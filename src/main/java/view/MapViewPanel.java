@@ -28,7 +28,7 @@ public class MapViewPanel extends JPanel {
     public MapViewPanel(Map gameMap) {
         this.gameMap = gameMap;
         try {
-            URL imageUrl = ClassLoader.getSystemResource("images/tile.png");
+            URL imageUrl = getClass().getResource("images/tile.png");
             if (imageUrl == null) {
                 System.err.println("FATAL ERROR: File 'tile.png' not found in resources!");
             } else {
@@ -49,14 +49,15 @@ public class MapViewPanel extends JPanel {
             for (int x = 0; x < WIDTH; x++) {
                 Tile tileModel = gameMap.getTile(x, y);
                 BufferedImage imageToDraw = tileImage;
-
+                boolean usingImage = (tileImage != null && !tileModel.isWall(x, y));
                 Color color = Color.LIGHT_GRAY;
 
                 if (tileModel.isWall(getX(), getY())) {
                     color = Color.BLACK;
                     g2d.setColor(color);
                     g2d.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-                } else {
+                }
+                else {
                     imageToDraw = tileImage;
                     g2d.drawImage(imageToDraw, x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, this);
                     g2d.drawRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);

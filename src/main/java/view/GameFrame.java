@@ -13,7 +13,7 @@ public class GameFrame {
 //        List<Chef> allChefs = List.of(chefA, chefB);
         //main.java.model.map.Map gameMap = new main.java.model.map.Map(config, allChefs); // main.java.model.map.Map harus menerima List<Chef>
         Map gameMap = new Map(config);
-        //chefA.activate(); // Aktifkan Chef utama
+        //chefA.activate();
 
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Nimonscooked");
