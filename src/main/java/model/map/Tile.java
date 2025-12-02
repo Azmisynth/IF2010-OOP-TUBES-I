@@ -1,3 +1,5 @@
+package main.java.model.map;
+
 public class Tile {
     private final int x;
     private final int y;

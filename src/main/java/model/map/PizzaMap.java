@@ -1,3 +1,5 @@
+package main.java.model.map;
+
 public class PizzaMap extends MapType {
     private static final String[] PIZZA_LAYOUT = {
             "XATACAAACAAAXX",
@@ -19,7 +21,7 @@ public class PizzaMap extends MapType {
 
     @Override
     protected String getMapName() {
-        return "Pizza Map";
+        return "Pizza main.java.model.map.Map";
     }
 
     @Override

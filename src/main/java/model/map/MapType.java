@@ -1,3 +1,5 @@
+package main.java.model.map;
+
 public abstract class MapType {
     protected abstract String[] getLayoutData();
     protected abstract String getMapName();

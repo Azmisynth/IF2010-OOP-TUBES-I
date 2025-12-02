@@ -1,3 +1,5 @@
+package main.java.model.map;
+
 public enum TileState {
     WALL("X"),
     CUTTING_STATION("C"),

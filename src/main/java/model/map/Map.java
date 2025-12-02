@@ -1,3 +1,5 @@
+package main.java.model.map;
+
 public class Map {
     private static final int width = 14;
     private static final int height = 10;
@@ -6,6 +8,7 @@ public class Map {
 
     public Map(MapType mapConfig) {
         this.mapConfig = mapConfig;
+        mapConfig.initialLayout();
         this.tiles = mapConfig.getTiles();
     }
 

@@ -1,3 +1,7 @@
+import main.java.model.map.Map;
+import main.java.model.map.MapType;
+import main.java.model.map.PizzaMap;
+
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
@@ -7,13 +11,12 @@ public class GameFrame {
 //        Chef chefA = new Chef("C1", "Kebin", new Position(5, 5));
 //        Chef chefB = new Chef("C2", "Stewart", new Position(10, 8));
 //        List<Chef> allChefs = List.of(chefA, chefB);
-        config.initialLayout();
-        //Map gameMap = new Map(config, allChefs); // Map harus menerima List<Chef>
+        //main.java.model.map.Map gameMap = new main.java.model.map.Map(config, allChefs); // main.java.model.map.Map harus menerima List<Chef>
         Map gameMap = new Map(config);
         //chefA.activate(); // Aktifkan Chef utama
 
         SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame(config.getMapName() + " - Nimonscooked");
+            JFrame frame = new JFrame("Nimonscooked");
 
             // MapViewPanel gameView = new MapViewPanel(gameMap, allChefs);
             MapViewPanel gameView = new MapViewPanel(gameMap);
