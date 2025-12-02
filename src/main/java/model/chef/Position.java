@@ -1,3 +1,5 @@
+package main.java.model.chef;
+
 public class Position {
     private final int x;
     private final int y;

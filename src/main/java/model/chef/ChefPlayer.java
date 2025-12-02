@@ -1,3 +1,5 @@
+package main.java.model.chef;
+
 public class ChefPlayer implements Moveable {
     private String id;
     private String name;

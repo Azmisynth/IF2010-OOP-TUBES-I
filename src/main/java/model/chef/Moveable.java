@@ -1,3 +1,5 @@
+package main.java.model.chef;
+
 public interface Moveable {
     public void moveUp(Map map);
     public void moveDown(Map map);
