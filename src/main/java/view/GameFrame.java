@@ -23,7 +23,7 @@ public class GameFrame {
 
             frame.add(gameView);
 
-            frame.pack(); // Sesuaikan ukuran frame dengan panel
+            frame.pack();
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setVisible(true);
 

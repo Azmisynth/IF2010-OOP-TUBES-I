@@ -50,11 +50,16 @@ public class MapViewPanel extends JPanel {
                 Tile tileModel = gameMap.getTile(x, y);
                 BufferedImage imageToDraw = tileImage;
 
-                //Color color = Color.LIGHT_GRAY;
+                Color color = Color.LIGHT_GRAY;
 
                 if (tileModel.isWall(getX(), getY())) {
-//                    color = Color.BLACK; // Dinding
+                    color = Color.BLACK;
+                    g2d.setColor(color);
+                    g2d.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                } else {
                     imageToDraw = tileImage;
+                    g2d.drawImage(imageToDraw, x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, this);
+                    g2d.drawRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
                 }
 //                else if (tileModel.getStation() != null) {
 //                    color = Color.ORANGE; // Stasiun
@@ -65,9 +70,7 @@ public class MapViewPanel extends JPanel {
 //                g2d.setColor(color);
 //                g2d.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 //
-                g2d.drawImage(imageToDraw, x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, this);
-                g2d.setColor(Color.DARK_GRAY);
-                g2d.drawRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+
             }
         }
 
@@ -76,11 +79,9 @@ public class MapViewPanel extends JPanel {
 //            int px = chef.getPosition().getX() * TILE_SIZE;
 //            int py = chef.getPosition().getY() * TILE_SIZE;
 //
-//            // Gambar Chef sebagai lingkaran (simulasi ImageView)
 //            g2d.setColor(chef.isActive() ? Color.BLUE : Color.RED);
 //            g2d.fillOval(px, py, TILE_SIZE, TILE_SIZE);
 //
-//            // Tambahkan nama untuk debugging
 //            g2d.setColor(Color.WHITE);
 //            g2d.drawString(chef.getName(), px + 5, py + TSIZE / 2);
 //        }
