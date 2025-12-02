@@ -31,7 +31,9 @@ public class Map {
         }
 
         Tile targetTile = tiles[y][x];
-
+        if(targetTile.isWall(x, y)) {
+            return false;
+        }
 //        if(targetTile.isWall(x, y)) {
 //            return false;
 //        } else if(targetTile.isStation(x, y)) {
