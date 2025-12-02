@@ -1,15 +1,19 @@
 package main.java.model.map;
 
+import main.java.model.chef.ChefPlayer;
+
 public class Map {
     private static final int width = 14;
     private static final int height = 10;
     private final Tile[][] tiles;
     private final MapType mapConfig;
+    private ChefPlayer chef;
 
-    public Map(MapType mapConfig) {
+    public Map(MapType mapConfig, ChefPlayer chef) {
         this.mapConfig = mapConfig;
         mapConfig.initialLayout();
         this.tiles = mapConfig.getTiles();
+        this.chef = chef;
     }
 
     public Tile getTile(int x, int y) {
