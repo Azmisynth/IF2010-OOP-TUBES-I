@@ -31,7 +31,7 @@ public class MapViewPanel extends JPanel {
 //        this.setPreferredSize(new Dimension(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE));
 //    }
 
-    public MapViewPanel(Map gameMap, ChefPlayer activeChef, List<ChefPlayer> allChefs) {
+    public MapViewPanel(Map gameMap, List<ChefPlayer> allChefs) {
         this.gameMap = gameMap;
         this.allChefs = allChefs;
         try {

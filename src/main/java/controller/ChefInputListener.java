@@ -4,6 +4,7 @@ import main.java.model.chef.ChefPlayer;
 import main.java.model.map.Map;
 import main.java.view.MapViewPanel;
 import java.awt.event.KeyEvent;
+import main.java.view.GameFrame;
 import java.awt.event.KeyListener;
 import java.util.List;
 
@@ -11,11 +12,13 @@ public class ChefInputListener implements KeyListener {
     private List <ChefPlayer> allChefs;
     private final Map gameMap;
     private final MapViewPanel gameView;
+    private final GameFrame gameController;
 
-    public ChefInputListener(List<ChefPlayer> allChefs, Map map, MapViewPanel view) {
+    public ChefInputListener(List<ChefPlayer> allChefs, Map map, MapViewPanel view, GameFrame gameController) {
         this.allChefs = allChefs;
         this.gameMap = map;
         this.gameView = view;
+        this.gameController = gameController;
     }
 
     private ChefPlayer getActiveChef() {
@@ -33,6 +36,10 @@ public class ChefInputListener implements KeyListener {
         if (activeChef == null) return;
 
         switch (e.getKeyCode()) {
+            case KeyEvent.VK_SPACE:
+                gameController.changeActiveChef();
+                gameView.refreshView();
+                break;
             case KeyEvent.VK_W:
             case KeyEvent.VK_UP:
                 activeChef.moveUp(gameMap);
