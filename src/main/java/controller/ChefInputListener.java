@@ -36,7 +36,7 @@ public class ChefInputListener implements KeyListener {
         if (activeChef == null) return;
 
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_SPACE:
+            case KeyEvent.VK_B:
                 gameController.changeActiveChef();
                 gameView.refreshView();
                 break;
