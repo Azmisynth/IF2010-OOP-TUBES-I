@@ -1,14 +1,17 @@
 package main.java.model.station;
 
+import main.java.model.chef.Chef;
+import main.java.model.items.*;
+
 public class TrashStation extends Station {
-    public TrashStation(Tile position) { 
-        super(position, 'T');
+    public TrashStation() {
+        super("T"); // simbol T sebagai String
     }
-    
-    @Override 
-    public void interact(Chef chef) {
+
+    @Override
+    public void ChefPlayer(Chef chef) {
         Item chefItem = chef.getInventory(); // ambil item yang lagi dibawa chef
-        
+
         if (chefItem != null) { // cek chef bawa sesuatu
             // kalau yang dibawa adalah kitchen utensils (kayak panci, wajan)
             if (chefItem instanceof KitchenUtensils) { // cek apakah item adalah KitchenUtensils
@@ -22,7 +25,7 @@ public class TrashStation extends Station {
                 System.out.println("Item dibuang ke trash");
             }
         } else { // kalau chef ngga bawa apa-apa
-            System.out.println("Tidak ada item untuk dibuang!"); 
+            System.out.println("Tidak ada item untuk dibuang!");
         }
     }
 }

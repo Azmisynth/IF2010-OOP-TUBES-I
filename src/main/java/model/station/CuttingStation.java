@@ -1,5 +1,6 @@
 package main.java.model.station;
 
+import main.java.model.chef.Chef;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -11,8 +12,8 @@ public class CuttingStation extends Station {
     private Chef busyChef; // chef yg lagi motong
     private static final int CUTTING_DURATION = 3000; // durasi motong dalam mili detik
 
-    public CuttingStation(Tile position){ // posisi si station di tile mana
-        super(position, 'C');
+    public CuttingStation(){
+        super("C"); // simbol C sebagai String
         this.itemOnStation = null;
         this.isBusy = false;
         this.progress = 0.0;
@@ -20,7 +21,7 @@ public class CuttingStation extends Station {
     }
 
     @Override
-    public void interact(Chef chef){
+    public void ChefPlayer(Chef chef){
         Item chefItem = chef.getInventory();
 
         if (chefItem != null && itemOnStation == null && !isBusy){ // kalo chef bawa item dan di station cutting ga ada item dan lgi g sibuk
@@ -28,47 +29,47 @@ public class CuttingStation extends Station {
             chef.setInventory(null); // jadi set inventory alias bawaansi chef jadi kosong lagi karena udah ditaro
             return;
         }
-        
+
         if (itemOnStation != null && chefItem == null && !isBusy ){ // kalo di station ada item dan chef ga bawa apa2 dan lgi ga sibuk
             chef.setInventory(itemOnStation); // maka ambil item, dan isi inventory alias tangan chef penuh
             itemOnStation = null; // jadi board stationnya kosong
             progress = 0.0; // progress balik ke 0.0 (reset)
             return;
         }
-        
+
         if (itemOnStation instanceof Preparable && chefItem == null) {
             // kalau ada ingredient yg bisa di potong dan tangan chef kosong sok di potong
             Preparable prep = (Preparable) itemOnStation;
             if (prep.canbeChopped() && progress < 1.0){ // kalo bisa di potong trus belum selesai di potong
                 startOrContinueCutting(chef); //maka potong
                 return;
-            } 
+            }
         }
-        
+
         if (chefItem instanceof Plate && itemOnStation instanceof Preparable && !isBusy){
             Plate plate = (Plate) chefItem;
             Preparable prep = (Preparable) itemOnStation;
-            if (!plate.isDirty() && prep.getState() == Ingredient.CHOPPED){ // ini yang fungsi assembly
+            if (!plate.isDirty() && prep.getState() == IngredientState.CHOPPED){ // ini yang fungsi assembly
                 plate.addComponent(prep);
-                itemOnStation = plate; 
+                itemOnStation = plate;
                 chef.setInventory(null); // tangan chef kosong
                 return;
             }
         }
 
         if (chefItem instanceof Preparable && itemOnStation instanceof Plate && !isBusy){
-            Plate plate = (Plate) chefItem;
-            Preparable prep = (Preparable) itemOnStation;
-            if (!plate.isDirty() && prep.getState() == Ingredient.CHOPPED){ // ini yang fungsi assembly
+            Plate plate = (Plate) itemOnStation;
+            Preparable prep = (Preparable) chefItem;
+            if (!plate.isDirty() && prep.getState() == IngredientState.CHOPPED){ // ini yang fungsi assembly
                 plate.addComponent(prep);
                 chef.setInventory(null); // tangan chef kosong
                 return;
             }
         }
-        
+
     }
 
-    public void startOrContinueCutting(Chef chef){ 
+    public void startOrContinueCutting(Chef chef){
         if (isBusy){ // klo station lgi motong jangan mulai apa2
             return;
         }
@@ -117,7 +118,7 @@ public class CuttingStation extends Station {
             busyChef = null;
         }
 
-        isBusy = false; // progress cuma berhenti ga di reset okeng 
+        isBusy = false; // progress cuma berhenti ga di reset okeng
     }
 
     public Item getItemOnStation(){
@@ -131,9 +132,8 @@ public class CuttingStation extends Station {
     public boolean isBusy(){
         return isBusy;
     }
+
     public double getProgress(){
         return progress;
     }
-
-    
 }

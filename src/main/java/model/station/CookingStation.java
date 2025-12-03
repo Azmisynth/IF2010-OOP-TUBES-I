@@ -1,28 +1,31 @@
 package main.java.model.station;
+import main.java.model.chef.Chef;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class CookingStation extends Station {
-    private Oven oven; // Oven built-in di main.java.model.station.CookingStation
+    private Oven oven; // Oven built-in di CookingStation
     private Timer cookingTimer; // Timer untuk mngiitung waktu sampe pizza COOKED (12 detik)
     private Timer burnTimer; // Timer untuk ngitung waktu sampe pizza BURNED (24 detik total)
     private boolean isCooking; // Status oven lagi memasak atau gak
-    
+
     private static final int COOKING_DURATION = 12000; // 12 detik dalam milidetik - waktu untuk pizza jadi COOKED
     private static final int BURNING_DURATION = 24000; // 24 detik dalam milidetik - waktu untuk pizza jadi BURNED (dihitung dari awal masak)
-    
-    public CookingStation(Tile position) {
-        super(position, "R"); // panggil constructor parent class main.java.model.station.Station dengan simbol R
+
+    public CookingStation() {
+        super("R"); // panggil constructor parent class Station dengan simbol R sebagai String
         this.oven = new Oven(); // oven ada di station sejak awal (built-in)
         this.isCooking = false; // status cooking dimulai dari belum masak
     }
-    
+
     @Override
-    public void interact(Chef chef) {
+    public void ChefPlayer(Chef chef) {
         Item chefItem = chef.getInventory(); // ambil item yang lagi dibawa chef
-        
+
         // kalo chef bawa Pizza (Dish) -> masukin pizza ke oven (chef jadi tangan kosong)
         if (chefItem instanceof Pizza) { // cek chef mbawa Pizza
             Pizza pizza = (Pizza) chefItem; // cast item jadi Pizza
-            
+
             // validasi: pizza harus bisa dimasak (semua ingredient RAW/CHOPPED, bukan COOKED/BURNED)
             if (canCookPizza(pizza)) { // cek apakah pizza valid untuk dimasak
                 oven.setDish(pizza); // masukin pizza ke oven
@@ -38,7 +41,7 @@ public class CookingStation extends Station {
             chef.setInventory(pizza); // chef sekarang membawa pizza (matang atau gosong)
             oven.setDish(null); // oven jadi kosong
             stopCooking(); // hentikan semua timer cooking
-            
+
             // kasih feedback ke chef apakah pizza matang atau gosong
             if (isPizzaBurned(pizza)) {
                 System.out.println("Pizza gosong diambil! Harus dibuang ke trash!");
@@ -57,7 +60,7 @@ public class CookingStation extends Station {
         }
         return true; // semua ingredient bisa dimasak
     }
-    
+
     // method untuk cek apakah semua ingredient di pizza sudah COOKED
     private boolean isPizzaCooked(Pizza pizza) {
         for (Preparable ingredient : pizza.getIngredients()) { // loop semua ingredient di pizza
@@ -67,7 +70,7 @@ public class CookingStation extends Station {
         }
         return true; // semua ingredient sudah COOKED
     }
-    
+
     // method untuk cek apakah ada ingredient di pizza yang BURNED
     private boolean isPizzaBurned(Pizza pizza) {
         for (Preparable ingredient : pizza.getIngredients()) { // loop semua ingredient di pizza
@@ -77,7 +80,7 @@ public class CookingStation extends Station {
         }
         return false; // tidak ada ingredient yang gosong
     }
-    
+
     private void startCooking() {
         if (isCooking){ // kalau sudah sedang memasak, jangan mulai lagi
             return; // prevent double cooking
@@ -85,7 +88,7 @@ public class CookingStation extends Station {
 
         isCooking = true;
         System.out.println("Oven memasak pizza...");
-        
+
         // buat timer untuk COOKED (12 detik)
         cookingTimer = new Timer(); // buat timer baru
         cookingTimer.schedule(new TimerTask() { // schedule task yang akan dijalankan setelah delay
@@ -94,7 +97,7 @@ public class CookingStation extends Station {
                 finishCooking(); // panggil method finishCooking untuk ubah ingredient jadi COOKED
             }
         }, COOKING_DURATION); // delay 12000 milidetik (12 detik)
-        
+
         // buat timer untuk BURNED (24 detik dari mulai)
         burnTimer = new Timer(); // buat timer baru untuk burn
         burnTimer.schedule(new TimerTask() { // schedule task yang akan dijalankan setelah delay
@@ -104,7 +107,7 @@ public class CookingStation extends Station {
             }
         }, BURNING_DURATION); // delay 24000 milidetik (24 detik dari awal masak)
     }
-    
+
     // method yang dipanggil setelah 12 detik - ubah semua ingredient jadi COOKED
     private void finishCooking() {
         Pizza pizza = (Pizza) oven.getDish(); // ambil pizza dari oven
@@ -115,7 +118,7 @@ public class CookingStation extends Station {
             System.out.println("Pizza sudah matang!");
         }
     }
-    
+
     // method yang dipanggil setelah 24 detik - ubah semua ingredient jadi BURNED
     private void burnFood() {
         Pizza pizza = (Pizza) oven.getDish(); // ambil pizza dari oven
@@ -126,8 +129,8 @@ public class CookingStation extends Station {
             System.out.println("PIZZA GOSONG!");
         }
     }
-    
-   
+
+
     private void stopCooking() {
         if (cookingTimer != null) { // cek apakah cookingTimer ada
             cookingTimer.cancel(); // cancel timer COOKED
@@ -139,12 +142,12 @@ public class CookingStation extends Station {
         }
         isCooking = false; // set status jadi tidak sedang memasak
     }
-    
-    
+
+
     public Oven getOven() {
         return oven;
     }
-    
+
     public boolean isCooking() {
         return isCooking;
     }
