@@ -23,6 +23,8 @@ public class ChefPlayer implements Moveable {
         return position;
     }
 
+    public Direction getDirection() { return direction;}
+
 //    public Item getInventory() {
 //        return inventory;
 //    }

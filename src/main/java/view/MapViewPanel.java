@@ -3,6 +3,7 @@ package main.java.view;
 import main.java.model.chef.ChefPlayer;
 import main.java.model.map.Map;
 import main.java.model.map.Tile;
+import main.java.model.chef.Direction;
 
 import javax.swing.JPanel;
 import java.awt.Graphics;
@@ -20,7 +21,11 @@ public class MapViewPanel extends JPanel {
     private ChefPlayer activeChef;
     private List<ChefPlayer> allChefs;
     private BufferedImage tileImage;
-    private BufferedImage chefImage;
+    //private BufferedImage chefImage;
+    private BufferedImage chefBackImage;
+    private BufferedImage chefFrontImage;
+    private BufferedImage chefLeftImage;
+    private BufferedImage chefRightImage;
     private static final int TILE_SIZE = 50;
     private static final int WIDTH = 14;
     private static final int HEIGHT = 10;
@@ -41,9 +46,21 @@ public class MapViewPanel extends JPanel {
             } else {
                 tileImage = ImageIO.read(imageUrl);
             }
-            URL chefImageUrl = getClass().getResource("/images/chef_player.png");
+            URL chefImageUrl = getClass().getResource("/images/chef_player_back.png");
             if (chefImageUrl != null) {
-                this.chefImage = ImageIO.read(chefImageUrl);
+                this.chefBackImage = ImageIO.read(chefImageUrl);
+            }
+            chefImageUrl = getClass().getResource("/images/chef_player_front.png");
+            if(chefImageUrl != null) {
+                this.chefFrontImage = ImageIO.read(chefImageUrl);
+            }
+            chefImageUrl = getClass().getResource("/images/chef_player_right.png");
+            if(chefImageUrl != null) {
+                this.chefRightImage = ImageIO.read(chefImageUrl);
+            }
+            chefImageUrl = getClass().getResource("/images/chef_player_left.png");
+            if(chefImageUrl != null) {
+                this.chefLeftImage = ImageIO.read(chefImageUrl);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -89,7 +106,25 @@ public class MapViewPanel extends JPanel {
             int px = chef.getPosition().getX() * TILE_SIZE;
             int py = chef.getPosition().getY() * TILE_SIZE;
 
-            BufferedImage imageToDraw = this.chefImage;
+            BufferedImage imageToDraw;
+            Direction currentDir = chef.getDirection();
+
+            switch (currentDir) {
+                case UP:
+                    imageToDraw = chefBackImage;
+                    break;
+                case DOWN:
+                    imageToDraw = chefFrontImage;
+                    break;
+                case LEFT:
+                    imageToDraw = chefLeftImage;
+                    break;
+                case RIGHT:
+                    imageToDraw = chefRightImage;
+                    break;
+                default:
+                    imageToDraw = chefFrontImage;
+            }
 
             if (imageToDraw != null) {
                 g2d.drawImage(imageToDraw, px, py, TILE_SIZE, TILE_SIZE, this);
