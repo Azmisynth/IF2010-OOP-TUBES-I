@@ -1,5 +1,6 @@
 package main.java.model.map;
 
+import java.util.List;
 import main.java.model.chef.ChefPlayer;
 
 public class Map {
@@ -7,13 +8,13 @@ public class Map {
     private static final int height = 10;
     private final Tile[][] tiles;
     private final MapType mapConfig;
-    private ChefPlayer chef;
+    private List<ChefPlayer> allChefs;
 
-    public Map(MapType mapConfig, ChefPlayer chef) {
+    public Map(MapType mapConfig, List<ChefPlayer> allChefs) {
         this.mapConfig = mapConfig;
         mapConfig.initialLayout();
         this.tiles = mapConfig.getTiles();
-        this.chef = chef;
+        this.allChefs = allChefs;
     }
 
     public Tile getTile(int x, int y) {

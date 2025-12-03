@@ -5,38 +5,49 @@ import main.java.model.map.Map;
 import main.java.view.MapViewPanel;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.List;
 
 public class ChefInputListener implements KeyListener {
-    private final ChefPlayer chefModel;
+    private List <ChefPlayer> allChefs;
     private final Map gameMap;
     private final MapViewPanel gameView;
 
-    public ChefInputListener(ChefPlayer chef, Map map, MapViewPanel view) {
-        this.chefModel = chef;
+    public ChefInputListener(List<ChefPlayer> allChefs, Map map, MapViewPanel view) {
+        this.allChefs = allChefs;
         this.gameMap = map;
         this.gameView = view;
     }
 
+    private ChefPlayer getActiveChef() {
+        for (ChefPlayer chef : allChefs) {
+            if (chef.isActive()) {
+                return chef;
+            }
+        }
+        return null; // tidak ada chef yang aktif
+    }
+
     @Override
     public void keyPressed(KeyEvent e) {
-        if (!chefModel.isActive()) return;
+        ChefPlayer activeChef = getActiveChef();
+        if (activeChef == null) return;
 
         switch (e.getKeyCode()) {
             case KeyEvent.VK_W:
             case KeyEvent.VK_UP:
-                chefModel.moveUp(gameMap);
+                activeChef.moveUp(gameMap);
                 break;
             case KeyEvent.VK_S:
             case KeyEvent.VK_DOWN:
-                chefModel.moveDown(gameMap);
+                activeChef.moveDown(gameMap);
                 break;
             case KeyEvent.VK_A:
             case KeyEvent.VK_LEFT:
-                chefModel.moveLeft(gameMap);
+                activeChef.moveLeft(gameMap);
                 break;
             case KeyEvent.VK_D:
             case KeyEvent.VK_RIGHT:
-                chefModel.moveRight(gameMap);
+                activeChef.moveRight(gameMap);
                 break;
         }
 

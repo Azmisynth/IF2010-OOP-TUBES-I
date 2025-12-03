@@ -13,10 +13,12 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 public class MapViewPanel extends JPanel {
     private final Map gameMap;
-    private ChefPlayer chef;
+    private ChefPlayer activeChef;
+    private List<ChefPlayer> allChefs;
     private BufferedImage tileImage;
     private BufferedImage chefImage;
     private static final int TILE_SIZE = 50;
@@ -29,9 +31,9 @@ public class MapViewPanel extends JPanel {
 //        this.setPreferredSize(new Dimension(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE));
 //    }
 
-    public MapViewPanel(Map gameMap, ChefPlayer chef) {
+    public MapViewPanel(Map gameMap, ChefPlayer activeChef, List<ChefPlayer> allChefs) {
         this.gameMap = gameMap;
-        this.chef = chef;
+        this.allChefs = allChefs;
         try {
             URL imageUrl = getClass().getResource("/images/tile.png");
             if (imageUrl == null) {
@@ -83,23 +85,24 @@ public class MapViewPanel extends JPanel {
 
             }
         }
+        for(ChefPlayer chef : allChefs) {
+            int px = chef.getPosition().getX() * TILE_SIZE;
+            int py = chef.getPosition().getY() * TILE_SIZE;
 
-        int px = chef.getPosition().getX() * TILE_SIZE;
-        int py = chef.getPosition().getY() * TILE_SIZE;
+            BufferedImage imageToDraw = this.chefImage;
 
-        BufferedImage imageToDraw = this.chefImage;
-
-        if (imageToDraw != null) {
-            g2d.drawImage(imageToDraw, px, py, TILE_SIZE, TILE_SIZE, this);
-        }
+            if (imageToDraw != null) {
+                g2d.drawImage(imageToDraw, px, py, TILE_SIZE, TILE_SIZE, this);
+            }
 //        else {
 //            // Fallback: Jika gambar gagal dimuat, gambar lingkaran berwarna
 //            g2d.setColor(chef.isActive() ? Color.BLUE : Color.RED);
 //            g2d.fillOval(px, py, TILE_SIZE, TILE_SIZE);
 //        }
 
-        g2d.setColor(Color.WHITE);
-        g2d.drawString(chef.getName(), px + TILE_SIZE/4, py + 2);
+            g2d.setColor(Color.WHITE);
+            g2d.drawString(chef.getName(), px + TILE_SIZE/4, py + 2);
+        }
 
         // 2. Gambar Chef (Didasarkan pada posisi Model)
 //        for (Chef chef : allChefs) {
