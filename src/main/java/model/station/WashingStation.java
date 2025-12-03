@@ -1,3 +1,5 @@
+package main.java.model.station;
+
 import java.util.Stack; // utk nyimpen piring kotor dan bersih dengan sistem LIFO (Last In First Out)
 import java.util.Timer; 
 import java.util.TimerTask;

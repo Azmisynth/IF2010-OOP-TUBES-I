@@ -1,5 +1,7 @@
+package main.java.model.station;
+
 public class CookingStation extends Station {
-    private Oven oven; // Oven built-in di CookingStation
+    private Oven oven; // Oven built-in di main.java.model.station.CookingStation
     private Timer cookingTimer; // Timer untuk mngiitung waktu sampe pizza COOKED (12 detik)
     private Timer burnTimer; // Timer untuk ngitung waktu sampe pizza BURNED (24 detik total)
     private boolean isCooking; // Status oven lagi memasak atau gak
@@ -8,7 +10,7 @@ public class CookingStation extends Station {
     private static final int BURNING_DURATION = 24000; // 24 detik dalam milidetik - waktu untuk pizza jadi BURNED (dihitung dari awal masak)
     
     public CookingStation(Tile position) {
-        super(position, "R"); // panggil constructor parent class Station dengan simbol R
+        super(position, "R"); // panggil constructor parent class main.java.model.station.Station dengan simbol R
         this.oven = new Oven(); // oven ada di station sejak awal (built-in)
         this.isCooking = false; // status cooking dimulai dari belum masak
     }

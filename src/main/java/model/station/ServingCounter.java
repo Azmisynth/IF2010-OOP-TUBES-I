@@ -1,4 +1,6 @@
-import java.util.Timer; 
+package main.java.model.station;
+
+import java.util.Timer;
 import java.util.TimerTask;
 
 public class ServingCounter extends Station {
@@ -11,7 +13,7 @@ public class ServingCounter extends Station {
         this.plateStorage = plateStorage; // simpen referensi PlateStorage yang dikasih
     }
     
-    @Override // override method interactnya Station
+    @Override // override method interactnya main.java.model.station.Station
     public void interact(Chef chef) { // method yang dipanggil pas chef berinteraksi sama counter ini
         Item chefItem = chef.getInventory(); // ambil item yang lagi dibawa chef
         

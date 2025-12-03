@@ -1,4 +1,6 @@
-public class TrashStation extends Station { 
+package main.java.model.station;
+
+public class TrashStation extends Station {
     public TrashStation(Tile position) { 
         super(position, 'T');
     }

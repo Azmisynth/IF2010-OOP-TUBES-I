@@ -1,9 +1,11 @@
+package main.java.model.station;
+
 public class IngredientStation extends Station {
     private Class<? extends Ingredient> ingredientType; // simpen tipe ingredient apa yang ada di station ini (misalnya Lettuce, Tomato, dll)
     private Item itemOnStation;
     
-    public IngredientStation(Tile position, Class<? extends Ingredient> ingredientType) { // constructor buat bikin IngredientStation baru
-        super(position, 'I'); // panggil constructor Station dengan posisi dan simbol 'I'
+    public IngredientStation(Tile position, Class<? extends Ingredient> ingredientType) { // constructor buat bikin main.java.model.station.IngredientStation baru
+        super(position, 'I'); // panggil constructor main.java.model.station.Station dengan posisi dan simbol 'I'
         this.ingredientType = ingredientType; // set tipe ingredient yang disediain station ini
         this.itemOnStation = null; // awalnya station kosong gak ada item
     }
@@ -21,7 +23,7 @@ public class IngredientStation extends Station {
                     plate.addComponent(prep); // tambahin ingredient/component ke plate
                     itemOnStation = plate; // sekarang yang di station jadi plate-nya
                     chef.setInventory(null); // kosongin inventory chef karena plate udah ditaro di station
-                    System.out.println("Plating berhasil di Ingredient Station!");
+                    System.out.println("Plating berhasil di Ingredient main.java.model.station.Station!");
                     return;
                 }
             }
@@ -31,13 +33,13 @@ public class IngredientStation extends Station {
         if (chefItem != null && itemOnStation == null) { // cek chef bawa sesuatu dan station kosong
             itemOnStation = chefItem; // taro item chef ke station
             chef.setInventory(null); // kosongin inventory chef
-            System.out.println("Item diletakkan di Ingredient Station");
+            System.out.println("Item diletakkan di Ingredient main.java.model.station.Station");
         }
         // skenario 3: chef mau ambil item dari station
         else if (itemOnStation != null && chefItem == null) { // cek station ada item dan chef gak bawa apa-apa
             chef.setInventory(itemOnStation); // kasih item dari station ke chef
             itemOnStation = null; // kosongin station
-            System.out.println("Item diambil dari Ingredient Station");
+            System.out.println("Item diambil dari Ingredient main.java.model.station.Station");
         }
         // skenario 4: ambil ingredient baru dari station (stok unlimited)
         else if (chefItem == null && itemOnStation == null) { // cek chef dan station sama-sama kosong

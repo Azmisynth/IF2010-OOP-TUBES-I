@@ -1,3 +1,5 @@
+package main.java.model.station;
+
 public abstract class Station {
     protected Tile position;
     protected char symbol; // simbol dari stationnya

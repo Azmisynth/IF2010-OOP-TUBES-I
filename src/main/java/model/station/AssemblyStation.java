@@ -1,3 +1,5 @@
+package main.java.model.station;
+
 public class AssemblyStation extends Station { // class untuk station tempat rakit dish/ingredient
     private Item itemOnStation; // item yang lagi ada di atas assembly station (bisa ingredient, plate, dish, apapun)
          
@@ -19,7 +21,7 @@ public class AssemblyStation extends Station { // class untuk station tempat rak
                     plate.addComponent(prep); // masukin ingredient/dish ke dalam plate
                     itemOnStation = plate; // sekarang yang ada di station adalah plate berisi dish
                     chef.setInventory(null); // tangan chef jadi kosong
-                    System.out.println("Plating berhasil di Assembly Station!");
+                    System.out.println("Plating berhasil di Assembly main.java.model.station.Station!");
                 }
             }
         }
@@ -46,14 +48,14 @@ public class AssemblyStation extends Station { // class untuk station tempat rak
         if (chefItem != null && itemOnStation == null) { // chef bawa item dan station kosong
             itemOnStation = chefItem; // item yang dibawa chef sekarang ada di station
             chef.setInventory(null); // tangan chef jadi kosong
-            System.out.println("Item diletakkan di Assembly Station");
+            System.out.println("Item diletakkan di Assembly main.java.model.station.Station");
         // ambil item dari station (case umum: ambil item apapun)
         }
 
         if (itemOnStation != null && chefItem == null) { // station ada item dan tangan chef kosong
             chef.setInventory(itemOnStation); // item di station pindah ke tangan chef
             itemOnStation = null; // station jadi kosong
-            System.out.println("Item diambil dari Assembly Station");
+            System.out.println("Item diambil dari Assembly main.java.model.station.Station");
         }
     }
          
