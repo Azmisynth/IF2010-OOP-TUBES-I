@@ -5,6 +5,7 @@ import main.java.model.map.Map;
 import main.java.model.map.Tile;
 import main.java.model.chef.Direction;
 import main.java.model.station.Station;
+import main.java.model.station.StationFactory;
 
 import javax.swing.JPanel;
 import java.awt.Graphics;
@@ -38,6 +39,7 @@ public class MapViewPanel extends JPanel {
     private static final int TILE_SIZE = 50;
     private static final int WIDTH = 14;
     private static final int HEIGHT = 10;
+    private java.util.Map<String, BufferedImage> stationImages;
 
 //    public MapViewPanel(main.java.model.map.Map map, List<Chef> chefs) {
 //        this.gameMap = map;
@@ -48,6 +50,7 @@ public class MapViewPanel extends JPanel {
     public MapViewPanel(Map gameMap, List<ChefPlayer> allChefs) {
         this.gameMap = gameMap;
         this.allChefs = allChefs;
+        this.stationImages = new java.util.HashMap<>();
         try {
             URL imageUrl = getClass().getResource("/images/tile.png");
             if (imageUrl == null) {
@@ -59,14 +62,22 @@ public class MapViewPanel extends JPanel {
             this.chefDownImage = ImageIO.read(getClass().getResource("/images/chef_player_down.png"));
             this.chefRightImage = ImageIO.read(getClass().getResource("/images/chef_player_right.png"));
             this.chefLeftImage = ImageIO.read(getClass().getResource("/images/chef_player_left.png"));
-            this.assemblyStation = ImageIO.read(getClass().getResource("/images/assembly_station.png"));
-            this.cookingStation = ImageIO.read(getClass().getResource("/images/cooking_station.png"));
-            this.cuttingStation = ImageIO.read(getClass().getResource("/images/cutting_station.png"));
-//            this.ingredientStation = ImageIO.read(getClass().getResource("/images/ingredient_station.png"));
-//            this.plateStorage = ImageIO.read(getClass().getResource("/images/plate_storage.png"));
-            this.servingCounter = ImageIO.read(getClass().getResource("/images/serving_counter.png"));
-            this.trashStation = ImageIO.read(getClass().getResource("/images/trash_station.png"));
-            this.washingStation = ImageIO.read(getClass().getResource("/images/washing_station.png"));
+//            this.assemblyStation = ImageIO.read(getClass().getResource("/images/assembly_station.png"));
+//            this.cookingStation = ImageIO.read(getClass().getResource("/images/cooking_station.png"));
+//            this.cuttingStation = ImageIO.read(getClass().getResource("/images/cutting_station.png"));
+////            this.ingredientStation = ImageIO.read(getClass().getResource("/images/ingredient_station.png"));
+////            this.plateStorage = ImageIO.read(getClass().getResource("/images/plate_storage.png"));
+//            this.servingCounter = ImageIO.read(getClass().getResource("/images/serving_counter.png"));
+//            this.trashStation = ImageIO.read(getClass().getResource("/images/trash_station.png"));
+//            this.washingStation = ImageIO.read(getClass().getResource("/images/washing_station.png"));
+            stationImages.put("assembly", ImageIO.read(getClass().getResource("/images/assembly_station.png")));
+            stationImages.put("cooking", ImageIO.read(getClass().getResource("/images/cooking_station.png")));
+            stationImages.put("cutting", ImageIO.read(getClass().getResource("/images/cutting_station.png")));
+//            stationImages.put("ingredient", ImageIO.read(getClass().getResource("/images/ingredient_station.png")));
+//            stationImages.put("plate", ImageIO.read(getClass().getResource("/images/plate_station.png")));
+            stationImages.put("serving", ImageIO.read(getClass().getResource("/images/serving_counter.png")));
+            stationImages.put("trash", ImageIO.read(getClass().getResource("/images/trash_station.png")));
+            stationImages.put("washing", ImageIO.read(getClass().getResource("/images/washing_station.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -94,8 +105,16 @@ public class MapViewPanel extends JPanel {
                 }
                 else if (tileModel.getStation() != null) {
                     Station currentStation = tileModel.getStation();
-                    imageToDraw = assemblyStation; //sementara
-                    if(imageToDraw != null) {g2d.drawImage(imageToDraw, px, py, TILE_SIZE, TILE_SIZE, this);}
+                    String stationKey = StationFactory.getName(currentStation.getSymbol());
+
+                    imageToDraw = stationImages.get(stationKey);
+                    if(imageToDraw != null) {
+                        g2d.drawImage(imageToDraw, px, py, TILE_SIZE, TILE_SIZE, this);
+                    }
+//
+//                    Station currentStation = tileModel.getStation();
+//                    imageToDraw = assemblyStation;
+//                    if(imageToDraw != null) {g2d.drawImage(imageToDraw, px, py, TILE_SIZE, TILE_SIZE, this);}
                 }
 //                else if (tileModel.getItem() != null) {
 //                    color = Color.YELLOW; // Item di lantai
