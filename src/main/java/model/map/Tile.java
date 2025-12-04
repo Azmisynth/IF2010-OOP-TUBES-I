@@ -50,7 +50,7 @@ public class Tile {
     }
 
     public boolean isStation(int x, int y) {
-        return getStation() == null;
+        return getStation() != null;
     }
 
     public Station getStation() {
