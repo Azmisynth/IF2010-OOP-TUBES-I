@@ -21,7 +21,7 @@ public class PizzaMap extends MapType {
 
     @Override
     protected String getMapName() {
-        return "Pizza main.java.model.map.Map";
+        return "Pizza Map";
     }
 
     @Override
