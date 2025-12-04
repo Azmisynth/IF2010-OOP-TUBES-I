@@ -1,3 +1,5 @@
+package main.java.view;
+
 import main.java.model.map.Map;
 import main.java.model.map.Tile;
 
