@@ -1,11 +1,14 @@
 package main.java.model.map;
 
+import main.java.model.station.Station;
+import main.java.model.station.StationFactory;
+
 public class Tile {
     private final int x;
     private final int y;
     private String symbol;
     private String state;
-    //private final Station stationContained;
+    private final Station stationContained;
     //private Item itemContained;     // Item yang diletakkan chef di suatu tile, bisa jadi null
 
     public Tile(int x, int y, String symbol) {
@@ -15,11 +18,11 @@ public class Tile {
         this.state = TileState.fromSymbol(symbol);
         //this.itemContained = null;
 //
-//        if(isWall(x, y) || isWalkable(x, y)) {
-//            this.stationContained = null;
-//        } else {
-//            this.stationContained = StationFactory.createStationObject(symbol);
-//        }
+        if(isWall(x, y) || isWalkable(x, y)) {
+            this.stationContained = null;
+        } else {
+            this.stationContained = StationFactory.createStationObject(symbol);
+        }
     }
 
     public String getSymbol() {
@@ -46,13 +49,13 @@ public class Tile {
         return getState().equals("WALKABLE");
     }
 
-//    public boolean isStation(int x, int y) {
-//        return getStation() == null;
-//    }
+    public boolean isStation(int x, int y) {
+        return getStation() == null;
+    }
 
-//    public Station getStation() {
-//        return stationContained;
-//    }
+    public Station getStation() {
+        return stationContained;
+    }
 
 //    public Item getItem() {
 //        return itemContained;
