@@ -15,7 +15,7 @@ public class CuttingStation extends Station {
 
     public CuttingStation(){
         super("C"); // simbol C sebagai String
-        this.itemOnStation = null;
+        //this.itemOnStation = null;
         this.isBusy = false;
         this.progress = 0.0;
         this.busyChef = null;
@@ -77,7 +77,7 @@ public class CuttingStation extends Station {
 
         isBusy = true;
         busyChef = chef;
-        chef.setBusy(true);
+        //chef.setBusy(true);
         // set status chef dan station lgi dipakai alias sibuk
 
         int remainingTime = (int) ((1.0 - progress) * CUTTING_DURATION);
@@ -95,14 +95,14 @@ public class CuttingStation extends Station {
     }
 
     public void finishCutting(){
-        if (itemOnStation instanceof Preparable){
-            Preparable prep = (Preparable) itemOnStation;
-            prep.chop(); // ubah state jdi CHOPPED
-            progress = 1.0; // progress dah penuh
-        }
+//        if (itemOnStation instanceof Preparable){
+//            Preparable prep = (Preparable) itemOnStation;
+//            prep.chop(); // ubah state jdi CHOPPED
+//            progress = 1.0; // progress dah penuh
+//        }
 
         if (busyChef != null){
-            busyChef.setBusy(false);
+            //busyChef.setBusy(false);
             busyChef = null;
         }
 
@@ -115,20 +115,20 @@ public class CuttingStation extends Station {
             cuttingTimer = null;
         }
         if (busyChef != null){ // chef dibuat jdi ga sibuk
-            busyChef.setBusy(false);
+            //busyChef.setBusy(false);
             busyChef = null;
         }
 
         isBusy = false; // progress cuma berhenti ga di reset okeng
     }
 
-    public Item getItemOnStation(){
-        return itemOnStation;
-    }
-
-    public void setItemOnStation(Item item){
-        this.itemOnStation = item;
-    }
+//    public Item getItemOnStation(){
+//        return itemOnStation;
+//    }
+//
+//    public void setItemOnStation(Item item){
+//        this.itemOnStation = item;
+//    }
 
     public boolean isBusy(){
         return isBusy;
