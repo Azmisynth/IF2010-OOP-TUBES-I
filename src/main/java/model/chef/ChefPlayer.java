@@ -14,7 +14,7 @@ public class ChefPlayer implements Moveable {
         this.id = id;
         this.name = name;
         this.position = startPosition;
-        this.direction = Direction.UP;
+        this.direction = Direction.DOWN;
         //this.inventory = null;
         this.active = false;
     }
