@@ -22,8 +22,8 @@ public class MapViewPanel extends JPanel {
     private List<ChefPlayer> allChefs;
     private BufferedImage tileImage;
     //private BufferedImage chefImage;
-    private BufferedImage chefBackImage;
-    private BufferedImage chefFrontImage;
+    private BufferedImage chefUpImage;
+    private BufferedImage chefDownImage;
     private BufferedImage chefLeftImage;
     private BufferedImage chefRightImage;
     private static final int TILE_SIZE = 50;
@@ -46,13 +46,13 @@ public class MapViewPanel extends JPanel {
             } else {
                 tileImage = ImageIO.read(imageUrl);
             }
-            URL chefImageUrl = getClass().getResource("/images/chef_player_back.png");
+            URL chefImageUrl = getClass().getResource("/images/chef_player_up.png");
             if (chefImageUrl != null) {
-                this.chefBackImage = ImageIO.read(chefImageUrl);
+                this.chefUpImage = ImageIO.read(chefImageUrl);
             }
-            chefImageUrl = getClass().getResource("/images/chef_player_front.png");
+            chefImageUrl = getClass().getResource("/images/chef_player_down.png");
             if(chefImageUrl != null) {
-                this.chefFrontImage = ImageIO.read(chefImageUrl);
+                this.chefDownImage = ImageIO.read(chefImageUrl);
             }
             chefImageUrl = getClass().getResource("/images/chef_player_right.png");
             if(chefImageUrl != null) {
@@ -111,10 +111,10 @@ public class MapViewPanel extends JPanel {
 
             switch (currentDir) {
                 case UP:
-                    imageToDraw = chefBackImage;
+                    imageToDraw = chefUpImage;
                     break;
                 case DOWN:
-                    imageToDraw = chefFrontImage;
+                    imageToDraw = chefDownImage;
                     break;
                 case LEFT:
                     imageToDraw = chefLeftImage;
@@ -123,7 +123,7 @@ public class MapViewPanel extends JPanel {
                     imageToDraw = chefRightImage;
                     break;
                 default:
-                    imageToDraw = chefFrontImage;
+                    imageToDraw = chefDownImage;
             }
 
             if (imageToDraw != null) {
