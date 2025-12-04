@@ -14,7 +14,6 @@ import java.util.ArrayList;
 public class GameFrame {
     private final List<ChefPlayer> allChefs;
     private int activeChefIndex;
-    private ChefPlayer activeChef;
 
     public GameFrame(List<ChefPlayer> allChefs) {
         this.allChefs = allChefs;
