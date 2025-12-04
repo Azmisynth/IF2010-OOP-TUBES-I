@@ -46,13 +46,13 @@ public class MapViewPanel extends JPanel {
             } else {
                 tileImage = ImageIO.read(imageUrl);
             }
-            URL chefImageUrl = getClass().getResource("/images/chef_player_back.png");
-            if (chefImageUrl != null) {
-                this.chefBackImage = ImageIO.read(chefImageUrl);
-            }
-            chefImageUrl = getClass().getResource("/images/chef_player_front.png");
+            URL chefImageUrl = getClass().getResource("/images/chef_player_front.png");
             if(chefImageUrl != null) {
                 this.chefFrontImage = ImageIO.read(chefImageUrl);
+            }
+            chefImageUrl = getClass().getResource("/images/chef_player_back.png");
+            if (chefImageUrl != null) {
+                this.chefBackImage = ImageIO.read(chefImageUrl);
             }
             chefImageUrl = getClass().getResource("/images/chef_player_right.png");
             if(chefImageUrl != null) {
