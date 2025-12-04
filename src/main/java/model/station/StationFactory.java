@@ -20,7 +20,7 @@ public class StationFactory {
             case "C" -> "cutting";
             case "R" -> "cooking";
             case "A" -> "assembly";
-//            case "S" -> new ServingCounter();
+            case "S" -> "serving";
             case "W" -> "washing";
 //            case "I" -> new IngredientStorage();
 //            case "P" -> new PlateStorage();
