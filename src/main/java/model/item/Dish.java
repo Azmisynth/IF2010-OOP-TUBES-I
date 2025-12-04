@@ -1,4 +1,5 @@
-import java.util.ArrayList;
+package main.java.model.item;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,7 +15,7 @@ public class Dish extends Item{
 
     public void addComponent(Preparable item){
         if (item == null) {
-            throw new IllegalArgumentException("Item cannot be null.");
+            throw new IllegalArgumentException("main.java.model.item.Item cannot be null.");
         }
         components.add(item);
     }

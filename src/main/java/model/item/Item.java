@@ -1,3 +1,5 @@
+package main.java.model.item;
+
 public abstract class Item {
     private String name;
     private boolean portable = true;

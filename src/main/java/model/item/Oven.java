@@ -1,4 +1,6 @@
-public class Oven extends KitchenUtensils implements CookingDevice {
+package main.java.model.item;
+
+public class Oven extends KitchenUtensils<Preparable> implements CookingDevice {
     private static final int CAPACITY = 1;
 
     public Oven(String name) {
@@ -25,12 +27,17 @@ public class Oven extends KitchenUtensils implements CookingDevice {
         if (canAccept(ingredient)) {
             contents.add(ingredient);
         } else {
-            throw new IllegalArgumentException("Oven cannot accept this ingredient.");
+            throw new IllegalArgumentException("main.java.model.item.Oven cannot accept this ingredient.");
         }
     }
 
     @Override
     public void startCooking() {
-        System.out.println("Oven starting to cook");
+        System.out.println("main.java.model.item.Oven starting to cook");
+    }
+
+    @Override
+    public java.util.Set<Preparable> getContents() {
+        return contents;
     }
 }

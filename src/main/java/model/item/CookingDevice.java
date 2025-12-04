@@ -1,3 +1,5 @@
+package main.java.model.item;
+
 public interface CookingDevice {
     boolean isPortable();
     int capacity();
@@ -5,4 +7,5 @@ public interface CookingDevice {
 
     void addIngredient(Preparable ingredient);
     void startCooking();
+    java.util.Set<Preparable> getContents();
 }
