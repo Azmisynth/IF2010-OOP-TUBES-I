@@ -51,7 +51,7 @@ public class GameFrame {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Nimonscooked");
 
-            MapViewPanel gameView = new MapViewPanel(gameMap, allChefs); // untuk sekarang baru bisa sampe kaya gini, belum bisa switch chef soalnya
+            MapViewPanel gameView = new MapViewPanel(gameMap, allChefs);
             //MapViewPanel gameView = new MapViewPanel(gameMap, chefA);
 //            ChefInputListener inputListener = new ChefInputListener(chefA, gameMap, gameView);
             ChefInputListener inputListener = new ChefInputListener(allChefs, gameMap, gameView, gameController);
