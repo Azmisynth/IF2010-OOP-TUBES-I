@@ -124,6 +124,10 @@ public class ChefPlayer implements Moveable {
         if(!active) {
             return;
         }
+        if (this.direction != newDirection) {
+            this.direction = newDirection;
+            return;
+        }
 
         Position targetPosition = Position.getAdjacent(position, newDirection);
 

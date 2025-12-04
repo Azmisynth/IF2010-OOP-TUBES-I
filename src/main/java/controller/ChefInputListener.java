@@ -1,6 +1,7 @@
 package main.java.controller;
 
 import main.java.model.chef.ChefPlayer;
+import main.java.model.chef.Direction;
 import main.java.model.map.Map;
 import main.java.view.MapViewPanel;
 import java.awt.event.KeyEvent;
@@ -28,6 +29,15 @@ public class ChefInputListener implements KeyListener {
             }
         }
         return null; // tidak ada chef yang aktif
+    }
+
+    private void changeView(ChefPlayer activeChef, Direction direction) {
+        if(activeChef == null) {
+            return;
+        }
+
+        if(direction == Direction.DOWN) {
+        }
     }
 
     @Override

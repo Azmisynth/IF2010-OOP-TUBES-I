@@ -35,6 +35,43 @@ public class MapViewPanel extends JPanel {
 //        this.allChefs = chefs;
 //        this.setPreferredSize(new Dimension(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE));
 //    }
+//
+//    public BufferedImage changeView(ChefPlayer activeChef, Direction newDirection) {
+//        int px = activeChef.getPosition().getX() * TILE_SIZE;
+//        int py = activeChef.getPosition().getY() * TILE_SIZE;
+//
+//        BufferedImage imageToDraw;
+//
+//        switch (newDirection) {
+//            case UP:
+//                imageToDraw = chefUpImage;
+//                break;
+//            case DOWN:
+//                imageToDraw = chefDownImage;
+//                break;
+//            case LEFT:
+//                imageToDraw = chefLeftImage;
+//                break;
+//            case RIGHT:
+//                imageToDraw = chefRightImage;
+//                break;
+//            default:
+//                imageToDraw = chefDownImage;
+//        }
+//
+////        if (imageToDraw != null) {
+////            g2d.drawImage(imageToDraw, px, py, TILE_SIZE, TILE_SIZE, this);
+////        }
+//////        else {
+//////            // Fallback: Jika gambar gagal dimuat, gambar lingkaran berwarna
+//////            g2d.setColor(chef.isActive() ? Color.BLUE : Color.RED);
+//////            g2d.fillOval(px, py, TILE_SIZE, TILE_SIZE);
+//////        }
+////
+////        g2d.setColor(Color.WHITE);
+////        g2d.drawString(chef.getName(), px + TILE_SIZE/4, py + 2);
+//        return imageToDraw;
+//    }
 
     public MapViewPanel(Map gameMap, List<ChefPlayer> allChefs) {
         this.gameMap = gameMap;
