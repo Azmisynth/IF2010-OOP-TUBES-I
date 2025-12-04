@@ -14,4 +14,18 @@ public class StationFactory {
             default -> null;
         };
     }
+
+    public static String getName(String symbol) {
+        return switch(symbol) {
+            case "C" -> "cutting";
+            case "R" -> "cooking";
+            case "A" -> "assembly";
+//            case "S" -> new ServingCounter();
+            case "W" -> "washing";
+//            case "I" -> new IngredientStorage();
+//            case "P" -> new PlateStorage();
+            case "T" -> "trash";
+            default -> null;
+        };
+    }
 }
