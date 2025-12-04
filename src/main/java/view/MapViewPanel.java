@@ -4,6 +4,7 @@ import main.java.model.chef.ChefPlayer;
 import main.java.model.map.Map;
 import main.java.model.map.Tile;
 import main.java.model.chef.Direction;
+import main.java.model.station.Station;
 
 import javax.swing.JPanel;
 import java.awt.Graphics;
@@ -26,6 +27,14 @@ public class MapViewPanel extends JPanel {
     private BufferedImage chefDownImage;
     private BufferedImage chefLeftImage;
     private BufferedImage chefRightImage;
+    private BufferedImage assemblyStation;
+    private BufferedImage cookingStation;
+    private BufferedImage cuttingStation;
+    private BufferedImage ingredientStation;
+    private BufferedImage plateStorage;
+    private BufferedImage servingCounter;
+    private BufferedImage trashStation;
+    private BufferedImage washingStation;
     private static final int TILE_SIZE = 50;
     private static final int WIDTH = 14;
     private static final int HEIGHT = 10;
@@ -46,22 +55,18 @@ public class MapViewPanel extends JPanel {
             } else {
                 tileImage = ImageIO.read(imageUrl);
             }
-            URL chefImageUrl = getClass().getResource("/images/chef_player_up.png");
-            if (chefImageUrl != null) {
-                this.chefUpImage = ImageIO.read(chefImageUrl);
-            }
-            chefImageUrl = getClass().getResource("/images/chef_player_down.png");
-            if(chefImageUrl != null) {
-                this.chefDownImage = ImageIO.read(chefImageUrl);
-            }
-            chefImageUrl = getClass().getResource("/images/chef_player_right.png");
-            if(chefImageUrl != null) {
-                this.chefRightImage = ImageIO.read(chefImageUrl);
-            }
-            chefImageUrl = getClass().getResource("/images/chef_player_left.png");
-            if(chefImageUrl != null) {
-                this.chefLeftImage = ImageIO.read(chefImageUrl);
-            }
+            this.chefUpImage = ImageIO.read(getClass().getResource("/images/chef_player_up.png"));
+            this.chefDownImage = ImageIO.read(getClass().getResource("/images/chef_player_down.png"));
+            this.chefRightImage = ImageIO.read(getClass().getResource("/images/chef_player_right.png"));
+            this.chefLeftImage = ImageIO.read(getClass().getResource("/images/chef_player_left.png"));
+            this.assemblyStation = ImageIO.read(getClass().getResource("/images/assembly_station.png"));
+            this.cookingStation = ImageIO.read(getClass().getResource("/images/cooking_station.png"));
+            this.cuttingStation = ImageIO.read(getClass().getResource("/images/cutting_station.png"));
+//            this.ingredientStation = ImageIO.read(getClass().getResource("/images/ingredient_station.png"));
+//            this.plateStorage = ImageIO.read(getClass().getResource("/images/plate_storage.png"));
+            this.servingCounter = ImageIO.read(getClass().getResource("/images/serving_counter.png"));
+            this.trashStation = ImageIO.read(getClass().getResource("/images/trash_station.png"));
+            this.washingStation = ImageIO.read(getClass().getResource("/images/washing_station.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -75,6 +80,8 @@ public class MapViewPanel extends JPanel {
 
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
+                int px = x * TILE_SIZE;
+                int py = y * TILE_SIZE;
                 Tile tileModel = gameMap.getTile(x, y);
                 BufferedImage imageToDraw = tileImage;
                 boolean usingImage = (tileImage != null && !tileModel.isWall(x, y));
@@ -85,17 +92,19 @@ public class MapViewPanel extends JPanel {
                     g2d.setColor(color);
                     g2d.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
                 }
+                else if (tileModel.getStation() != null) {
+                    Station currentStation = tileModel.getStation();
+                    imageToDraw = assemblyStation; //sementara
+                    if(imageToDraw != null) {g2d.drawImage(imageToDraw, px, py, TILE_SIZE, TILE_SIZE, this);}
+                }
+//                else if (tileModel.getItem() != null) {
+//                    color = Color.YELLOW; // Item di lantai
+//                }
                 else {
                     imageToDraw = tileImage;
                     g2d.drawImage(imageToDraw, x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, this);
                     g2d.drawRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
                 }
-//                else if (tileModel.getStation() != null) {
-//                    color = Color.ORANGE; // Stasiun
-//                } else if (tileModel.getItem() != null) {
-//                    color = Color.YELLOW; // Item di lantai
-//                }
-
 //                g2d.setColor(color);
 //                g2d.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 //
@@ -138,18 +147,6 @@ public class MapViewPanel extends JPanel {
             g2d.setColor(Color.WHITE);
             g2d.drawString(chef.getName(), px + TILE_SIZE/4, py + 2);
         }
-
-        // 2. Gambar Chef (Didasarkan pada posisi Model)
-//        for (Chef chef : allChefs) {
-//            int px = chef.getPosition().getX() * TILE_SIZE;
-//            int py = chef.getPosition().getY() * TILE_SIZE;
-//
-//            g2d.setColor(chef.isActive() ? Color.BLUE : Color.RED);
-//            g2d.fillOval(px, py, TILE_SIZE, TILE_SIZE);
-//
-//            g2d.setColor(Color.WHITE);
-//            g2d.drawString(chef.getName(), px + 5, py + TSIZE / 2);
-//        }
     }
 
     public void refreshView() {
