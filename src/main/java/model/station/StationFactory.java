@@ -1,5 +1,7 @@
 package main.java.model.station;
 
+import main.java.model.chef.Position;
+
 public class StationFactory {
     public static Station createStationObject(String symbol) {
         return switch(symbol) {
@@ -15,11 +17,14 @@ public class StationFactory {
         };
     }
 
-    public static String getName(String symbol) {
+    public static String getName(String symbol, Position position) {
         return switch(symbol) {
             case "C" -> "cutting";
             case "R" -> "cooking";
-            case "A" -> "assembly";
+            case "A" -> {
+                if(position.getY() == 9) { yield "assembly-bottom"; }
+                else { yield "assembly-normal"; }
+            }
             case "S" -> "serving";
             case "W" -> "washing";
 //            case "I" -> new IngredientStorage();
