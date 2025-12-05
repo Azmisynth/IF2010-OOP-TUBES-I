@@ -72,7 +72,7 @@ public class MapViewPanel extends JPanel {
             this.chef2RightImage = ImageIO.read(getClass().getResource("/images/chef2_right.png"));
             this.chef2UpImage = ImageIO.read(getClass().getResource("/images/chef2_up.png"));
 //            this.assemblyStation = ImageIO.read(getClass().getResource("/images/assembly_station_normal.png"));
-//            this.cookingStation = ImageIO.read(getClass().getResource("/images/cooking_station.png"));
+//            this.cookingStation = ImageIO.read(getClass().getResource("/images/cooking_station_right.png"));
 //            this.cuttingStation = ImageIO.read(getClass().getResource("/images/cutting_station.png"));
 ////            this.ingredientStation = ImageIO.read(getClass().getResource("/images/ingredient_station.png"));
 ////            this.plateStorage = ImageIO.read(getClass().getResource("/images/plate_storage.png"));
@@ -81,7 +81,8 @@ public class MapViewPanel extends JPanel {
 //            this.washingStation = ImageIO.read(getClass().getResource("/images/washing_station.png"));
             stationImages.put("assembly-normal", ImageIO.read(getClass().getResource("/images/assembly_station_normal.png")));
             stationImages.put("assembly-bottom", ImageIO.read(getClass().getResource("/images/assembly_station_bottom.png")));
-            stationImages.put("cooking", ImageIO.read(getClass().getResource("/images/cooking_station.png")));
+            stationImages.put("cooking-right", ImageIO.read(getClass().getResource("/images/cooking_station_right.png")));
+            stationImages.put("cooking-left", ImageIO.read(getClass().getResource("/images/cooking_station_left.png")));
             stationImages.put("cutting", ImageIO.read(getClass().getResource("/images/cutting_station.png")));
 //            stationImages.put("ingredient", ImageIO.read(getClass().getResource("/images/ingredient_station.png")));
 //            stationImages.put("plate", ImageIO.read(getClass().getResource("/images/plate_station.png")));

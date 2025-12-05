@@ -20,7 +20,10 @@ public class StationFactory {
     public static String getName(String symbol, Position position) {
         return switch(symbol) {
             case "C" -> "cutting";
-            case "R" -> "cooking";
+            case "R" -> {
+                if(position.getX() == 12) { yield "cooking-right"; }
+                else { yield "cooking-left"; }
+            }
             case "A" -> {
                 if(position.getY() == 9) { yield "assembly-bottom"; }
                 else { yield "assembly-normal"; }
