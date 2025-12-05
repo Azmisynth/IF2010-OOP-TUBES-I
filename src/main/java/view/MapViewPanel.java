@@ -24,10 +24,14 @@ public class MapViewPanel extends JPanel {
     private List<ChefPlayer> allChefs;
     private BufferedImage tileImage;
     //private BufferedImage chefImage;
-    private BufferedImage chefUpImage;
-    private BufferedImage chefDownImage;
-    private BufferedImage chefLeftImage;
-    private BufferedImage chefRightImage;
+    private BufferedImage chef1UpImage;
+    private BufferedImage chef1DownImage;
+    private BufferedImage chef1LeftImage;
+    private BufferedImage chef1RightImage;
+    private BufferedImage chef2UpImage;
+    private BufferedImage chef2DownImage;
+    private BufferedImage chef2LeftImage;
+    private BufferedImage chef2RightImage;
     private BufferedImage assemblyStation;
     private BufferedImage cookingStation;
     private BufferedImage cuttingStation;
@@ -58,10 +62,14 @@ public class MapViewPanel extends JPanel {
             } else {
                 tileImage = ImageIO.read(imageUrl);
             }
-            this.chefUpImage = ImageIO.read(getClass().getResource("/images/chef_player_up.png"));
-            this.chefDownImage = ImageIO.read(getClass().getResource("/images/chef_player_down.png"));
-            this.chefRightImage = ImageIO.read(getClass().getResource("/images/chef_player_right.png"));
-            this.chefLeftImage = ImageIO.read(getClass().getResource("/images/chef_player_left.png"));
+            this.chef1UpImage = ImageIO.read(getClass().getResource("/images/chef1_up.png"));
+            this.chef1DownImage = ImageIO.read(getClass().getResource("/images/chef1_down.png"));
+            this.chef1RightImage = ImageIO.read(getClass().getResource("/images/chef1_right.png"));
+            this.chef1LeftImage = ImageIO.read(getClass().getResource("/images/chef1_left.png"));
+            this.chef2LeftImage = ImageIO.read(getClass().getResource("/images/chef2_left.png"));
+            this.chef2DownImage = ImageIO.read(getClass().getResource("/images/chef2_down.png"));
+            this.chef2RightImage = ImageIO.read(getClass().getResource("/images/chef2_right.png"));
+            this.chef2UpImage = ImageIO.read(getClass().getResource("/images/chef2_up.png"));
 //            this.assemblyStation = ImageIO.read(getClass().getResource("/images/assembly_station.png"));
 //            this.cookingStation = ImageIO.read(getClass().getResource("/images/cooking_station.png"));
 //            this.cuttingStation = ImageIO.read(getClass().getResource("/images/cutting_station.png"));
@@ -134,24 +142,33 @@ public class MapViewPanel extends JPanel {
             int px = chef.getPosition().getX() * TILE_SIZE;
             int py = chef.getPosition().getY() * TILE_SIZE;
 
-            BufferedImage imageToDraw;
+            BufferedImage imageToDraw = null;
             Direction currentDir = chef.getDirection();
 
             switch (currentDir) {
                 case UP:
-                    imageToDraw = chefUpImage;
+                    if(chef.getName().equals("Kebin")) { imageToDraw = chef1UpImage; }
+                    else if(chef.getName().equals("Stewart")) { imageToDraw = chef2UpImage; }
                     break;
                 case DOWN:
-                    imageToDraw = chefDownImage;
+                    if(chef.getName().equals("Kebin")) { imageToDraw = chef1DownImage; }
+                    else if(chef.getName().equals("Stewart")) { imageToDraw = chef2DownImage; }
+                    //imageToDraw = chef1DownImage;
                     break;
                 case LEFT:
-                    imageToDraw = chefLeftImage;
+                    if(chef.getName().equals("Kebin")) { imageToDraw = chef1LeftImage; }
+                    else if(chef.getName().equals("Stewart")) { imageToDraw = chef2LeftImage; }
+//                    imageToDraw = chef1LeftImage;
                     break;
                 case RIGHT:
-                    imageToDraw = chefRightImage;
+                    if(chef.getName().equals("Kebin")) { imageToDraw = chef1RightImage; }
+                    else if(chef.getName().equals("Stewart")) { imageToDraw = chef2RightImage; }
+//                    imageToDraw = chef1RightImage;
                     break;
                 default:
-                    imageToDraw = chefDownImage;
+                    if(chef.getName().equals("Kebin")) { imageToDraw = chef1DownImage; }
+                    else if(chef.getName().equals("Stewart")) { imageToDraw = chef2DownImage; }
+//                    imageToDraw = chef1DownImage;
             }
 
             if (imageToDraw != null) {

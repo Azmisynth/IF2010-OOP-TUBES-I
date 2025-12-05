@@ -42,10 +42,10 @@ public class GameFrame {
 
     public static void main(String[] args) {
         MapType config = new PizzaMap();
-        ChefPlayer chefA = new ChefPlayer("C1", "Kebin", new Position(8, 2));
-        ChefPlayer chefB = new ChefPlayer("C2", "Stewart", new Position(5, 7));
-        List<ChefPlayer> allChefs = new ArrayList<>(List.of(chefA, chefB));
-        //main.java.model.map.Map gameMap = new main.java.model.map.Map(config, chefA);
+        ChefPlayer chef1 = new ChefPlayer("C1", "Kebin", new Position(8, 2));
+        ChefPlayer chef2 = new ChefPlayer("C2", "Stewart", new Position(5, 7));
+        List<ChefPlayer> allChefs = new ArrayList<>(List.of(chef1, chef2));
+        //main.java.model.map.Map gameMap = new main.java.model.map.Map(config, chef1);
         Map gameMap = new Map(config, allChefs);
         GameFrame gameController = new GameFrame(allChefs);
 
@@ -53,8 +53,8 @@ public class GameFrame {
             JFrame frame = new JFrame("Nimonscooked");
 
             MapViewPanel gameView = new MapViewPanel(gameMap, allChefs); // untuk sekarang baru bisa sampe kaya gini, belum bisa switch chef soalnya
-            //MapViewPanel gameView = new MapViewPanel(gameMap, chefA);
-//            ChefInputListener inputListener = new ChefInputListener(chefA, gameMap, gameView);
+            //MapViewPanel gameView = new MapViewPanel(gameMap, chef1);
+//            ChefInputListener inputListener = new ChefInputListener(chef1, gameMap, gameView);
             ChefInputListener inputListener = new ChefInputListener(allChefs, gameMap, gameView, gameController);
             frame.add(gameView);
 
