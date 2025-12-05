@@ -1,6 +1,7 @@
 package main.java.model.chef;
 
 import main.java.model.map.*;
+import main.java.model.station.Station;
 
 public class ChefPlayer implements Moveable {
     private String id;
@@ -34,14 +35,15 @@ public class ChefPlayer implements Moveable {
 //
 //        Tile targetTile = map.getTile(targetPosition.getX(), targetPosition.getY());
 //
-//        if(targetTile != null && targetTile.getItem() != null) {
+//        Item itemOnTile =  targetTile.getItem();
+//
+//        if(itemOnTile != null) { // Jika tangan kosong → ambil item di depan
 //            this.receiveItem(targetTile.removeItem());
-//        } else {
-//            System.out.println("No item found on the floor to pick up.");
+//            System.out.println(name + " picked up " + inventory.getName());
 //        }
 //    }
 //
-//    public void putDownItem(Map map) {
+//    public void dropItem(Map map) {
 //        if (this.inventory == null) {
 //            System.out.println("Cannot put down item: Inventory is empty.");
 //            return;
@@ -52,8 +54,7 @@ public class ChefPlayer implements Moveable {
 //
 //        if(targetTile != null && targetTile.getItem() == null) {
 //            targetTile.setItem(giveItem());
-//        } else {
-//            System.out.println("No item can be put down on the floor.");
+//            System.out.println(name + " placed " + targetTile.getItem().getName() + " on the floor.");
 //        }
 //    }
 
@@ -66,40 +67,102 @@ public class ChefPlayer implements Moveable {
         Tile targetTile = map.getTile(targetPosition.getX(), targetPosition.getY());
 
         if(targetTile == null) return;
+
+        Station targetStation = targetTile.getStation();
+//        Item itemOnTile = targetTile.getItem();
 //
-//        Station targetStation = targetTile.getStation();
-//        Item itemOnFloor = targetTile.getItem();
-//
-//        if(targetStation != null) {
-//            // method station
-//        } else {
-//            // jika masuk ke sini, artinya untuk handle item
-//            if(this.inventory == null && itemOnFloor == null) {
-//                System.out.println("No interaction can be done");
+//        if(targetStation != null) { // interaksi dengan station
+//            if (targetStation instanceof IngredientStorage) {
+//                handleIngredientStorageInteraction(targetTile, (IngredientStorage) targetStation);
+//            } else {
+//                targetStation.interact(this);
 //            }
-//            else if(this.inventory == null & itemOnFloor != null) {
-//                this.receiveItem(map.removeItemOnMap(targetPosition.getX(), targetPosition.getY()));
-//            } else if(this.inventory != null && itemOnFloor != null) {
-//                /***
-//                 * kalo inventorynya adalah piring, lalu itemOnFloor adalah ingredients yang bisa diletakkan di piring, itemOnFloor akan diletakkan di piring
-//                 * kalo inventorynya adalah piring, lalu itemOnFloor adalah dish, itemOnFloor akan diletakkan di piring
-//                 * kalo inventorynya adalah kitchen utensils yang berisi ingredients, itemOnFloor adalah piring, lalu ingredients di KitchenUtensils bisa diletakkan di piring dan telah selesai diproses, ingredients akan berpindah ke piring di lantai, menyisakan kitchen utensils kosong di chef
-//                 */
+//            return;
+//        }
+//
+//        if (this.inventory instanceof Plate) {
+//            Plate plateInHand = (Plate) this.inventory;
+//            if (plateInHand.isClean() && itemOnTile instanceof Ingredient) {
+//                handlePlating(targetTile, plateInHand, itemOnTile);
+//                return;
 //            }
 //        }
+//
+//        if (this.inventory == null) {
+//            if(itemonTile != null) {
+//                pickUpItem(map);
+//            } else {
+//                System.out.println("No interaction can be done");
+//            }
+//        } else if (itemOnTile == null) {
+//            dropItem(map);
+//        }
     }
+
+    //private void handlePlating(Tile targetTile, Plate plateInHand, Item itemOnTile) {
+        // plating item yang ada di kitchen utensils dan ada di lantai
+//        if (itemOnTile instanceof KitchenUtensils) {
+//            KitchenUtensils utensils = (KitchenUtensils) itemOnTile;
+//
+//            if (!utensils.getContents().isEmpty()) {
+//                Item itemToPlate = (Item) utensils.getContents().remove(0);
+//                plateInHand.addComponent((Preparable) itemToPlate);
+//                System.out.println(name + " plated item from utensil to plate in hand.");
+//            }
+//
+//        } else { // item bukan di kitchen utensils dan ada di lantai
+//            targetTile.removeItem();
+//
+//            if (itemOnTile instanceof Preparable) {
+//                plateInHand.addComponent((Preparable) itemOnTile);
+//            } else {
+//                System.err.println("Item cannot be added to plate.");
+//                targetTile.setItem(itemOnTile); // balikin ke tile
+//                return;
+//            }
+//
+//            targetTile.setItem(this.giveItem()); // berikan item yang ada di chef ke tile
+//            System.out.println(name + " plated item and placed the filled plate on the floor.");
+//        }
+    //}
+
+//    private void handleIngredientStationInteraction(Tile targetTile, IngredientStation storage) {
+//        Item itemOnStorage = targetTile.getItem();
+//
+//        if (itemOnStorage != null) {
+//            if (this.inventory == null) {
+//                this.receiveItem(targetTile.removeItem());
+//            } else {
+//                System.out.println(name + " inventory full, cannot take item on top.");
+//            }
+//            return;
+//        }
+//
+//        if (this.inventory != null && itemOnStorage == null) {
+//            targetTile.setItem(this.giveItem());
+//            System.out.println(name + " placed item on the empty storage.");
+//            return;
+//        }
+//
+//        if (this.inventory == null && itemOnStorage == null) {
+//            storage.interact(this);
+//        } else {
+//            System.out.println(name + " inventory full, cannot take ingredient.");
+//        }
+//    }
+
 //
 //    public void receiveItem(Item item) {
 //        if(getInventory() == null) {
 //            this.inventory = item;
 //        } else {
-//            throw new IllegalStateException("Chef has held an item.");
+//            System.err.println("Chef has held an item.");
 //        }
 //    }
 //
 //    public Item giveItem() {
 //        if(getInventory() == null) {
-//            throw new IllegalStateException("Chef has no items to give");
+//            return null;
 //        }
 //        Item itemToGive = this.inventory;
 //        this.inventory = null;
