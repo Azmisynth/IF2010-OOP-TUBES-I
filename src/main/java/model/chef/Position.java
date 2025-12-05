@@ -1,24 +1,32 @@
 package main.java.model.chef;
 
 public class Position {
-    private final int x;
-    private final int y;
+    private double x;
+    private double y;
 
-    public Position(int x, int y) {
+    public Position(double x, double y) {
         this.x = x;
         this.y = y;
     }
-    public int getX() {
+    public double getX() {
         return x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
     public static Position getAdjacent(Position current, Direction direction) {
-        int newX = current.getX() + direction.getX();
-        int newY = current.getY() + direction.getY();
+        double newX = current.getX() + direction.getX();
+        double newY = current.getY() + direction.getY();
 
         return new Position(newX, newY);
     }

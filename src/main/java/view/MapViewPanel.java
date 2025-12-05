@@ -1,10 +1,10 @@
 package main.java.view;
 
+import main.java.controller.KeyHandler;
 import main.java.model.chef.ChefPlayer;
 import main.java.model.map.Map;
 import main.java.model.map.Tile;
 import main.java.model.chef.Direction;
-
 import javax.swing.JPanel;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -16,9 +16,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
-public class MapViewPanel extends JPanel {
+public class MapViewPanel extends JPanel implements Runnable {
     private final Map gameMap;
-    private ChefPlayer activeChef;
+//    private ChefPlayer activeChef;
     private List<ChefPlayer> allChefs;
     private BufferedImage tileImage;
     //private BufferedImage chefImage;
@@ -29,49 +29,11 @@ public class MapViewPanel extends JPanel {
     private static final int TILE_SIZE = 50;
     private static final int WIDTH = 14;
     private static final int HEIGHT = 10;
+    Thread gameThread;
+    int FPS = 60;
+    KeyHandler keyHandler;
 
-//    public MapViewPanel(main.java.model.map.Map map, List<Chef> chefs) {
-//        this.gameMap = map;
-//        this.allChefs = chefs;
-//        this.setPreferredSize(new Dimension(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE));
-//    }
-//
-//    public BufferedImage changeView(ChefPlayer activeChef, Direction newDirection) {
-//        int px = activeChef.getPosition().getX() * TILE_SIZE;
-//        int py = activeChef.getPosition().getY() * TILE_SIZE;
-//
-//        BufferedImage imageToDraw;
-//
-//        switch (newDirection) {
-//            case UP:
-//                imageToDraw = chefUpImage;
-//                break;
-//            case DOWN:
-//                imageToDraw = chefDownImage;
-//                break;
-//            case LEFT:
-//                imageToDraw = chefLeftImage;
-//                break;
-//            case RIGHT:
-//                imageToDraw = chefRightImage;
-//                break;
-//            default:
-//                imageToDraw = chefDownImage;
-//        }
-//
-////        if (imageToDraw != null) {
-////            g2d.drawImage(imageToDraw, px, py, TILE_SIZE, TILE_SIZE, this);
-////        }
-//////        else {
-//////            // Fallback: Jika gambar gagal dimuat, gambar lingkaran berwarna
-//////            g2d.setColor(chef.isActive() ? Color.BLUE : Color.RED);
-//////            g2d.fillOval(px, py, TILE_SIZE, TILE_SIZE);
-//////        }
-////
-////        g2d.setColor(Color.WHITE);
-////        g2d.drawString(chef.getName(), px + TILE_SIZE/4, py + 2);
-//        return imageToDraw;
-//    }
+    double playerSpeed = 0.02;
 
     public MapViewPanel(Map gameMap, List<ChefPlayer> allChefs) {
         this.gameMap = gameMap;
@@ -103,6 +65,12 @@ public class MapViewPanel extends JPanel {
             e.printStackTrace();
         }
         this.setPreferredSize(new Dimension(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE));
+        this.setFocusable(true);
+    }
+
+    public void setKeyHandler(KeyHandler keyHandler) {
+        this.keyHandler = keyHandler;
+        this.addKeyListener(keyHandler);
     }
 
     @Override
@@ -140,8 +108,8 @@ public class MapViewPanel extends JPanel {
             }
         }
         for(ChefPlayer chef : allChefs) {
-            int px = chef.getPosition().getX() * TILE_SIZE;
-            int py = chef.getPosition().getY() * TILE_SIZE;
+            double px = chef.getPosition().getX() * TILE_SIZE;
+            double py = chef.getPosition().getY() * TILE_SIZE;
 
             BufferedImage imageToDraw;
             Direction currentDir = chef.getDirection();
@@ -164,7 +132,7 @@ public class MapViewPanel extends JPanel {
             }
 
             if (imageToDraw != null) {
-                g2d.drawImage(imageToDraw, px, py, TILE_SIZE, TILE_SIZE, this);
+                g2d.drawImage(imageToDraw, (int) px, (int) py, TILE_SIZE, TILE_SIZE, this);
             }
 //        else {
 //            // Fallback: Jika gambar gagal dimuat, gambar lingkaran berwarna
@@ -173,7 +141,7 @@ public class MapViewPanel extends JPanel {
 //        }
 
             g2d.setColor(Color.WHITE);
-            g2d.drawString(chef.getName(), px + TILE_SIZE/4, py + 2);
+            g2d.drawString(chef.getName(), ((int) px) + TILE_SIZE/4,((int) py) + 2);
         }
 
         // 2. Gambar Chef (Didasarkan pada posisi Model)
@@ -191,5 +159,52 @@ public class MapViewPanel extends JPanel {
 
     public void refreshView() {
         this.repaint();
+    }
+
+    public void startGameThread() {
+        gameThread = new Thread(this);
+        gameThread.start();
+    }
+
+    @Override
+    public void run() {
+        double drawInterval = 1000000000/FPS; // 0.01666 sec
+        double nextDrawTime = System.nanoTime() + drawInterval;
+
+        while (gameThread != null) {
+            // update information such as character position
+            update();
+            // draw the screen with the updated information (player gerak dan berpindah posisi, artinya update informasi koordinat secara terus menerus)
+            repaint();
+
+            try {
+                double remainingTime = nextDrawTime - System.nanoTime();
+                remainingTime /= 1000000;
+
+                if (remainingTime < 0) {
+                    remainingTime = 0;
+                }
+                Thread.sleep((long) remainingTime);
+
+                nextDrawTime += drawInterval;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void update() {
+        ChefPlayer chef = gameMap.getActiveChef();
+        //for(ChefPlayer chef : allChefs) {
+            if(keyHandler.upPressed == true) {
+                chef.setPosition(Direction.UP, playerSpeed);
+            } else if(keyHandler.downPressed == true) {
+                chef.setPosition(Direction.DOWN, playerSpeed);
+            } else if(keyHandler.leftPressed == true) {
+                chef.setPosition(Direction.LEFT, playerSpeed);
+            } else if(keyHandler.rightPressed == true) {
+                chef.setPosition(Direction.RIGHT, playerSpeed);
+            }
+        //}
     }
 }

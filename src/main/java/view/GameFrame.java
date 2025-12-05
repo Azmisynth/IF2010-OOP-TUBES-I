@@ -1,6 +1,6 @@
 package main.java.view;
 
-import main.java.controller.ChefInputListener;
+import main.java.controller.KeyHandler;
 import main.java.model.chef.ChefPlayer;
 import main.java.model.chef.Position;
 import main.java.model.map.Map;
@@ -47,23 +47,28 @@ public class GameFrame {
         //main.java.model.map.Map gameMap = new main.java.model.map.Map(config, chefA);
         Map gameMap = new Map(config, allChefs);
         GameFrame gameController = new GameFrame(allChefs);
+        chefA.setGameMap(gameMap);
+        chefB.setGameMap(gameMap);
 
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Nimonscooked");
 
             MapViewPanel gameView = new MapViewPanel(gameMap, allChefs);
+            KeyHandler inputHandler = new KeyHandler(allChefs, gameMap, gameView, gameController);
+            gameView.setKeyHandler(inputHandler);
             //MapViewPanel gameView = new MapViewPanel(gameMap, chefA);
 //            ChefInputListener inputListener = new ChefInputListener(chefA, gameMap, gameView);
-            ChefInputListener inputListener = new ChefInputListener(allChefs, gameMap, gameView, gameController);
+            //KeyHandler inputListener = new KeyHandler(allChefs, gameMap, gameView, gameController);
             frame.add(gameView);
 
             frame.pack();
-            gameView.addKeyListener(inputListener);
+            gameView.addKeyListener(inputHandler);
             gameView.setFocusable(true);
             gameView.requestFocusInWindow();
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setVisible(true);
 
+            gameView.startGameThread();
         });
     }
 }

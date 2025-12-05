@@ -9,6 +9,7 @@ public class ChefPlayer implements Moveable {
     private Direction direction;
     //private Item inventory; // item yang dibawa oleh chef dan bisa null
     private boolean active;
+    Map gameMap;
 
     public ChefPlayer(String id, String name, Position startPosition) {
         this.id = id;
@@ -17,6 +18,10 @@ public class ChefPlayer implements Moveable {
         this.direction = Direction.DOWN;
         //this.inventory = null;
         this.active = false;
+    }
+
+    public void setGameMap(Map gameMap) {
+        this.gameMap = gameMap;
     }
 
     public Position getPosition() {
@@ -63,7 +68,7 @@ public class ChefPlayer implements Moveable {
         }
 
         Position targetPosition = Position.getAdjacent(this.position, this.direction);
-        Tile targetTile = map.getTile(targetPosition.getX(), targetPosition.getY());
+        Tile targetTile = map.getTile((int) targetPosition.getX(), (int) targetPosition.getY());
 
         if(targetTile == null) return;
 //
@@ -131,7 +136,7 @@ public class ChefPlayer implements Moveable {
 
         Position targetPosition = Position.getAdjacent(position, newDirection);
 
-        if(map.isWalkable(targetPosition.getX(), targetPosition.getY())) {
+        if(map.isWalkable((int) targetPosition.getX(), (int) targetPosition.getY())) {
             this.position = targetPosition;
         } else {
             System.out.println(name + " movement blocked.");
@@ -140,6 +145,29 @@ public class ChefPlayer implements Moveable {
     }
 
     public String getName() { return this.name; }
+
+    public void setPosition(Direction direction, double playerSpeed) {
+        double tempX = this.position.getX();
+        double tempY = this.position.getY();
+        if(direction == Direction.UP) {
+            //this.position.setY((position.getY() - playerSpeed));
+            tempY -= playerSpeed;
+        } else if (direction == Direction.DOWN) {
+//            this.position.setY(position.getY() + playerSpeed);
+            tempY += playerSpeed;
+        } else if(direction == Direction.LEFT) {
+//            this.position.setX(position.getX() - playerSpeed);
+            tempX -= playerSpeed;
+        } else if(direction == Direction.RIGHT) {
+//            this.position.setX(position.getX() + playerSpeed);
+            tempX += playerSpeed;
+        }
+
+        if (gameMap.isWalkable(tempX, tempY)) { // Asumsi Map diakses dari ChefPlayer
+            this.position.setX(tempX);
+            this.position.setY(tempY);
+        }
+    }
 
     public void moveUp(Map map) {
         attemptMove(map, Direction.UP);
