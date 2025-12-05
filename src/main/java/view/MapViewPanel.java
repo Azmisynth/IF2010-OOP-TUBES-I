@@ -183,7 +183,6 @@ public class MapViewPanel extends JPanel {
 //        }
 
             g2d.setColor(Color.WHITE);
-            g2d.drawString(chef.getName(), px + TILE_SIZE/4, py + 2);
         }
     }
 
