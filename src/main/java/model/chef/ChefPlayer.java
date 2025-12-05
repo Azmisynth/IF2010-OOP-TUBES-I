@@ -10,6 +10,7 @@ public class ChefPlayer implements Moveable {
     private Direction direction;
     //private Item inventory; // item yang dibawa oleh chef dan bisa null
     private boolean active;
+    private volatile boolean busy = false;
 
     public ChefPlayer(String id, String name, Position startPosition) {
         this.id = id;
@@ -168,6 +169,10 @@ public class ChefPlayer implements Moveable {
 //        this.inventory = null;
 //        return itemToGive;
 //    }
+
+    public boolean isBusy() { return busy; }
+
+    public void setBusy(boolean busy) { this.busy = busy; }
 
     public void activate() {
         active = true;
