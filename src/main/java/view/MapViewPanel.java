@@ -1,6 +1,7 @@
 package main.java.view;
 
 import main.java.model.chef.ChefPlayer;
+import main.java.model.chef.Position;
 import main.java.model.map.Map;
 import main.java.model.map.Tile;
 import main.java.model.chef.Direction;
@@ -70,7 +71,7 @@ public class MapViewPanel extends JPanel {
             this.chef2DownImage = ImageIO.read(getClass().getResource("/images/chef2_down.png"));
             this.chef2RightImage = ImageIO.read(getClass().getResource("/images/chef2_right.png"));
             this.chef2UpImage = ImageIO.read(getClass().getResource("/images/chef2_up.png"));
-//            this.assemblyStation = ImageIO.read(getClass().getResource("/images/assembly_station.png"));
+//            this.assemblyStation = ImageIO.read(getClass().getResource("/images/assembly_station_normal.png"));
 //            this.cookingStation = ImageIO.read(getClass().getResource("/images/cooking_station.png"));
 //            this.cuttingStation = ImageIO.read(getClass().getResource("/images/cutting_station.png"));
 ////            this.ingredientStation = ImageIO.read(getClass().getResource("/images/ingredient_station.png"));
@@ -78,7 +79,8 @@ public class MapViewPanel extends JPanel {
 //            this.servingCounter = ImageIO.read(getClass().getResource("/images/serving_counter.png"));
 //            this.trashStation = ImageIO.read(getClass().getResource("/images/trash_station.png"));
 //            this.washingStation = ImageIO.read(getClass().getResource("/images/washing_station.png"));
-            stationImages.put("assembly", ImageIO.read(getClass().getResource("/images/assembly_station.png")));
+            stationImages.put("assembly-normal", ImageIO.read(getClass().getResource("/images/assembly_station_normal.png")));
+            stationImages.put("assembly-bottom", ImageIO.read(getClass().getResource("/images/assembly_station_bottom.png")));
             stationImages.put("cooking", ImageIO.read(getClass().getResource("/images/cooking_station.png")));
             stationImages.put("cutting", ImageIO.read(getClass().getResource("/images/cutting_station.png")));
 //            stationImages.put("ingredient", ImageIO.read(getClass().getResource("/images/ingredient_station.png")));
@@ -113,7 +115,7 @@ public class MapViewPanel extends JPanel {
                 }
                 else if (tileModel.getStation() != null) {
                     Station currentStation = tileModel.getStation();
-                    String stationKey = StationFactory.getName(currentStation.getSymbol());
+                    String stationKey = StationFactory.getName(currentStation.getSymbol(), new Position(x, y));
 
                     imageToDraw = stationImages.get(stationKey);
                     if(imageToDraw != null) {
