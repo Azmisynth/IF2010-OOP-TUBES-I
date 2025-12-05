@@ -41,9 +41,15 @@ public class GameFrame {
     }
 
     public static void main(String[] args) {
-        MapType config = new PizzaMap();
-        ChefPlayer chef1 = new ChefPlayer("C1", "Kebin", new Position(8, 2));
-        ChefPlayer chef2 = new ChefPlayer("C2", "Stewart", new Position(5, 7));
+        PizzaMap config = new PizzaMap();
+//        MapType config = new PizzaMap();
+        List<Position> chefPositions = config.getChefPositions();
+        if (chefPositions.size() < 2) {
+            System.err.println("FATAL ERROR: Only " + chefPositions.size() + " spawn points found. Minimum 2 required.");
+            return;
+        }
+        ChefPlayer chef1 = new ChefPlayer("C1", "Kebin", chefPositions.get(0));
+        ChefPlayer chef2 = new ChefPlayer("C2", "Stewart", chefPositions.get(1));
         List<ChefPlayer> allChefs = new ArrayList<>(List.of(chef1, chef2));
         //main.java.model.map.Map gameMap = new main.java.model.map.Map(config, chef1);
         Map gameMap = new Map(config, allChefs);
