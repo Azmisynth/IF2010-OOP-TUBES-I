@@ -42,7 +42,7 @@ public class MapViewPanel extends JPanel {
     private BufferedImage trashStation;
     private BufferedImage washingStation;
     private static final int TILE_SIZE = 50;
-    private static final int WIDTH = 14;
+    private static final int WIDTH = 16;
     private static final int HEIGHT = 10;
     private java.util.Map<String, BufferedImage> stationImages;
 

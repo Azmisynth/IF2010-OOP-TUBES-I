@@ -21,7 +21,7 @@ public class MainMenuPanel extends JPanel {
 
     public MainMenuPanel(GameFrame controller) {
         this.controller = controller;
-        this.setPreferredSize(new Dimension(700, 500)); // Ukuran default
+        this.setPreferredSize(new Dimension(800, 500)); // Ukuran default
         this.setLayout(new GridBagLayout());
         try {
             this.backgroundImage = ImageIO.read(getClass().getResource("/images/main/background.png"));

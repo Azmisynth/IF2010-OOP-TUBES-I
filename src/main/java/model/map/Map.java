@@ -4,7 +4,7 @@ import java.util.List;
 import main.java.model.chef.ChefPlayer;
 
 public class Map {
-    private static final int width = 14;
+    private static final int width = 16;
     private static final int height = 10;
     private final Tile[][] tiles;
     private final MapType mapConfig;

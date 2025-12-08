@@ -7,16 +7,16 @@ import java.util.ArrayList;
 public class PizzaMap extends MapType {
     private List<Position> chefPosition = new ArrayList<>();
     private static final String[] PIZZA_LAYOUT = {
-            "XATACAAACAAAXX",
-            "X...........XX",
-            "X.....A.V...SX",
-            "X...........SX",
-            "XWWAIAIAIAIAPX",
-            "X............X",
-            "XXXX..A...XXXX",
-            "XR...V......RX",
-            "XXXX......XXXX",
-            "XXXXAAIAAAXXXX",
+            "XXXATACAAACAAAXX",
+            "XXX...........XX",
+            "XXX.....A.V...SX",
+            "XXX...........SX",
+            "XXXWWAIAIAIAIAPX",
+            "XXX............X",
+            "XXXXXX..A...XXXX",
+            "XXXR...V......RX",
+            "XXXXXX......XXXX",
+            "XXXXXXAAIAAAXXXX",
     };
 
     public List<Position> getChefPositions() {

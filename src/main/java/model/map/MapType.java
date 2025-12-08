@@ -7,7 +7,7 @@ public abstract class MapType {
     protected Tile[][] tiles = new Tile[getHeight()][getWidth()];
 
     public final int getWidth() {
-        return 14;
+        return 16;
     }
 
     public final int getHeight() {

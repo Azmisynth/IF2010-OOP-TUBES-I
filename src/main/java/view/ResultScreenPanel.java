@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class ResultScreenPanel extends JPanel {
     public ResultScreenPanel(GameFrame controller, int score, int successfulOrders, int failedOrders, boolean passed) {
-        this.setPreferredSize(new Dimension(700, 500));
+        this.setPreferredSize(new Dimension(800, 500));
         this.setLayout(new GridLayout(7, 1));
 
         String status = passed ? "🎉 STAGE CLEARED! (PASS)" : "❌ GAME OVER (FAIL)";

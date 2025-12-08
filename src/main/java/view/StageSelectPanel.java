@@ -8,7 +8,7 @@ public class StageSelectPanel extends JPanel {
 
     public StageSelectPanel(GameFrame controller) {
         this.controller = controller;
-        this.setPreferredSize(new Dimension(700, 500));
+        this.setPreferredSize(new Dimension(800, 500));
         this.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 30));
 
         add(new JLabel("CHOOSE STAGE:"));
