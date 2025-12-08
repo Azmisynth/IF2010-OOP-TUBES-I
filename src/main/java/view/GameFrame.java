@@ -6,17 +6,18 @@ import main.java.model.chef.Position;
 import main.java.model.map.Map;
 import main.java.model.map.MapType;
 import main.java.model.map.PizzaMap;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
+
+import javax.swing.*;
 import java.util.List;
 import java.util.ArrayList;
 
-public class GameFrame {
+public class GameFrame extends JFrame {
     private final List<ChefPlayer> allChefs;
     private int activeChefIndex;
     private ChefPlayer activeChef;
+    private Map gameMap;
 
-    public GameFrame(List<ChefPlayer> allChefs) {
+    public GameFrame(List<ChefPlayer> allChefs, Map gameMap) {
         this.allChefs = allChefs;
         this.activeChefIndex = 0;
         if (!allChefs.isEmpty()) {
@@ -25,6 +26,54 @@ public class GameFrame {
                 allChefs.get(i).deactivate();
             }
         }
+        this.gameMap = gameMap;
+        setTitle("Nimonscooked");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
+
+        showMainMenu();
+
+        setVisible(true);
+    }
+
+    public void showMainMenu() {
+        MainMenuPanel mainMenu = new MainMenuPanel(this);
+        switchPanel((JPanel) mainMenu);
+    }
+
+    public void showStageSelect() {
+        StageSelectPanel stageSelect = new StageSelectPanel(this);
+        switchPanel(stageSelect);
+    }
+
+    public void startGame(String stageId) {
+        if(stageId.equals("Stage1")) {
+            MapViewPanel gameView = new MapViewPanel(gameMap, allChefs);
+
+            ChefInputListener inputHandler = new ChefInputListener(allChefs, gameMap, gameView, this);
+            gameView.addKeyListener(inputHandler);
+
+            switchPanel(gameView);
+
+            gameView.setFocusable(true);
+            gameView.requestFocusInWindow();
+        }
+    }
+
+    public void showHowToPlay() {
+        JOptionPane.showMessageDialog(this,
+                "W/UP: Move Up\nS/DOWN: Move Down\nA/LEFT: Move Left\nD/RIGHT: Move Right\nSPACE: Interact\nB: Switch Chef",
+                "How to Play",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void switchPanel(JPanel newPanel) {
+        getContentPane().removeAll();
+        getContentPane().add(newPanel);
+        pack();
+        setLocationRelativeTo(null);
+        revalidate();
+        repaint();
     }
 
     public void changeActiveChef() {
@@ -53,24 +102,24 @@ public class GameFrame {
         List<ChefPlayer> allChefs = new ArrayList<>(List.of(chef1, chef2));
         //main.java.model.map.Map gameMap = new main.java.model.map.Map(config, chef1);
         Map gameMap = new Map(config, allChefs);
-        GameFrame gameController = new GameFrame(allChefs);
+        GameFrame gameController = new GameFrame(allChefs, gameMap);
 
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Nimonscooked");
-
-            MapViewPanel gameView = new MapViewPanel(gameMap, allChefs); // untuk sekarang baru bisa sampe kaya gini, belum bisa switch chef soalnya
-            //MapViewPanel gameView = new MapViewPanel(gameMap, chef1);
-//            ChefInputListener inputListener = new ChefInputListener(chef1, gameMap, gameView);
-            ChefInputListener inputListener = new ChefInputListener(allChefs, gameMap, gameView, gameController);
-            frame.add(gameView);
-
-            frame.pack();
-            gameView.addKeyListener(inputListener);
-            gameView.setFocusable(true);
-            gameView.requestFocusInWindow();
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setVisible(true);
-
-        });
+//        SwingUtilities.invokeLater(() -> {
+//           // JFrame frame = new JFrame("Nimonscooked");
+//
+//            //MapViewPanel gameView = new MapViewPanel(gameMap, allChefs); // untuk sekarang baru bisa sampe kaya gini, belum bisa switch chef soalnya
+//            //MapViewPanel gameView = new MapViewPanel(gameMap, chef1);
+////            ChefInputListener inputListener = new ChefInputListener(chef1, gameMap, gameView);
+////            ChefInputListener inputListener = new ChefInputListener(allChefs, gameMap, gameView, gameController);
+////            frame.add(gameView);
+////
+////            frame.pack();
+////            gameView.addKeyListener(inputListener);
+////            gameView.setFocusable(true);
+////            gameView.requestFocusInWindow();
+////            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+////            frame.setVisible(true);
+//
+//        });
     }
 }

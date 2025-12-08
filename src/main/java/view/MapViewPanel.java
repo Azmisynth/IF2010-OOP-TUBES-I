@@ -57,20 +57,20 @@ public class MapViewPanel extends JPanel {
         this.allChefs = allChefs;
         this.stationImages = new java.util.HashMap<>();
         try {
-            URL imageUrl = getClass().getResource("/images/tile.png");
+            URL imageUrl = getClass().getResource("/images/map/tile.png");
             if (imageUrl == null) {
                 System.err.println("FATAL ERROR: File 'tile.png' not found in resources!");
             } else {
                 tileImage = ImageIO.read(imageUrl);
             }
-            this.chef1UpImage = ImageIO.read(getClass().getResource("/images/chef1_up.png"));
-            this.chef1DownImage = ImageIO.read(getClass().getResource("/images/chef1_down.png"));
-            this.chef1RightImage = ImageIO.read(getClass().getResource("/images/chef1_right.png"));
-            this.chef1LeftImage = ImageIO.read(getClass().getResource("/images/chef1_left.png"));
-            this.chef2LeftImage = ImageIO.read(getClass().getResource("/images/chef2_left.png"));
-            this.chef2DownImage = ImageIO.read(getClass().getResource("/images/chef2_down.png"));
-            this.chef2RightImage = ImageIO.read(getClass().getResource("/images/chef2_right.png"));
-            this.chef2UpImage = ImageIO.read(getClass().getResource("/images/chef2_up.png"));
+            this.chef1UpImage = ImageIO.read(getClass().getResource("/images/chef/chef1_up.png"));
+            this.chef1DownImage = ImageIO.read(getClass().getResource("/images/chef/chef1_down.png"));
+            this.chef1RightImage = ImageIO.read(getClass().getResource("/images/chef/chef1_right.png"));
+            this.chef1LeftImage = ImageIO.read(getClass().getResource("/images/chef/chef1_left.png"));
+            this.chef2LeftImage = ImageIO.read(getClass().getResource("/images/chef/chef2_left.png"));
+            this.chef2DownImage = ImageIO.read(getClass().getResource("/images/chef/chef2_down.png"));
+            this.chef2RightImage = ImageIO.read(getClass().getResource("/images/chef/chef2_right.png"));
+            this.chef2UpImage = ImageIO.read(getClass().getResource("/images/chef/chef2_up.png"));
 //            this.assemblyStation = ImageIO.read(getClass().getResource("/images/assembly_station_normal.png"));
 //            this.cookingStation = ImageIO.read(getClass().getResource("/images/cooking_station_right.png"));
 //            this.cuttingStation = ImageIO.read(getClass().getResource("/images/cutting_station.png"));
@@ -79,16 +79,16 @@ public class MapViewPanel extends JPanel {
 //            this.servingCounter = ImageIO.read(getClass().getResource("/images/serving_counter.png"));
 //            this.trashStation = ImageIO.read(getClass().getResource("/images/trash_station.png"));
 //            this.washingStation = ImageIO.read(getClass().getResource("/images/washing_station.png"));
-            stationImages.put("assembly-normal", ImageIO.read(getClass().getResource("/images/assembly_station_normal.png")));
-            stationImages.put("assembly-bottom", ImageIO.read(getClass().getResource("/images/assembly_station_bottom.png")));
-            stationImages.put("cooking-right", ImageIO.read(getClass().getResource("/images/cooking_station_right.png")));
-            stationImages.put("cooking-left", ImageIO.read(getClass().getResource("/images/cooking_station_left.png")));
-            stationImages.put("cutting", ImageIO.read(getClass().getResource("/images/cutting_station.png")));
+            stationImages.put("assembly-normal", ImageIO.read(getClass().getResource("/images/station/assembly_station_normal.png")));
+            stationImages.put("assembly-bottom", ImageIO.read(getClass().getResource("/images/station/assembly_station_bottom.png")));
+            stationImages.put("cooking-right", ImageIO.read(getClass().getResource("/images/station/cooking_station_right.png")));
+            stationImages.put("cooking-left", ImageIO.read(getClass().getResource("/images/station/cooking_station_left.png")));
+            stationImages.put("cutting", ImageIO.read(getClass().getResource("/images/station/cutting_station.png")));
 //            stationImages.put("ingredient", ImageIO.read(getClass().getResource("/images/ingredient_station.png")));
 //            stationImages.put("plate", ImageIO.read(getClass().getResource("/images/plate_station.png")));
-            stationImages.put("serving", ImageIO.read(getClass().getResource("/images/serving_counter.png")));
-            stationImages.put("trash", ImageIO.read(getClass().getResource("/images/trash_station.png")));
-            stationImages.put("washing", ImageIO.read(getClass().getResource("/images/washing_station.png")));
+            stationImages.put("serving", ImageIO.read(getClass().getResource("/images/station/serving_counter.png")));
+            stationImages.put("trash", ImageIO.read(getClass().getResource("/images/station/trash_station.png")));
+            stationImages.put("washing", ImageIO.read(getClass().getResource("/images/station/washing_station.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
