@@ -13,12 +13,10 @@ public class StageSelectPanel extends JPanel {
 
         add(new JLabel("CHOOSE STAGE:"));
 
-        // Contoh Stage 1
-        JButton stage1Button = new JButton("Stage 1 (Target Time: 90 s)");
+        JButton stage1Button = new JButton("Stage 1");
         stage1Button.addActionListener(e -> controller.startGame("Stage1"));
         add(stage1Button);
 
-        // Tombol kembali
         JButton backButton = new JButton("Back to Main Menu");
         backButton.addActionListener(e -> controller.showMainMenu());
         add(backButton);

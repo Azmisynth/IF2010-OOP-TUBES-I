@@ -46,6 +46,34 @@ public class GameFrame extends JFrame {
         switchPanel(stageSelect);
     }
 
+    // File: main/java/view/GameFrame.java (Lanjutan)
+
+    private void showStageInfoPopup(String stageId) {
+        if(stageId.equals("Stage1")) {
+            String targetTime = "90 detik";
+            String targetScore = "500 poin";
+
+            String message = String.format(
+                    "Stage %s berhasil dimuat.\n\n" +
+                            "Tujuan:\n" +
+                            "- Target Waktu: %s\n" +
+                            "- Target Skor: %s\n\n" +
+                            "Tekan OK untuk memulai!",
+                    stageId, targetTime, targetScore);
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    message,
+                    "Stage Loaded: " + stageId,
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+        }
+
+
+        // MapViewPanel currentView = (MapViewPanel) getContentPane().getComponent(0);
+        // currentView.requestFocusInWindow();
+    }
+
     public void startGame(String stageId) {
         if(stageId.equals("Stage1")) {
             MapViewPanel gameView = new MapViewPanel(gameMap, allChefs);
@@ -56,15 +84,16 @@ public class GameFrame extends JFrame {
             switchPanel(gameView);
 
             gameView.setFocusable(true);
-            gameView.requestFocusInWindow();
+            SwingUtilities.invokeLater(() -> {
+                gameView.requestFocusInWindow();
+                showStageInfoPopup(stageId);
+            });
         }
     }
 
     public void showHowToPlay() {
-        JOptionPane.showMessageDialog(this,
-                "W/UP: Move Up\nS/DOWN: Move Down\nA/LEFT: Move Left\nD/RIGHT: Move Right\nSPACE: Interact\nB: Switch Chef",
-                "How to Play",
-                JOptionPane.INFORMATION_MESSAGE);
+        HowToPlayPanel howToPlayView = new HowToPlayPanel(this);
+        switchPanel(howToPlayView);
     }
 
     public void switchPanel(JPanel newPanel) {
