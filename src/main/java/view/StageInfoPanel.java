@@ -61,7 +61,7 @@ public class StageInfoPanel extends JPanel {
 //        targetTime.setAlignmentX(Component.CENTER_ALIGNMENT);
 //        gbc.gridy = 2;
 //        this.add(targetTime, gbc);
-        JLabel titleLabel = new JLabel("KrustyCooked");
+        JLabel titleLabel = new JLabel("  KrustyCooked");
         titleLabel.setForeground(new Color(90, 43, 12));
         titleLabel.setFont(new Font("Red Hat Text", Font.BOLD, 20));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -70,7 +70,7 @@ public class StageInfoPanel extends JPanel {
         titleLabel.setBounds(titleX, 40, titleWidth, 50);
         this.add(titleLabel);
 
-        JLabel targetTime = new JLabel("Target time: 90 s");
+        JLabel targetTime = new JLabel("Target time      90 s");
         targetTime.setForeground(new Color(90, 43, 12));
         targetTime.setFont(new Font("Red Hat Text", Font.BOLD, 15));
         targetTime.setAlignmentX(Component.CENTER_ALIGNMENT);

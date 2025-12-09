@@ -45,22 +45,6 @@ public class GameFrame extends JFrame {
         switchPanel(stageSelect);
     }
 
-    private void showStageInfoPopup(String stageId) {
-        if(stageId.equals("Stage1")) {
-            String targetTime = "90 detik";
-//            String targetScore = "500 poin";
-
-            String message = String.format("Target Waktu: %s\n", targetTime);
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    message,
-                    "Stage Loaded: " + stageId,
-                    JOptionPane.INFORMATION_MESSAGE
-            );
-        }
-    }
-
     public void startGame(String stageId) {
         if(stageId.equals("Stage1")) {
             DetailStagePanel screen = new DetailStagePanel("Stage1");
