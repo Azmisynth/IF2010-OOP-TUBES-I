@@ -46,24 +46,25 @@ public class GameFrame extends JFrame {
     }
 
     public void startGame(String stageId) {
-        if(stageId.equals("Stage1")) {
-            DetailStagePanel screen = new DetailStagePanel("Stage1");
-            switchPanel(screen);
-            StageInfoDialog dialog = new StageInfoDialog(this, stageId);
-            dialog.setVisible(true);
-            if (dialog.isPlayConfirmed()) {
-                MapViewPanel gameView = new MapViewPanel(gameMap, allChefs);
-                ChefInputListener inputHandler = new ChefInputListener(allChefs, gameMap, gameView, this);
-                gameView.addKeyListener(inputHandler);
+        DetailStagePanel screen = new DetailStagePanel(stageId);
+        switchPanel(screen);
 
-                switchPanel(gameView);
+        StageInfoDialog dialog = new StageInfoDialog(this, stageId);
+        dialog.setVisible(true);
 
-                gameView.setFocusable(true);
-                gameView.requestFocusInWindow();
-            } else {
-                showStageSelect();
-            }
+        if (!dialog.isPlayConfirmed()) {
+            showStageSelect();
+            return;
         }
+
+        MapViewPanel gameView = new MapViewPanel(gameMap, allChefs);
+        ChefInputListener inputHandler =
+                new ChefInputListener(allChefs, gameMap, gameView, this);
+
+        gameView.addKeyListener(inputHandler);
+        switchPanel(gameView);
+        gameView.setFocusable(true);
+        gameView.requestFocusInWindow();
     }
 
     public void showHowToPlay() {

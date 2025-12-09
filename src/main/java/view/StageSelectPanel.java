@@ -3,22 +3,28 @@ package main.java.view;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class StageSelectPanel extends JPanel {
     private final GameFrame controller;
     private BufferedImage background;
+    private int hoverIndex = -1;
+
 
     private static class Circle {
         int x, y, r;
         String stage;
+        String label;
 
-        Circle(int x, int y, int r, String stage) {
+        Circle(int x, int y, int r, String stage, String label) {
             this.x = x;
             this.y = y;
             this.r = r;
             this.stage = stage;
+            this.label = label;
         }
 
         boolean contains(int mx, int my) {
@@ -41,11 +47,48 @@ public class StageSelectPanel extends JPanel {
         }
 
         int r = 35;
-        circles.add(new Circle(146, 195, r, "Stage1"));
-        circles.add(new Circle(397, 300, r, "Stage2"));
-        circles.add(new Circle(670, 195, r, "Stage3"));
+        circles.add(new Circle(148, 188, r, "Stage1", "1"));
+        circles.add(new Circle(402, 309, r, "Stage2", "2"));
+        circles.add(new Circle(670, 187, r, "Stage3", "3"));
 
-        addMouseListener(new java.awt.event.MouseAdapter() {
+        OutlineLabel backLabel = new OutlineLabel("< Back to Homepage");
+        backLabel.setBorder(BorderFactory.createEmptyBorder(0, 30, 40, 0));
+        backLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        backLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                backLabel.setForeground(Color.LIGHT_GRAY);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                backLabel.setForeground(Color.WHITE);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                controller.showMainMenu();
+            }
+        });
+
+
+        JPanel linkPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 30, 450));
+        linkPanel.setOpaque(false);
+        linkPanel.add(backLabel);
+        setLayout(new BorderLayout());
+
+        setLayout(new BorderLayout());
+
+        JPanel bottom = new JPanel(new BorderLayout());
+        bottom.setOpaque(false);
+        bottom.setBorder(BorderFactory.createEmptyBorder(0, 20, 30, 0));
+
+        bottom.add(backLabel, BorderLayout.WEST);
+        add(bottom, BorderLayout.SOUTH);
+
+
+        this.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mousePressed(java.awt.event.MouseEvent e) {
                 int mx = e.getX();
@@ -59,6 +102,28 @@ public class StageSelectPanel extends JPanel {
                 }
             }
         });
+
+        addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                int mx = e.getX();
+                int my = e.getY();
+
+                int newHover = -1;
+                for (int i = 0; i < circles.size(); i++) {
+                    if (circles.get(i).contains(mx, my)) {
+                        newHover = i;
+                        break;
+                    }
+                }
+
+                if (newHover != hoverIndex) {
+                    hoverIndex = newHover;
+                    repaint();
+                }
+            }
+        });
+
     }
 
     private void drawCenteredString(Graphics2D g2d, String text, int centerX, int centerY) {
@@ -81,6 +146,28 @@ public class StageSelectPanel extends JPanel {
         g2d.setStroke(new BasicStroke(1));
     }
 
+    private void drawStageCircle(Graphics2D g2d, Circle c, int index) {
+        Color fill = (hoverIndex == index)
+                ? new Color(90, 43, 12)
+                : new Color(130, 228, 255);
+
+        Color border = (hoverIndex == index)
+                ? new Color(255, 240, 200)
+                : new Color(31, 123, 192);
+
+        drawCircleWithBorder(g2d, c.x, c.y, c.r, fill, border, 3);
+
+        Color textColor = (hoverIndex == index)
+                ? new Color(255, 240, 200)
+                : new Color(31, 123, 192);
+
+        g2d.setColor(textColor);
+        g2d.setStroke(new BasicStroke(2));
+        g2d.setFont(new Font("Red Hat Text", Font.BOLD, 40));
+        drawCenteredString(g2d, c.label, c.x, c.y);
+    }
+
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -92,17 +179,9 @@ public class StageSelectPanel extends JPanel {
             g2d.drawImage(background, 0, 0, 800, 500, null);
         }
 
-        int circleRadius = 35;
-
-        drawCircleWithBorder(g2d, 146, 195, circleRadius, new Color(255,240,200), new Color(90,43,12), 3);
-        drawCircleWithBorder(g2d, 397, 300, circleRadius, new Color(255,240,200), new Color(90,43,12), 3);
-        drawCircleWithBorder(g2d, 670, 195, circleRadius, new Color(255,240,200), new Color(90,43,12), 3);
-
-        g2d.setColor(new Color(90,43,12));
-        g2d.setFont(new Font("Red Hat Text", Font.BOLD, 40));
-        drawCenteredString(g2d, "1", 146, 195);
-        drawCenteredString(g2d, "2", 397, 300);
-        drawCenteredString(g2d, "3", 670, 195);
+        for (int i = 0; i < circles.size(); i++) {
+            drawStageCircle(g2d, circles.get(i), i);
+        }
 
         g2d.dispose();
     }

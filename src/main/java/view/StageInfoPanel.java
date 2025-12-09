@@ -29,38 +29,17 @@ public class StageInfoPanel extends JPanel {
         this.dialog = dialog;
 
         this.setPreferredSize(new Dimension(231, 240));
-//        this.setLayout(new GridBagLayout());
         this.setLayout(null);
 
         this.setOpaque(false);
         try {
-            this.previewStage = ImageIO.read(getClass().getResource("/images/stage/preview_stage.png"));
+            if(stageId.equals("Stage1")) this.previewStage = ImageIO.read(getClass().getResource("/images/stage/preview_stage1.png"));
+            else if(stageId.equals("Stage2")) this.previewStage = ImageIO.read(getClass().getResource("/images/stage/preview_stage2.png"));
+            else this.previewStage = ImageIO.read(getClass().getResource("/images/stage/preview_stage3.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        GridBagConstraints gbc = new GridBagConstraints();
-//        gbc.insets = new Insets(0, 10, 10, 10);
 
-//        JPanel topSpacer = new JPanel();
-//        topSpacer.setPreferredSize(new Dimension(1, 20));
-//        topSpacer.setOpaque(false);
-//
-//        gbc.gridy = 0;
-//        this.add(topSpacer, gbc);
-
-//        JLabel titleLabel = new JLabel("KrustyCooked");
-//        titleLabel.setForeground(new Color(90, 43, 12));;
-//        titleLabel.setFont(new Font("Red Hat Text", Font.BOLD, 20));
-//        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-//        gbc.gridy = 1;
-//        this.add(titleLabel, gbc);
-//
-//        JLabel targetTime = new JLabel("Target time: 90 s");
-//        targetTime.setForeground(new Color(216, 146, 33));
-//        targetTime.setFont(new Font("Red Had Text", Font.BOLD, 15));
-//        targetTime.setAlignmentX(Component.CENTER_ALIGNMENT);
-//        gbc.gridy = 2;
-//        this.add(targetTime, gbc);
         JLabel titleLabel = new JLabel("  KrustyCooked");
         titleLabel.setForeground(new Color(90, 43, 12));
         titleLabel.setFont(new Font("Red Hat Text", Font.BOLD, 20));
@@ -69,8 +48,18 @@ public class StageInfoPanel extends JPanel {
         int titleX = (231 - titleWidth) / 2;
         titleLabel.setBounds(titleX, 40, titleWidth, 50);
         this.add(titleLabel);
+        JLabel targetTime;
+        if(stageId.equals("Stage1")) {
+            targetTime = new JLabel("Target time      120 s");
+        } else if(stageId.equals("Stage2")) {
+            targetTime = new JLabel("Target time      90 s");
+        } else if(stageId.equals("Stage3")) {
+            targetTime = new JLabel("Target time      60 s");
+        } else {
+            targetTime = new JLabel("No target time");
+        }
 
-        JLabel targetTime = new JLabel("Target time      90 s");
+//        JLabel targetTime = new JLabel("Target time      90 s");
         targetTime.setForeground(new Color(90, 43, 12));
         targetTime.setFont(new Font("Red Hat Text", Font.BOLD, 15));
         targetTime.setAlignmentX(Component.CENTER_ALIGNMENT);

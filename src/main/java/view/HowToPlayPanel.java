@@ -18,39 +18,44 @@ public class HowToPlayPanel extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        JButton backButton = new JButton("Back to Main Menu");
-//        backButton.addActionListener(e -> controller.showMainMenu());
+        OutlineLabel backLabel = new OutlineLabel("< Back to Homepage");
 
-        String linkText = "<html><u>&lt; Back to Homepage</u></html>";
-        JLabel backToMenuLabel = new JLabel(linkText);
+        backLabel.setFont(new Font("Red Hat Text", Font.BOLD, 16));
+        backLabel.setForeground(Color.WHITE);
+        backLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        backToMenuLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        backToMenuLabel.setForeground(Color.WHITE);
-        backToMenuLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-//        JPanel buttonPanel = new JPanel();
-//        buttonPanel.add(backButton);
-
-        backToMenuLabel.addMouseListener(new MouseAdapter() {
+        backLabel.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 controller.showMainMenu();
             }
             @Override
             public void mouseEntered(MouseEvent e) {
-                backToMenuLabel.setForeground(Color.LIGHT_GRAY);
+                backLabel.setForeground(Color.LIGHT_GRAY);
             }
             @Override
             public void mouseExited(MouseEvent e) {
-                backToMenuLabel.setForeground(Color.WHITE);
+                backLabel.setForeground(Color.WHITE);
             }
         });
-        JPanel linkPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 30));
-//        linkPanel.setBackground(Color.WHITE);
+//        JPanel linkPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 30));
+//        linkPanel.setOpaque(false);
+//        linkPanel.add(backToMenuLabel);
+//        backToMenuLabel.setOpaque(false);
+//        this.add(linkPanel, BorderLayout.SOUTH);
+        JPanel linkPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 30, 450));
         linkPanel.setOpaque(false);
-        linkPanel.add(backToMenuLabel);
-        backToMenuLabel.setOpaque(false);
-        this.add(linkPanel, BorderLayout.SOUTH);
+        linkPanel.add(backLabel);
+        setLayout(new BorderLayout());
+
+        setLayout(new BorderLayout());
+
+        JPanel bottom = new JPanel(new BorderLayout());
+        bottom.setOpaque(false);
+        bottom.setBorder(BorderFactory.createEmptyBorder(0, 20, 30, 0));
+
+        bottom.add(backLabel, BorderLayout.WEST);
+        add(bottom, BorderLayout.SOUTH);
     }
 
     @Override
