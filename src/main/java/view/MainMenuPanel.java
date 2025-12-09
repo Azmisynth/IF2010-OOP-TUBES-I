@@ -77,7 +77,7 @@ public class MainMenuPanel extends JPanel {
 
         startButton.addActionListener(e -> controller.showStageSelect());
         howToButton.addActionListener(e -> controller.showHowToPlay());
-        exit.addActionListener(e -> System.exit(0));
+        exit.addActionListener(e -> controller.handleExitRequest());
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 0, 5, 0);
@@ -90,7 +90,7 @@ public class MainMenuPanel extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g); // Pastikan komponen default digambar
+        super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
         if (backgroundImage != null) {

@@ -25,6 +25,7 @@ public class MapViewPanel extends JPanel {
     private List<ChefPlayer> allChefs;
     private BufferedImage tileImage;
     //private BufferedImage chefImage;
+    private BufferedImage wall;
     private BufferedImage chef1UpImage;
     private BufferedImage chef1DownImage;
     private BufferedImage chef1LeftImage;
@@ -63,6 +64,7 @@ public class MapViewPanel extends JPanel {
             } else {
                 tileImage = ImageIO.read(imageUrl);
             }
+            this.wall = ImageIO.read(getClass().getResource("/images/map/wall.png"));
             this.chef1UpImage = ImageIO.read(getClass().getResource("/images/chef/chef1_up.png"));
             this.chef1DownImage = ImageIO.read(getClass().getResource("/images/chef/chef1_down.png"));
             this.chef1RightImage = ImageIO.read(getClass().getResource("/images/chef/chef1_right.png"));
@@ -110,9 +112,9 @@ public class MapViewPanel extends JPanel {
                 Color color = Color.LIGHT_GRAY;
 
                 if (tileModel.isWall(getX(), getY())) {
-                    color = Color.BLACK;
-                    g2d.setColor(color);
-                    g2d.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                    imageToDraw = wall;
+                    g2d.drawImage(imageToDraw, x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, this);
+                    g2d.drawRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
                 }
                 else if (tileModel.getStation() != null) {
                     Station currentStation = tileModel.getStation();
