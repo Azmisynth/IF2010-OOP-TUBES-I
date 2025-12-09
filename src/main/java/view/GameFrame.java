@@ -1,6 +1,7 @@
 package main.java.view;
 
 import main.java.controller.ChefInputListener;
+import main.java.helper.SoundPlayer;
 import main.java.model.chef.ChefPlayer;
 import main.java.model.chef.Position;
 import main.java.model.map.Map;
@@ -15,6 +16,7 @@ public class GameFrame extends JFrame {
     private int activeChefIndex;
     private ChefPlayer activeChef;
     private Map gameMap;
+    private SoundPlayer bgmPlayer;
 
     public GameFrame(List<ChefPlayer> allChefs, Map gameMap) {
         this.allChefs = allChefs;
@@ -26,6 +28,8 @@ public class GameFrame extends JFrame {
             }
         }
         this.gameMap = gameMap;
+        bgmPlayer = new SoundPlayer("/sound/bgm.wav");
+        bgmPlayer.loop();
         setTitle("KrustyCooked");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
