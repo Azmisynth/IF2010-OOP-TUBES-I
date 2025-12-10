@@ -60,17 +60,17 @@ public class PizzaMap extends MapType {
                 if (symbol.equals("I")) {
                     Station specificStation = new IngredientStation(Tomato.class);
                     if (i == 4) {
-                        if (j == 4) {
+                        if (j == 6) {
                             specificStation = new IngredientStation(Dough.class);
-                        } else if (j == 6) {
-                            specificStation = new IngredientStation(Chicken.class);
                         } else if (j == 8) {
-                            specificStation = new IngredientStation(Cheese.class);
+                            specificStation = new IngredientStation(Chicken.class);
                         } else if (j == 10) {
+                            specificStation = new IngredientStation(Cheese.class);
+                        } else if (j == 12) {
                             specificStation = new IngredientStation(Sausage.class);
                         }
                     }
-                    else if (i == 9 && j == 6) {
+                    else if (i == 9 && j == 8) {
                         specificStation = new IngredientStation(Tomato.class);
                     }
                     if (specificStation != null) {

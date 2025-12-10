@@ -1,5 +1,6 @@
 package main.java.model.kitchen;
 
+import java.util.concurrent.CopyOnWriteArrayList;
 import main.java.model.item.Ingredient;
 import main.java.model.item.Preparable;
 import main.java.model.item.ItemState;
@@ -15,7 +16,7 @@ public class OrderManager {
     private List<Order> activeOrders;
 
     private static final int MAX_ACTIVE_ORDERS = 3;
-    private static final int ORDER_DURATION =120;
+    private static final int ORDER_DURATION = 120;
 
     public OrderManager() {
         this.score = 0;

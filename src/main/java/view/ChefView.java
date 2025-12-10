@@ -2,7 +2,12 @@ package main.java.view;
 
 import main.java.model.chef.ChefPlayer;
 import main.java.model.chef.Direction;
+import main.java.model.item.Ingredient;
 import main.java.model.item.Item; // Sesuaikan package Item kamu
+import main.java.model.item.ItemState;
+import main.java.model.item.Plate;
+import main.java.model.kitchen.Recipe;
+import main.java.model.kitchen.RecipeBook;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -110,15 +115,106 @@ public class ChefView {
         }
 
         if (chef.getInventory() != null) {
-            String baseName = chef.getInventory().getName();
-            BufferedImage itemImg = itemImages.get(baseName + "pick"); // Cek suffix "pick"
+            Item item = chef.getInventory();
+            String itemName = item.getName();
+            boolean drawStack = false;
+            Plate plateRefForStack = null;
 
-            if (itemImg == null) {
-                itemImg = itemImages.get(baseName); // Fallback ke nama asli
+            if (item instanceof Ingredient) {
+                Ingredient ing = (Ingredient) item;
+                if (ing.getState() == ItemState.CHOPPED) itemName += "_CHOPPED";
+                else if (ing.getState() == ItemState.BURNED) itemName = "Burnt";
+                else if (ing.getState() == ItemState.RAW) itemName += "pick";
             }
 
-            if (itemImg != null) {
-                g2d.drawImage(itemImg, px + 15, py + 20, 20, 20, null);
+            // 2. Cek Status Plate
+            if (item instanceof Plate) {
+                Plate plate = (Plate) item;
+                itemName = "Plate";
+                if (!plate.isClean()) {
+                    itemName = "Plate_DIRTY";
+                }
+                else if (plate.getContents() != null && !plate.getContents().isEmpty()) {
+
+                    boolean isBurned = false;
+                    boolean isAllCooked = true;
+                    boolean hasDough = false;
+                    boolean hasTomato = false;
+                    boolean hasCheese = false;
+
+                    for (Object obj : plate.getContents()) {
+                        if (obj instanceof Ingredient) {
+                            Ingredient ing = (Ingredient) obj;
+
+                            if (ing.getState() == ItemState.BURNED) isBurned = true;
+                            if (ing.getState() != ItemState.COOKED) isAllCooked = false;
+
+                            if (ing.getName().equals("Dough")) hasDough = true;
+                            if (ing.getName().equals("Tomato")) hasTomato = true;
+                            if (ing.getName().equals("Cheese")) hasCheese = true;
+                        }
+                    }
+
+                    if (isBurned) {
+                        itemName = "Burnt";
+                    } else {
+                        Recipe recipe = RecipeBook.findRecipe(plate.getContents());
+
+                        if (recipe != null) {
+                            String recipeName = recipe.getName().replace(" ", "_");
+                            itemName = isAllCooked ? recipeName : recipeName + "_RAW";
+                        }
+
+                        // Kasus: Dough + Tomato (Pizza Tomat Mentah)
+                        else if (hasDough && hasTomato && !hasCheese) {
+                            itemName = "Pizza_Tomat_RAW";
+                        }
+                        // Fallback: Tumpukan Bahan
+                        else {
+                            itemName = "Plate";
+                            drawStack = true;
+                            plateRefForStack = plate;
+                        }
+                    }
+                }
+            }
+            BufferedImage img = itemImages.get(itemName);
+            if (img != null) {
+                g2d.drawImage(img, px + 15, py + 20, 20, 20, null);
+            }
+
+            //
+            if (drawStack && plateRefForStack != null) {
+                int offset = 0;
+
+                for (Object obj : plateRefForStack.getContents()) {
+                    if (obj instanceof Item) {
+                        Item contentItem = (Item) obj;
+                        String key = contentItem.getName();
+
+                        // Logic suffix (sama seperti di atas agar konsisten)
+                        if (contentItem instanceof Ingredient) {
+                            Ingredient cIng = (Ingredient) contentItem;
+                            if (cIng.getState() == ItemState.CHOPPED) key += "_CHOPPED";
+                            else if (cIng.getState() == ItemState.COOKED) key += "_COOKED";
+                            else if (cIng.getState() == ItemState.RAW) key += "pick";
+                        }
+
+                        // Cari gambar (Prioritas: key -> key+pick)
+                        // Karena kita mau gambar kecil, mungkin logic 'pick' bawaanmu berguna
+                        BufferedImage icon = itemImages.get(key);
+                        if (icon == null) icon = itemImages.get(key + "pick");
+
+                        if (icon != null) {
+                            // Gambar kecil (14x14) di atas piring
+                            // Offset: x makin ke kanan, y makin ke atas (efek tumpuk)
+                            g2d.drawImage(icon, px + 18 + offset, py + 22 - offset, 14, 14, null);
+
+                            // Batasi offset biar gak terbang kejauhan
+                            if (offset < 6) offset += 3;
+                        }
+                    }
+                }
             }
         }
     }

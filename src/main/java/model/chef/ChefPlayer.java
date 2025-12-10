@@ -15,7 +15,7 @@ public class ChefPlayer implements Moveable {
     private boolean active;
     private volatile boolean busy = false;
     private static final int THROW_DISTANCE = 4;
-    private static final long DASH_COOLDOWN_MS = 5000; // Cooldown 2 Detik
+    private static final long DASH_COOLDOWN_MS = 3000; // Cooldown 3 Detik
     private static final int DASH_DISTANCE = 3;         // Jarak 3 Kotak
     private long lastDashTime = 0;                      // Waktu terakhir dash
 

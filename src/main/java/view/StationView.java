@@ -19,14 +19,16 @@ import java.util.Map;
 public class StationView {
     private static final int TILE_SIZE = 50;
 
+    private final BufferedImage wall;
     private final BufferedImage tileImage;
     private final Map<String, BufferedImage> stationImages;
     private final Map<String, BufferedImage> itemImages;
 
-    public StationView(BufferedImage tileImage, Map<String, BufferedImage> stationImages, Map<String, BufferedImage> itemImages) {
+    public StationView(BufferedImage tileImage, BufferedImage wall, Map<String, BufferedImage> stationImages, Map<String, BufferedImage> itemImages) {
         this.tileImage = tileImage;
         this.stationImages = stationImages;
         this.itemImages = itemImages;
+        this.wall = wall;
     }
 
     public void drawTile(Graphics2D g2d, Tile tileModel, int x, int y) {
@@ -35,8 +37,7 @@ public class StationView {
 
         //Tembok
         if (tileModel.isWall(x, y)) {
-            g2d.setColor(Color.BLACK);
-            g2d.fillRect(px, py, TILE_SIZE, TILE_SIZE);
+            g2d.drawImage(wall, px, py, TILE_SIZE, TILE_SIZE, null);
         } else {
             if (tileImage != null) {
                 g2d.drawImage(tileImage, px, py, TILE_SIZE, TILE_SIZE, null);
@@ -162,18 +163,18 @@ public class StationView {
             int barY = py - 8;
 
             g2d.setColor(Color.DARK_GRAY);
-            g2d.fillRect(px + 5, barY, 40, 6);
+            g2d.fillRect(px + 7, barY, 40, 6);
 
             if (progress <= 1.0) {
                 g2d.setColor(Color.GREEN);
-                g2d.fillRect(px + 5, barY, (int)(40 * progress), 6);
+                g2d.fillRect(px + 7, barY, (int)(40 * progress), 6);
             } else {
                 g2d.setColor(Color.RED);
                 double burnProgress = Math.min(progress - 1.0, 1.0);
-                g2d.fillRect(px + 5, barY, (int)(40 * burnProgress), 6);
+                g2d.fillRect(px + 7, barY, (int)(40 * burnProgress), 6);
             }
             g2d.setColor(Color.WHITE);
-            g2d.drawRect(px + 5, barY, 40, 6);
+            g2d.drawRect(px + 7, barY, 40, 6);
         }
     }
 
@@ -244,7 +245,7 @@ public class StationView {
         boolean hasDough = false;
         boolean hasTomato = false;
         boolean hasCheese = false;
-        // A. Cek GOSONG
+        // Cek GOSONG
         boolean isBurned = false;
         boolean isAllCooked = true;
         for (Object obj : plate.getContents()) {
@@ -265,32 +266,27 @@ public class StationView {
             if (burntImg != null) g2d.drawImage(burntImg, px + 5, py + 5, 40, 40, null);
             return;
         }
-
-        // B. Cek RESEP (Pizza Utuh)
         Recipe recipe = RecipeBook.findRecipe(plate.getContents());
         if (recipe != null) {
-            // "Pizza Margherita" -> "Pizza_Margherita"
             String recipeName = recipe.getName().replace(" ", "_");
             String imageKey = isAllCooked ? recipeName : recipeName + "_RAW";
 
             BufferedImage dishImg = itemImages.get(imageKey);
             if (dishImg != null) {
                 g2d.drawImage(dishImg, px + 5, py + 5, 40, 40, null);
-                return; // Selesai
+                return;
             }
         }
 
         if (hasDough && hasTomato && !hasCheese) {
-            // Kita anggap ini "Pizza Tomat Mentah"
             BufferedImage intermediateImg = itemImages.get("Pizza_Tomat_RAW");
 
             if (intermediateImg != null) {
                 g2d.drawImage(intermediateImg, px + 5, py + 5, 40, 40, null);
-                return; // Selesai, jangan gambar overlay lagi
+                return;
             }
         }
 
-        // C. Fallback: Gambar Bahan Satu-Satu (Overlay)
         int offset = 0;
         for (Object obj : plate.getContents()) {
             if (obj instanceof Ingredient) {

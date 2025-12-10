@@ -30,8 +30,8 @@ public class StationFactory {
                 else { yield "assembly-normal"; }
             }
             case "S" -> {
-                if(position.getX() == 12 && position.getY() == 3) { yield "serving-bottom"; }
-                else if  (position.getX() == 12 && position.getY() == 2) { yield "serving"; }
+                if(position.getX() == 14 && position.getY() == 3) { yield "serving-bottom"; }
+                else if  (position.getX() == 14 && position.getY() == 2) { yield "serving"; }
                 else { yield "null"; }
             }
             case "W" -> "washing";

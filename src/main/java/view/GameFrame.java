@@ -4,6 +4,7 @@ import main.java.controller.ChefInputListener;
 import main.java.helper.SoundPlayer;
 import main.java.model.chef.ChefPlayer;
 import main.java.model.chef.Position;
+import main.java.model.kitchen.OrderManager;
 import main.java.model.map.Map;
 import main.java.model.map.PizzaMap;
 
@@ -16,6 +17,7 @@ public class GameFrame extends JFrame {
     private int activeChefIndex;
     private ChefPlayer activeChef;
     private Map gameMap;
+    private MapViewPanel gameView;
     private SoundPlayer bgmPlayer;
 
     public GameFrame(List<ChefPlayer> allChefs, Map gameMap) {
@@ -64,11 +66,22 @@ public class GameFrame extends JFrame {
         MapViewPanel gameView = new MapViewPanel(gameMap, allChefs);
         ChefInputListener inputHandler =
                 new ChefInputListener(allChefs, gameMap, gameView, this);
+        SwingUtilities.invokeLater(() -> {
+            gameView.addKeyListener(inputHandler);
+            switchPanel(gameView);
+            gameView.setFocusable(true);
+            gameView.requestFocusInWindow();
+            javax.swing.Timer timer = new javax.swing.Timer(16, e -> {
+                gameView.refreshView();
+            });
+            timer.start();
 
-        gameView.addKeyListener(inputHandler);
-        switchPanel(gameView);
-        gameView.setFocusable(true);
-        gameView.requestFocusInWindow();
+            javax.swing.Timer logicTimer = new javax.swing.Timer(1000, e -> {
+                OrderManager.getInstance().updateOrders();
+            });
+            logicTimer.start();
+        });
+
     }
 
     public void showHowToPlay() {

@@ -25,6 +25,7 @@ public class MapViewPanel extends JPanel {
 
     // Resource Variables (Sesuai kodemu)
     private BufferedImage tileImage;
+    private BufferedImage wall;
     private BufferedImage chef1UpImage, chef1DownImage, chef1LeftImage, chef1RightImage;
     private BufferedImage chef2UpImage, chef2DownImage, chef2LeftImage, chef2RightImage;
 
@@ -33,7 +34,7 @@ public class MapViewPanel extends JPanel {
     private java.util.Map<String, BufferedImage> itemImages;
 
     private static final int TILE_SIZE = 50;
-    private static final int WIDTH = 14;
+    private static final int WIDTH = 16;
     private static final int HEIGHT = 10;
 
     public MapViewPanel(Map gameMap, List<ChefPlayer> allChefs) {
@@ -50,7 +51,7 @@ public class MapViewPanel extends JPanel {
     private void loadResources() {
         try {
             // 1. Load Tile
-            URL imageUrl = getClass().getResource("/images/tile.png");
+            URL imageUrl = getClass().getResource("/images/map/tile.png");
             if (imageUrl == null) {
                 System.err.println("FATAL ERROR: File 'tile.png' not found!");
             } else {
@@ -58,29 +59,29 @@ public class MapViewPanel extends JPanel {
             }
 
             // 2. Load Chef Images (Sesuai nama variabelmu)
-            chef1UpImage = ImageIO.read(getClass().getResource("/images/chef1_up.png"));
-            chef1DownImage = ImageIO.read(getClass().getResource("/images/chef1_down.png"));
-            chef1RightImage = ImageIO.read(getClass().getResource("/images/chef1_right.png"));
-            chef1LeftImage = ImageIO.read(getClass().getResource("/images/chef1_left.png"));
-
-            chef2LeftImage = ImageIO.read(getClass().getResource("/images/chef2_left.png"));
-            chef2DownImage = ImageIO.read(getClass().getResource("/images/chef2_down.png"));
-            chef2RightImage = ImageIO.read(getClass().getResource("/images/chef2_right.png"));
-            chef2UpImage = ImageIO.read(getClass().getResource("/images/chef2_up.png"));
+            this.wall = ImageIO.read(getClass().getResource("/images/map/wall.png"));
+            this.chef1UpImage = ImageIO.read(getClass().getResource("/images/chef/chef1_up.png"));
+            this.chef1DownImage = ImageIO.read(getClass().getResource("/images/chef/chef1_down.png"));
+            this.chef1RightImage = ImageIO.read(getClass().getResource("/images/chef/chef1_right.png"));
+            this.chef1LeftImage = ImageIO.read(getClass().getResource("/images/chef/chef1_left.png"));
+            this.chef2LeftImage = ImageIO.read(getClass().getResource("/images/chef/chef2_left.png"));
+            this.chef2DownImage = ImageIO.read(getClass().getResource("/images/chef/chef2_down.png"));
+            this.chef2RightImage = ImageIO.read(getClass().getResource("/images/chef/chef2_right.png"));
+            this.chef2UpImage = ImageIO.read(getClass().getResource("/images/chef/chef2_up.png"));
 
             // 3. Load Station Images (Sesuai key map kodemu)
-            stationImages.put("assembly-normal", ImageIO.read(getClass().getResource("/images/assembly_station_normal.png")));
-            stationImages.put("assembly-bottom", ImageIO.read(getClass().getResource("/images/assembly_station_bottom.png")));
-            stationImages.put("cooking-right", ImageIO.read(getClass().getResource("/images/cooking_station_right.png")));
-            stationImages.put("cooking-left", ImageIO.read(getClass().getResource("/images/cooking_station_left.png")));
-            stationImages.put("cutting", ImageIO.read(getClass().getResource("/images/cutting_station.png")));
-            stationImages.put("ingredient", ImageIO.read(getClass().getResource("/images/ingredient_station.png")));
-            stationImages.put("ingredient-bottom", ImageIO.read(getClass().getResource("/images/assembly_station_bottom.png")));
-            stationImages.put("serving", ImageIO.read(getClass().getResource("/images/serving_atas.png")));
-            stationImages.put("serving-bottom", ImageIO.read(getClass().getResource("/images/serving_bawah.png")));
-            stationImages.put("trash", ImageIO.read(getClass().getResource("/images/trash_station.png")));
-            stationImages.put("washing", ImageIO.read(getClass().getResource("/images/washing_station.png")));
-            stationImages.put("plate", ImageIO.read(getClass().getResource("/images/plate_storage.png")));
+            stationImages.put("assembly-normal", ImageIO.read(getClass().getResource("/images/station/assembly_station_normal.png")));
+            stationImages.put("assembly-bottom", ImageIO.read(getClass().getResource("/images/station/assembly_station_bottom.png")));
+            stationImages.put("cooking-right", ImageIO.read(getClass().getResource("/images/station/cooking_station_right.png")));
+            stationImages.put("cooking-left", ImageIO.read(getClass().getResource("/images/station/cooking_station_left.png")));
+            stationImages.put("cutting", ImageIO.read(getClass().getResource("/images/station/cutting_station.png")));
+            stationImages.put("serving", ImageIO.read(getClass().getResource("/images/station/serving_atas.png")));
+            stationImages.put("trash", ImageIO.read(getClass().getResource("/images/station/trash_station.png")));
+            stationImages.put("washing", ImageIO.read(getClass().getResource("/images/station/washing_station.png")));
+            stationImages.put("ingredient", ImageIO.read(getClass().getResource("/images/station/ingredient_station.png")));
+            stationImages.put("ingredient-bottom", ImageIO.read(getClass().getResource("/images/station/assembly_station_bottom.png")));
+            stationImages.put("serving-bottom", ImageIO.read(getClass().getResource("/images/station/serving_bawah.png")));
+            stationImages.put("plate", ImageIO.read(getClass().getResource("/images/station/plate_storage.png")));
 
 
             // 4. Load Item Images (Sesuai key map kodemu + Tomatopick)
@@ -117,7 +118,7 @@ public class MapViewPanel extends JPanel {
 
     private void initRenderers() {
         // Mengirim aset yang sudah di-load ke Renderer
-        this.stationRenderer = new StationView(tileImage, stationImages, itemImages);
+        this.stationRenderer = new StationView(tileImage, wall, stationImages, itemImages);
         this.chefRenderer = new ChefView(itemImages,
                 chef1UpImage, chef1DownImage, chef1LeftImage, chef1RightImage,
                 chef2UpImage, chef2DownImage, chef2LeftImage, chef2RightImage

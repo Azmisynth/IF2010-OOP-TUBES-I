@@ -74,7 +74,7 @@ public class UIView {
                 g2d.drawString("?", startX + 20, y + 30);
             }
 
-            // Progress Bar Waktu (Di Bawah Kotak)
+            // 3. Progress Bar Waktu (Di Bawah Kotak)
             float progress = order.getProgress(); // 0.0 s/d 1.0
 
             // Warna Bar: Hijau -> Kuning -> Merah
