@@ -14,7 +14,7 @@ public class HowToPlayPanel extends JPanel {
         this.setPreferredSize(new Dimension(800, 500));
         this.setLayout(new BorderLayout());
         try {
-            howToPlayScreen = ImageIO.read(getClass().getResource("/images/main/how_to_play_screen.jpg"));
+            howToPlayScreen = ImageIO.read(getClass().getResource("/images/main/how_to_play_screen.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
