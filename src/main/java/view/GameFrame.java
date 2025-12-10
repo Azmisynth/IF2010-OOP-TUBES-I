@@ -3,6 +3,7 @@ package main.java.view;
 import main.java.controller.ChefInputListener;
 import main.java.model.chef.ChefPlayer;
 import main.java.model.chef.Position;
+import main.java.model.kitchen.OrderManager;
 import main.java.model.map.Map;
 import main.java.model.map.MapType;
 import main.java.model.map.PizzaMap;
@@ -15,6 +16,7 @@ public class GameFrame {
     private final List<ChefPlayer> allChefs;
     private int activeChefIndex;
     private ChefPlayer activeChef;
+    private MapViewPanel gameView;
 
     public GameFrame(List<ChefPlayer> allChefs) {
         this.allChefs = allChefs;
@@ -70,7 +72,15 @@ public class GameFrame {
             gameView.requestFocusInWindow();
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setVisible(true);
+            javax.swing.Timer timer = new javax.swing.Timer(16, e -> {
+                gameView.refreshView();
+            });
+            timer.start();
 
+            javax.swing.Timer logicTimer = new javax.swing.Timer(1000, e -> {
+                OrderManager.getInstance().updateOrders();
+            });
+            logicTimer.start();
         });
     }
 }

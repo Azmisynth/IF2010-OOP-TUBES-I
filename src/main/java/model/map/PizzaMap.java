@@ -1,6 +1,9 @@
 package main.java.model.map;
 
 import main.java.model.chef.Position;
+import main.java.model.station.*;
+import main.java.model.item.*;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -50,8 +53,30 @@ public class PizzaMap extends MapType {
                 String symbol = String.valueOf(rowLayout.charAt(j));
                 if(symbol.equals("V")) {
                     chefPosition.add(new Position(i, j));
+                    symbol = ".";
                 }
                 tiles[i][j] = new Tile(i, j, symbol);
+
+                if (symbol.equals("I")) {
+                    Station specificStation = new IngredientStation(Tomato.class);
+                    if (i == 4) {
+                        if (j == 4) {
+                            specificStation = new IngredientStation(Dough.class);
+                        } else if (j == 6) {
+                            specificStation = new IngredientStation(Chicken.class);
+                        } else if (j == 8) {
+                            specificStation = new IngredientStation(Cheese.class);
+                        } else if (j == 10) {
+                            specificStation = new IngredientStation(Sausage.class);
+                        }
+                    }
+                    else if (i == 9 && j == 6) {
+                        specificStation = new IngredientStation(Tomato.class);
+                    }
+                    if (specificStation != null) {
+                        tiles[i][j].setStation(specificStation);
+                    }
+                }
             }
         }
     }

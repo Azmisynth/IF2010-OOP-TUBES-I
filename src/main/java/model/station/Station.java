@@ -13,4 +13,6 @@ public abstract class Station {
     public String getSymbol() {
         return symbol;
     }
+
+    public void stopCutting(){}
 }

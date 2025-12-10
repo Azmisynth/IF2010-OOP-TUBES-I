@@ -56,11 +56,34 @@ public class ChefInputListener implements KeyListener {
             case KeyEvent.VK_RIGHT:
                 activeChef.moveRight(gameMap);
                 break;
+            case KeyEvent.VK_V:
+                activeChef.interact(gameMap);
+                break;
+            case KeyEvent.VK_C:
+                activeChef.pickUpOrDrop(gameMap);
+                break;
+            case KeyEvent.VK_F:
+                activeChef.throwItem(gameMap, allChefs);
+                break;
+            case KeyEvent.VK_SPACE:
+                activeChef.dash(gameMap);
+                break;
         }
 
         gameView.refreshView();
     }
 
     @Override public void keyTyped(KeyEvent e) {}
-    @Override public void keyReleased(KeyEvent e) {}
+    @Override public void keyReleased(KeyEvent e) {
+        ChefPlayer activeChef = getActiveChef();
+        if (activeChef == null) return;
+
+        // cek apakah tombol V dilepad
+        if (e.getKeyCode() == KeyEvent.VK_V) {
+
+            activeChef.stopInteract(gameMap);
+
+            gameView.refreshView();
+        }
+    }
 }

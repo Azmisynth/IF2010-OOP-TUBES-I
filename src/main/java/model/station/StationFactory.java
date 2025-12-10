@@ -1,6 +1,7 @@
 package main.java.model.station;
 
 import main.java.model.chef.Position;
+import main.java.model.item.Tomato;
 
 public class StationFactory {
     public static Station createStationObject(String symbol) {
@@ -8,10 +9,10 @@ public class StationFactory {
             case "C" -> new CuttingStation();
             case "R" -> new CookingStation();
             case "A" -> new AssemblyStation();
-//            case "S" -> new ServingCounter();
+            case "S" -> new ServingCounter();
             case "W" -> new WashingStation();
-//            case "I" -> new IngredientStorage();
-//            case "P" -> new PlateStorage();
+            case "I" -> new IngredientStation(Tomato.class);
+            case "P" -> new PlateStorage();
             case "T" -> new TrashStation();
             default -> null;
         };
@@ -28,10 +29,14 @@ public class StationFactory {
                 if(position.getY() == 9) { yield "assembly-bottom"; }
                 else { yield "assembly-normal"; }
             }
-            case "S" -> "serving";
+            case "S" -> {
+                if(position.getX() == 12 && position.getY() == 3) { yield "serving-bottom"; }
+                else if  (position.getX() == 12 && position.getY() == 2) { yield "serving"; }
+                else { yield "null"; }
+            }
             case "W" -> "washing";
-//            case "I" -> new IngredientStorage();
-//            case "P" -> new PlateStorage();
+            case "I" -> "ingredient";
+            case "P" -> "plate";
             case "T" -> "trash";
             default -> null;
         };
