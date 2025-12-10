@@ -22,7 +22,7 @@ public class StationFactory {
         return switch(symbol) {
             case "C" -> "cutting";
             case "R" -> {
-                if(position.getX() == 12) { yield "cooking-right"; }
+                if(position.getX() == 14) { yield "cooking-right"; }
                 else { yield "cooking-left"; }
             }
             case "A" -> {
