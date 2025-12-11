@@ -3,9 +3,12 @@ package main.java.model.chef;
 import main.java.model.item.Ingredient;
 import main.java.model.item.Item;
 import main.java.model.item.ItemState;
+import main.java.model.item.Plate;
 import main.java.model.map.*;
 import main.java.model.station.Station;
 import main.java.model.station.StationFactory;
+
+import java.util.List;
 
 public class ChefPlayer implements Moveable {
     private String id;
@@ -115,77 +118,152 @@ public class ChefPlayer implements Moveable {
         return (float) timePassed / DASH_COOLDOWN_MS;
     }
 
-    public void throwItem(Map map, java.util.List<ChefPlayer> allChefs) {
+    public void throwItem(Map map, List<ChefPlayer> allChefs) {
+        // Validasi dasar
         if (!active || inventory == null) return;
 
-        // Hanya Ingredient Mentah/Potong yang boleh dilempar
+        // Validasi Item: Hanya Ingredient Mentah/Potong
         if (inventory instanceof Ingredient) {
             Ingredient ing = (Ingredient) inventory;
-            if (ing.getState() == ItemState.COOKED || ing.getState() == ItemState.BURNED) {
+            if (ing.getState() == ItemState.COOKED ||
+                    ing.getState() == ItemState.BURNED) {
+                System.out.println("LOGIC: Makanan panas gaboleh dilempar!");
                 return;
             }
         } else {
             return;
         }
 
-        // Simpan item yang mau dilempar & kosongkan tangan
+        System.out.println(name + " MELEMPAR " + inventory.getName() + "!");
+
+        // Simpan projectile & kosongkan tangan
         Item projectile = this.inventory;
         this.inventory = null;
 
-        // Kalkulasi Lintasan
-        Position currentCheckPos = this.position;
-        Tile landingTile = null;
+        // Posisi terakhir yang valid untuk mendarat (Awalnya posisi chef sendiri)
+        Position validLandingPos = new Position(this.position.getX(), this.position.getY());
 
+        // LOOPING LINTASAN
         for (int i = 1; i <= THROW_DISTANCE; i++) {
-            // Cek koordinat berikutnya
-            Position nextPos = Position.getAdjacent(currentCheckPos, this.direction);
-            Tile nextTile = map.getTile(nextPos.getX(), nextPos.getY());
+            // Hitung koordinat target
+            Position nextPos = Position.getAdjacent(validLandingPos, this.direction);
+            if (!map.isValidCoordinate(nextPos.getX(), nextPos.getY())) {
+                System.out.println("-> Out of Bounds (Luar Map). Jatuh di posisi terakhir.");
 
-            // Cek Tembok
-            if (nextTile == null || nextTile.isWall(nextPos.getX(), nextPos.getY())) {
-                break; // Stop di tile sebelumnya
+                // Jatuh di tile terakhir yang aman (validLandingPos)
+                dropOnFloor(map, validLandingPos, projectile);
+                return;
             }
 
-            // Cek Chef Lain (Fitur Tangkap)
-            ChefPlayer catcher = null;
+            // Khusus untuk logic fly over, kita butuh tahu posisi 'calon' tile ini
+            // Jika validLandingPos tidak update (karena fly over), kita hitung manual dari posisi chef
+            if (i > 1) {
+                nextPos = getPositionAtDistance(this.position, this.direction, i);
+            }
+
+            main.java.model.map.Tile nextTile = map.getTile(nextPos.getX(), nextPos.getY());
+
+            if (nextTile == null || nextTile.isWall(nextPos.getX(), nextPos.getY())) {
+                System.out.println("-> Nabrak Tembok. Jatuh di " + validLandingPos.getX() + "," + validLandingPos.getY());
+                dropOnFloor(map, validLandingPos, projectile); // Jatuh di posisi valid terakhir
+                return;
+            }
+
             for (ChefPlayer c : allChefs) {
                 if (c != this && c.getPosition().getX() == nextPos.getX() && c.getPosition().getY() == nextPos.getY()) {
-                    catcher = c;
-                    break;
+                    // Chef Kosong -> Terima
+                    if (c.getInventory() == null) {
+                        c.setInventory(projectile);
+                        System.out.println("-> DITANGKAP oleh " + c.getName());
+                        return;
+                    }
+                    // Chef Penuh -> Jatuh DI TILE CHEF TERSEBUT
+                    else {
+                        System.out.println("-> Nabrak Chef (Penuh). Jatuh di kaki chef.");
+                        dropOnFloor(map, nextPos, projectile);
+                        return;
+                    }
                 }
             }
 
-            if (catcher != null) {
-                if (catcher.getInventory() == null) {
-                    catcher.receiveItem(projectile); // Tangkap!
-                    return; // Selesai, barang sudah di tangan chef lain
-                } else {
-                    landingTile = nextTile; // Jatuh di kaki chef itu kalau chef bawa ite,
-                    break;
-                }
-            }
-
-            // Cek Station (Bisa gak lempar masuk ke Wajan/Lantai?)
             if (nextTile.getStation() != null) {
-                landingTile = nextTile;
-                break;
+                boolean mustLandHere = (i == THROW_DISTANCE);
+                if (!mustLandHere) {
+                    Position peekPos = getPositionAtDistance(this.position, this.direction, i + 1);
+                    main.java.model.map.Tile peekTile = map.getTile(peekPos.getX(), peekPos.getY());
+
+                    // Jika depannya tembok, maka station ini jadi terminal terakhir
+                    if (peekTile == null || peekTile.isWall(peekPos.getX(), peekPos.getY())) {
+                        mustLandHere = true;
+                    }
+                }
+
+                // LOGIC FLY OVER
+                if (!mustLandHere) {
+                    validLandingPos = nextPos;
+
+                    continue; // Lanjut ke loop berikutnya (i+1)
+                }
+
+                // Coba masukkan ke station
+                boolean accepted = nextTile.getStation().receiveThrownItem(projectile);
+
+                if (accepted) {
+                    // Station Kosong/Cocok -> Masuk Station
+                    System.out.println("-> Mendarat di Station!");
+                    return;
+                } else {
+                    // Logic Fly Over vs Drop Before
+                    dropOnFloor(map, validLandingPos, projectile);
+                    return;
+                }
             }
 
-            // Kalau kosong (Lantai), lanjut terbang
-            landingTile = nextTile;
-            currentCheckPos = nextPos; // Maju selangkah
+            validLandingPos = nextPos;
+
+            // Jika sudah jarak maksimal, jatuhkan di sini
+            if (i == THROW_DISTANCE) {
+                System.out.println("-> Jarak Max. Jatuh di lantai.");
+                dropOnFloor(map, validLandingPos, projectile); // [Kondisi 1]
+                return;
+            }
         }
+    }
 
-        // Pendaratan
-        if (landingTile != null) {
-            // Cek apakah lantai sudah ada barang?
-            if (landingTile.getItem() == null) {
-                landingTile.setItem(projectile);
+    private Position getPositionAtDistance(Position start, Direction direction, int distance) {
+        int x = start.getX();
+        int y = start.getY();
+
+        switch (direction) {
+            case UP    -> y -= distance; // Y makin kecil ke atas
+            case RIGHT -> x += distance; // X makin besar ke kanan
+            case DOWN  -> y += distance; // Y makin besar ke bawah
+            case LEFT  -> x -= distance; // X makin kecil ke kiri
+        }
+        return new Position(x, y);
+    }
+
+    private void dropOnFloor(Map map, Position pos, Item item) {
+        Tile tile = map.getTile(pos.getX(), pos.getY());
+        if (tile == null) return;
+
+        Item floorItem = tile.getItem();
+
+        // Kasus A: Lantai Kosong
+        if (floorItem == null) {
+            tile.setItem(item);
+        }
+        // Kasus B: Ada Piring -> Coba Merge (Kondisi 1: Tertumpuk)
+        else if (floorItem instanceof Plate) {
+            Plate plate = (Plate) floorItem;
+            if (item instanceof Ingredient) {
+                plate.addComponent((Ingredient) item);
+                System.out.println("LOGIC: Lemparan masuk ke piring di lantai!");
             }
-        } else {
-            //Lempar pas madep tembok
-            Tile myTile = map.getTile(position.getX(), position.getY());
-            if (myTile.getItem() == null) myTile.setItem(projectile);
+        }
+        // Kasus C: Lantai Penuh bukan piring -> Item hilang/mental (atau timpa, tergantung desainmu)
+        else {
+            System.out.println("LOGIC: Lantai penuh, item hilang.");
         }
     }
 

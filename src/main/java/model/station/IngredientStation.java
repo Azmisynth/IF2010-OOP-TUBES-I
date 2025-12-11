@@ -79,6 +79,30 @@ public class IngredientStation extends Station {
         }
     }
 
+    public boolean receiveThrownItem(Item item) {
+        // MEJA KOSONG
+        if (itemOnStation == null) {
+            // Bisa terima Piring atau Ingredient
+            if (item instanceof Plate || item instanceof Ingredient) {
+                this.itemOnStation = item;
+                System.out.println("LOGIC: Assembly Station menangkap " + item.getName());
+                return true;
+            }
+        }
+        // SUDAH ADA PIRING
+        else if (itemOnStation instanceof Plate) {
+            // Kalau dilempar Ingredient, masukkan ke piring
+            if (item instanceof Ingredient) {
+                ((Plate) itemOnStation).addComponent((Ingredient) item);
+                System.out.println("LOGIC: Lemparan masuk ke Piring di Assembly Station!");
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
     public Class<? extends Ingredient> getIngredientType() {
         return ingredientType;
     }

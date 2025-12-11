@@ -1,5 +1,6 @@
 package main.java.model.station;
 import main.java.model.chef.ChefPlayer;
+import main.java.model.item.Item;
 
 public abstract class Station {
     protected String symbol; // simbol dari stationnya untuk identifikasi (konsisten dengan TileState)
@@ -15,4 +16,8 @@ public abstract class Station {
     }
 
     public void stopCutting(){}
+
+    public boolean receiveThrownItem(Item item) {
+        return false; // Default: Menolak semua lemparan
+    }
 }
