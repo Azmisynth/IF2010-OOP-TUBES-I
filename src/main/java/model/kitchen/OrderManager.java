@@ -12,19 +12,18 @@ import java.util.Set;
 
 public class OrderManager {
     private static OrderManager instance;
+    private int spawnTimer;
     private int score;
     private List<Order> activeOrders;
 
     private static final int MAX_ACTIVE_ORDERS = 3;
     private static final int ORDER_DURATION = 120;
+    private static final int SPAWN_INTERVAL = 15;
 
     public OrderManager() {
         this.score = 0;
         this.activeOrders = new ArrayList<>();
-
-        // Start dengan 3 order awal
-        addOrder();
-        addOrder();
+        this.spawnTimer = SPAWN_INTERVAL;
         addOrder();
     }
 
@@ -59,7 +58,12 @@ public class OrderManager {
 
         //isi sampai penuh kalau ada yang selesai.
         if (activeOrders.size() < MAX_ACTIVE_ORDERS) {
-            addOrder();
+            spawnTimer--;
+            if (spawnTimer <= 0) {
+                addOrder();
+                spawnTimer = SPAWN_INTERVAL;
+            }
+
         }
     }
 
