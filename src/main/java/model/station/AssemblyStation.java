@@ -93,6 +93,30 @@ public class AssemblyStation extends Station { // class untuk station tempat rak
         }
     }
 
+    @Override
+    public boolean receiveThrownItem(Item item) {
+        // MEJA KOSONG
+        if (itemOnStation == null) {
+            // Bisa terima Piring atau Ingredient
+            if (item instanceof Plate || item instanceof Ingredient) {
+                this.itemOnStation = item;
+                System.out.println("LOGIC: Assembly Station menangkap " + item.getName());
+                return true;
+            }
+        }
+        // SUDAH ADA PIRING
+        else if (itemOnStation instanceof Plate) {
+            // Kalau dilempar Ingredient, masukkan ke piring
+            if (item instanceof Ingredient) {
+                ((Plate) itemOnStation).addComponent((Ingredient) item);
+                System.out.println("LOGIC: Lemparan masuk ke Piring di Assembly Station!");
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
     public Item getItemOnStation() { // getter untuk ambil item yang ada di station
         return itemOnStation; // return item yang ada di station (atau null kalo kosong)

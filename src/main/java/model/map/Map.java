@@ -41,6 +41,10 @@ public class Map {
         return true;
     }
 
+    public boolean isValidCoordinate(int x, int y) {
+        return x >= 0 && x < width && y >= 0 && y < height;
+    }
+
 //    public void placeItemOnMap(int x, int y, Item item) {
 //        getTile(x, y).setItem(item);
 //    }
