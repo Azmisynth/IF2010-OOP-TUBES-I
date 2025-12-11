@@ -113,7 +113,7 @@ public class StationView {
 
             g2d.setColor(Color.DARK_GRAY);
             g2d.fillRect(px + 5, barY, 40, 6);
-            g2d.setColor(Color.GREEN);
+            g2d.setColor(Color.CYAN);
             g2d.fillRect(px + 5, barY, (int)(40 * progress), 6);
             g2d.setColor(Color.WHITE);
             g2d.drawRect(px + 5, barY, 40, 6);

@@ -1,6 +1,7 @@
 package main.java.model.station;
 
 import main.java.model.chef.ChefPlayer;
+import main.java.model.chef.Direction;
 import main.java.model.item.*;
 
 import java.util.Timer;
@@ -121,11 +122,13 @@ public class CuttingStation extends Station {
     }
 
     private void updateProgress(){
-        progress += PROGRESS_STEP; // Nambah dikit-dikit
+        if(busyChef.getDirection() == Direction.UP && busyChef.getName().equals("Kebin")) {
+            progress += PROGRESS_STEP; // Nambah dikit-dikit
 
-        if (progress >= 1.0) {
-            progress = 1.0;
-            finishCutting();
+            if (progress >= 1.0) {
+                progress = 1.0;
+                finishCutting();
+            }
         }
     }
 
@@ -147,19 +150,6 @@ public class CuttingStation extends Station {
         }
 
         isBusy = false;
-    }
-
-    public void stopCutting(){ // untuk kalau player berhenti hold tombol
-        if (cuttingTimer != null){ // timer di hentiin dlu
-            cuttingTimer.cancel();
-            cuttingTimer = null;
-        }
-        if (busyChef != null){ // chef dibuat jdi ga sibuk
-            //busyChef.setBusy(false);
-            busyChef = null;
-        }
-
-        isBusy = false; // progress cuma berhenti ga di reset okeng
     }
 
     public Item getItemOnStation(){
