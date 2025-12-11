@@ -1,6 +1,7 @@
 package main.java.model.station;
 
 import main.java.model.chef.ChefPlayer;
+import main.java.model.chef.Direction;
 import main.java.model.item.Item;
 import main.java.model.item.Plate;
 
@@ -84,11 +85,6 @@ public class WashingStation extends Station {
         }, 0, TICK_RATE);
     }
 
-    public void stopInteract() {
-        stopWashing();
-        System.out.println("LOGIC: Stop mencuci. Progress tersimpan: " + (int)(progress*100) + "%");
-    }
-
     private void finishWashingOnePlate() { // method yang dipanggil pas selesai cuci satu piring
         if (washingTimer != null) { // kalau timer lagi jalan
             washingTimer.cancel(); // cancel timer
@@ -123,11 +119,13 @@ public class WashingStation extends Station {
     }
 
     private void updateProgress() {
-        progress += PROGRESS_STEP;
+        if((busyChef.getDirection() == Direction.UP && busyChef.getName().equals("Stewart")) || (busyChef.getDirection() == Direction.DOWN && busyChef.getName().equals("Kebin"))) {
+            progress += PROGRESS_STEP;
 
-        if (progress >= 1.0) {
-            progress = 1.0;
-            finishWashingOnePlate();
+            if (progress >= 1.0) {
+                progress = 1.0;
+                finishWashingOnePlate();
+            }
         }
     }
 
