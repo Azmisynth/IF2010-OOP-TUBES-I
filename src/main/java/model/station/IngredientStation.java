@@ -33,10 +33,11 @@ public class IngredientStation extends Station {
         }
 
         // skenario 2: chef mau taro item di station kosong
-        //if (chefItem != null && itemOnStation == null) { // cek chef bawa sesuatu dan station kosong
-        //    itemOnStation = chefItem; // taro item chef ke station
-        //    chef.setInventory(null); // kosongin inventory chef
-         //   System.out.println("Item diletakkan di Ingredient Station");
+        if (chefItem != null && itemOnStation == null) { // cek chef bawa sesuatu dan station kosong
+            itemOnStation = chefItem; // taro item chef ke station
+            chef.setInventory(null); // kosongin inventory chef
+            System.out.println("Item diletakkan di Ingredient Station");
+        }
         //}
         // skenario 3: chef mau ambil item dari station
         if (itemOnStation != null && chefItem == null) { // cek station ada item dan chef gak bawa apa-apa
@@ -53,6 +54,27 @@ public class IngredientStation extends Station {
             } catch (Exception e) { // kalau ada error pas bikin ingredient
                 System.out.println("Error mengambil ingredient!");
                 e.printStackTrace(); // print detail error-nya
+            }
+        }
+
+        if (chefItem instanceof Preparable && itemOnStation instanceof Plate) {
+
+            Preparable food = (Preparable) chefItem;
+            Plate plate = (Plate) itemOnStation;
+
+            // Syarat: Piring tidak boleh kotor & Bahan siap disajikan
+            if (plate.isClean() && food.canBePlacedOnPlate()) {
+
+                // Masukkan bahan ke dalam objek Plate
+                plate.addComponent(food);
+
+                // Hapus bahan dari tangan Chef
+                chef.setInventory(null);
+
+                System.out.println("Bahan berhasil ditambahkan ke atas Piring di meja!");
+                return;
+            } else {
+                System.out.println("Piring kotor atau bahan belum siap.");
             }
         }
     }

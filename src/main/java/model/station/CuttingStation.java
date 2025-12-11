@@ -59,6 +59,27 @@ public class CuttingStation extends Station {
             }
         }
 
+        if (chefItem instanceof Preparable && itemOnStation instanceof Plate) {
+
+            Preparable food = (Preparable) chefItem;
+            Plate plate = (Plate) itemOnStation;
+
+            // Syarat: Piring tidak boleh kotor & Bahan siap disajikan
+            if (plate.isClean() && food.canBePlacedOnPlate()) {
+
+                // Masukkan bahan ke dalam objek Plate
+                plate.addComponent(food);
+
+                // Hapus bahan dari tangan Chef
+                chef.setInventory(null);
+
+                System.out.println("Bahan berhasil ditambahkan ke atas Piring di meja!");
+                return;
+            } else {
+                System.out.println("Piring kotor atau bahan belum siap.");
+            }
+        }
+
         if (chefItem instanceof Plate && itemOnStation instanceof Preparable && !isBusy){
             Plate plate = (Plate) chefItem;
             Preparable prep = (Preparable) itemOnStation;
