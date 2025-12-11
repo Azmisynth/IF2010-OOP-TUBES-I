@@ -18,6 +18,7 @@ public class ChefPlayer implements Moveable {
     private Item inventory; // item yang dibawa oleh chef dan bisa null
     private boolean active;
     private volatile boolean busy = false;
+    private ChefAction currentAction;
     private static final int THROW_DISTANCE = 4;
     private static final long DASH_COOLDOWN_MS = 3000; // Cooldown 3 Detik
     private static final int DASH_DISTANCE = 3;         // Jarak 3 Kotak
@@ -30,6 +31,25 @@ public class ChefPlayer implements Moveable {
         this.direction = Direction.DOWN;
         this.inventory = null;
         this.active = false;
+        this.currentAction = ChefAction.IDLE;
+    }
+
+    public ChefAction getCurrentAction() {
+        return currentAction;
+    }
+
+    public void setCurrentAction(ChefAction action) {
+        this.currentAction = action;
+    }
+
+    public void startWorking(ChefAction action) {
+        this.currentAction = action;
+        this.setBusy(true); // setBusy tetap dipertahankan untuk mengontrol thread stasiun
+    }
+
+    public void finishWorking() {
+        this.currentAction = ChefAction.IDLE;
+        this.setBusy(false);
     }
 
     public Position getPosition() {
@@ -43,6 +63,7 @@ public class ChefPlayer implements Moveable {
     }
     public void pickUpOrDrop(Map map) {
         if (!active) return;
+        this.currentAction = ChefAction.IDLE;
 
         // Cari Tile di depan Chef
         Position targetPosition = Position.getAdjacent(this.position, this.direction);
@@ -54,25 +75,28 @@ public class ChefPlayer implements Moveable {
             if (this.inventory != null && floorItem == null) {
                 targetTile.setItem(this.inventory); // Pindahkan item ke lantai
                 this.inventory = null; // Tangan jadi kosong
+                this.currentAction = ChefAction.DROPPING;
             }
 
             // SKENARIO 2: PICK UP (Tangan Kosong -> Lantai Ada Barang)
             else if (this.inventory == null && floorItem != null) {
                 this.inventory = floorItem; // Ambil item ke tangan
                 targetTile.setItem(null); // Lantai jadi kosong
+                this.currentAction = ChefAction.PICKING_UP;
             }
         }
     }
 
     public void interact(Map map) {
-        if (!active) {
-            return;
-        }
+        if (!active) return;
+
+        this.currentAction = ChefAction.INTERACTING;
 
         Position targetPosition = Position.getAdjacent(this.position, this.direction);
         Tile targetTile = map.getTile(targetPosition.getX(), targetPosition.getY());
 
         if (targetTile == null) {
+            this.currentAction = ChefAction.IDLE;
             return;
         }
 
@@ -88,10 +112,12 @@ public class ChefPlayer implements Moveable {
         // Cek  Cooldown
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastDashTime < DASH_COOLDOWN_MS) {
+            this.currentAction = ChefAction.IDLE;
             return;
         }
 
         // logic utama dash
+        boolean dashed = false;
         for (int i = 0; i < DASH_DISTANCE; i++) {
             Position nextPos = Position.getAdjacent(this.position, this.direction);
 
@@ -101,6 +127,7 @@ public class ChefPlayer implements Moveable {
                 if (nextTile != null && nextTile.getStation() != null) {
                     break;
                 }
+                dashed = true;
                 this.position = nextPos;
             } else {
                 break; // Berhenti kalau nabrak tembok
@@ -108,7 +135,12 @@ public class ChefPlayer implements Moveable {
         }
 
         // 3. Set Waktu Cooldown
-        lastDashTime = currentTime;
+        if (dashed) {
+            this.currentAction = ChefAction.DASHING;
+            lastDashTime = currentTime;
+        } else {
+            this.currentAction = ChefAction.IDLE;
+        }
     }
 
     // Visual Cooldown Bar (0.0 - 1.0)
@@ -121,6 +153,7 @@ public class ChefPlayer implements Moveable {
     public void throwItem(Map map, List<ChefPlayer> allChefs) {
         // Validasi dasar
         if (!active || inventory == null) return;
+        this.currentAction = ChefAction.THROWING;
 
         // Validasi Item: Hanya Ingredient Mentah/Potong
         if (inventory instanceof Ingredient) {
@@ -228,6 +261,7 @@ public class ChefPlayer implements Moveable {
                 return;
             }
         }
+        this.currentAction = ChefAction.IDLE;
     }
 
     private Position getPositionAtDistance(Position start, Direction direction, int distance) {
@@ -299,6 +333,7 @@ public class ChefPlayer implements Moveable {
 
         if(this.direction != newDirection) {
             this.direction = newDirection;
+            this.currentAction = ChefAction.IDLE;
             return;
         }
 
@@ -306,6 +341,7 @@ public class ChefPlayer implements Moveable {
 
         if(map.isWalkable(targetPosition.getX(), targetPosition.getY())) {
             this.position = targetPosition;
+            this.currentAction = ChefAction.MOVING;
         } else {
             System.out.println(name + " movement blocked.");
         }
