@@ -1,0 +1,36 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'main.java'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    // Sesuaikan versi Java
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+dependencies {
+    // Tambahkan dependencies yang digunakan oleh kode Anda (misalnya JLayer jika MP3)
+    // Contoh untuk Unit Testing (Jika Anda memilih JUnit Jupiter)
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+
+    // Jika Anda menggunakan library MP3 (JLayer):
+    // implementation 'javazoom:jlayer:1.0.1'
+}
+
+application {
+    // Tentukan path lengkap ke main class Anda
+    mainClass = 'main.java.view.GameFrame'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
