@@ -1,4 +1,5 @@
 package model.station;
+import helper.SoundPlayer;
 import model.chef.ChefPlayer;
 import model.item.*;
 import model.kitchen.Recipe;
@@ -18,6 +19,7 @@ public class CookingStation extends Station {
     private static final int TICK_RATE = 100;
     private static final int COOKING_DURATION = 12000; // 12 detik dalam milidetik - waktu untuk pizza jadi COOKED
     private static final int BURNING_DURATION = 24000; // 24 detik dalam milidetik - waktu untuk pizza jadi BURNED (dihitung dari awal masak)
+    private SoundPlayer cookingSound = new SoundPlayer("/sound/cooking.wav");
 
     public CookingStation() {
         super("R"); // panggil constructor parent class Station dengan simbol R sebagai String
@@ -44,6 +46,7 @@ public class CookingStation extends Station {
                     this.currentRecipe = foundRecipe;
                     chef.setInventory(null);
 
+                    cookingSound.play();
                     // Langsung mulai masak otomatis
                     startCooking();
                     System.out.println("LOGIC: Memasak " + currentRecipe.getName());

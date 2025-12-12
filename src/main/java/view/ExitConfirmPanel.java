@@ -77,7 +77,13 @@ public class ExitConfirmPanel extends JPanel {
         g2.setColor(hover ? hoverColor : baseColor);
         g2.fillRoundRect(rect.x, rect.y, rect.width, rect.height, 50, 50);
 
-        g2.setColor(new Color(90, 52, 12));
+        Color defaultStrokeColor = new Color(216, 48, 33);
+        Color hoverStrokeColor = new Color(255, 251, 202);
+        if(hover) {
+            g2.setColor(hoverColor);
+        } else {
+            g2.setColor(defaultStrokeColor);
+        }
         g2.setStroke(new BasicStroke(2));
         g2.drawRoundRect(rect.x, rect.y, rect.width, rect.height, 50, 50);
 
@@ -89,7 +95,14 @@ public class ExitConfirmPanel extends JPanel {
         int tx = rect.x + (rect.width - textWidth) / 2;
         int ty = rect.y + (rect.height + textHeight) / 2 - (fm.getDescent() / 2);
 
-        g2.setColor(text.equals("BACK") ? Color.WHITE : Color.RED);
+        Color defaultTextColor = text.equals("Back") ? new Color(255, 251, 202) : Color.RED;
+        Color hoverTextColor = new Color(255, 251, 202);
+
+        if (hover) {
+            g2.setColor(hoverTextColor);
+        } else {
+            g2.setColor(defaultTextColor);
+        }
         g2.setStroke(new BasicStroke(2));
         g2.drawString(text, tx, ty);
     }
@@ -108,12 +121,12 @@ public class ExitConfirmPanel extends JPanel {
         g2d.fillRoundRect(0, 0, getWidth(), getHeight(), arcRadius, arcRadius);
 
         Color backColor = Color.RED;
-        Color backHoverColor = Color.PINK;
-        drawButton(g2d, backButtonRect, "BACK", backHover, backColor, backHoverColor);
+        Color backHoverColor = new Color(90, 43, 12);
+        drawButton(g2d, backButtonRect, "Back", backHover, backColor, backHoverColor);
 
-        Color exitColor = new Color(255, 255, 202);
-        Color exitHoverColor = new Color(212, 212, 204);
-        drawButton(g2d, exitButtonRect, "EXIT", exitHover, exitColor, exitHoverColor);
+        Color exitColor = new Color(255, 251, 202);
+        Color exitHoverColor = new Color(90, 43, 12);
+        drawButton(g2d, exitButtonRect, "Exit", exitHover, exitColor, exitHoverColor);
 
         g2d.dispose();
     }

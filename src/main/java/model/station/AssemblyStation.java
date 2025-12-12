@@ -1,4 +1,5 @@
 package model.station;
+import helper.SoundPlayer;
 import model.chef.ChefPlayer;
 import model.item.Item;
 import model.item.KitchenUtensils;
@@ -8,6 +9,7 @@ import model.item.Ingredient;
 
 public class AssemblyStation extends Station { // class untuk station tempat rakit dish/ingredient
     private Item itemOnStation; // item yang lagi ada di atas assembly station (bisa ingredient, plate, dish, apapun)
+    private SoundPlayer placementSound = new SoundPlayer("/sound/placement.wav");
 
     public AssemblyStation() { // constructor untuk bikin assembly station baru
         super("A"); // panggil constructor parent dengan simbol A (String)
@@ -25,6 +27,7 @@ public class AssemblyStation extends Station { // class untuk station tempat rak
             if (plate.isClean() && itemOnStation instanceof Preparable) { // plate harus bersih dan item di station harus bisa dimasak (ingredient/dish)
                 Preparable prep = (Preparable) itemOnStation; // cast item di station jadi preparable
                 if (prep.canBePlacedOnPlate()) { // cek apakah item ini boleh ditaro di plate (harus COOKED atau sesuai rule)
+                    placementSound.play();
                     plate.addComponent(prep); // masukin ingredient/dish ke dalam plate
                     itemOnStation = plate; // sekarang yang ada di station adalah plate berisi dish
                     chef.setInventory(null); // tangan chef jadi kosong
@@ -45,6 +48,7 @@ public class AssemblyStation extends Station { // class untuk station tempat rak
                     if (ingredient instanceof Preparable) { // cek apakah ingredient boleh ditaro di plate
                         Preparable ing = (Preparable) ingredient;// masukin ingredient ke plate
                         if (ing.canBePlacedOnPlate()) {
+                            placementSound.play();
                             plate.addComponent(ing);
                         }
                     }
@@ -58,12 +62,14 @@ public class AssemblyStation extends Station { // class untuk station tempat rak
 
         if (chefItem != null && itemOnStation == null) { // chef bawa item dan station kosong
             itemOnStation = chefItem; // item yang dibawa chef sekarang ada di station
+            placementSound.play();
             chef.setInventory(null); // tangan chef jadi kosong
             System.out.println("Item diletakkan di Assembly Station");
             return;
         }
 
         if (itemOnStation != null && chefItem == null) { // station ada item dan tangan chef kosong
+            placementSound.play();
             chef.setInventory(itemOnStation); // item di station pindah ke tangan chef
             itemOnStation = null; // station jadi kosong
             System.out.println("Item diambil dari Assembly Station");
@@ -78,7 +84,7 @@ public class AssemblyStation extends Station { // class untuk station tempat rak
 
             // Syarat: Piring tidak boleh kotor & Bahan siap disajikan
             if (plate.isClean() && food.canBePlacedOnPlate()) {
-
+                placementSound.play();
                 // Masukkan bahan ke dalam objek Plate
                 plate.addComponent(food);
 
@@ -99,6 +105,7 @@ public class AssemblyStation extends Station { // class untuk station tempat rak
         if (itemOnStation == null) {
             // Bisa terima Piring atau Ingredient
             if (item instanceof Plate || item instanceof Ingredient) {
+                placementSound.play();
                 this.itemOnStation = item;
                 System.out.println("LOGIC: Assembly Station menangkap " + item.getName());
                 return true;
@@ -107,6 +114,7 @@ public class AssemblyStation extends Station { // class untuk station tempat rak
         // SUDAH ADA PIRING
         else if (itemOnStation instanceof Plate) {
             // Kalau dilempar Ingredient, masukkan ke piring
+            placementSound.play();
             if (item instanceof Ingredient) {
                 ((Plate) itemOnStation).addComponent((Ingredient) item);
                 System.out.println("LOGIC: Lemparan masuk ke Piring di Assembly Station!");

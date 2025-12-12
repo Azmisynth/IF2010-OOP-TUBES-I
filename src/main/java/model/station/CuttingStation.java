@@ -1,9 +1,11 @@
 package model.station;
 
+import helper.SoundPlayer;
 import model.chef.ChefAction;
 import model.chef.ChefPlayer;
 import model.chef.Direction;
 import model.item.*;
+import helper.SoundPlayer;
 
 import javax.swing.*;
 import java.util.Timer;
@@ -18,6 +20,7 @@ public class CuttingStation extends Station {
     private static final int CUTTING_DURATION = 3000; // durasi motong dalam mili detik
     private static final int TICK_RATE = 100;         // Update setiap 0.1 detik biar bar jalan bar
     private static final double PROGRESS_STEP = (double) TICK_RATE / CUTTING_DURATION;
+    private SoundPlayer cuttingSound = new SoundPlayer("/sound/cutting.wav");
 
     public CuttingStation(){
         super("C"); // simbol C sebagai String
@@ -46,6 +49,7 @@ public class CuttingStation extends Station {
                 Ingredient ingredient = (Ingredient) itemOnStation;
                 if (ingredient.getState() == ItemState.RAW) {
                     if (!isBusy) {
+                        cuttingSound.play();
                         startOrContinueCutting(chef);
                     } else {
                         System.out.println("Sedang memotong... " + (int) (progress * 100) + "%");
