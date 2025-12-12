@@ -1,4 +1,4 @@
-package main.java.model.item;
+package model.item;
 
 public class Oven extends KitchenUtensils<Preparable> implements CookingDevice {
     private static final int CAPACITY = 1;

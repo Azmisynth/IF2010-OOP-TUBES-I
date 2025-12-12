@@ -1,10 +1,10 @@
-package main.java.controller;
+package controller;
 
-import main.java.model.chef.ChefPlayer;
-import main.java.model.map.Map;
-import main.java.view.MapViewPanel;
+import model.chef.ChefPlayer;
+import model.map.Map;
+import view.MapViewPanel;
 import java.awt.event.KeyEvent;
-import main.java.view.GameFrame;
+import view.GameFrame;
 import java.awt.event.KeyListener;
 import java.util.List;
 

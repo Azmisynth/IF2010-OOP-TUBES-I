@@ -1,8 +1,8 @@
-package main.java.view;
+package view;
 
-import main.java.model.kitchen.Order;
-import main.java.model.kitchen.OrderManager;
-import main.java.model.kitchen.Recipe;
+import model.kitchen.Order;
+import model.kitchen.OrderManager;
+import model.kitchen.Recipe;
 
 import java.awt.Color;
 import java.awt.Font;

@@ -1,8 +1,8 @@
-package main.java.model.map;
+package model.map;
 
-import main.java.model.item.Item;
-import main.java.model.station.Station;
-import main.java.model.station.StationFactory;
+import model.item.Item;
+import model.station.Station;
+import model.station.StationFactory;
 
 public class Tile {
     private final int x;

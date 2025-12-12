@@ -1,6 +1,6 @@
-package main.java.model.chef;
+package model.chef;
 
-import main.java.model.map.Map;
+import model.map.Map;
 
 public interface Moveable {
     public void moveUp(Map map);

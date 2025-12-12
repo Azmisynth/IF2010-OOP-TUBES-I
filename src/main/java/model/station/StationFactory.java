@@ -1,7 +1,7 @@
-package main.java.model.station;
+package model.station;
 
-import main.java.model.chef.Position;
-import main.java.model.item.Tomato;
+import model.chef.Position;
+import model.item.Tomato;
 
 public class StationFactory {
     public static Station createStationObject(String symbol) {

@@ -1,4 +1,4 @@
-package main.java.model.item;
+package model.item;
 
 public abstract class Item {
     private String name;

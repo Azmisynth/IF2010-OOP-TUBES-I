@@ -1,7 +1,7 @@
-package main.java.view;
+package view;
 
-import main.java.model.chef.ChefPlayer;
-import main.java.model.map.Map;
+import model.chef.ChefPlayer;
+import model.map.Map;
 
 import javax.swing.JPanel;
 import java.awt.Dimension;

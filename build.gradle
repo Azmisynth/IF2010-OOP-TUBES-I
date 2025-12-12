@@ -28,9 +28,13 @@ dependencies {
 
 application {
     // Tentukan path lengkap ke main class Anda
-    mainClass = 'main.java.view.GameFrame'
+    mainClass = 'view.GameFrame'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }

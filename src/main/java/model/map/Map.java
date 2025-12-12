@@ -1,7 +1,7 @@
-package main.java.model.map;
+package model.map;
 
 import java.util.List;
-import main.java.model.chef.ChefPlayer;
+import model.chef.ChefPlayer;
 
 public class Map {
     private static final int width = 16;

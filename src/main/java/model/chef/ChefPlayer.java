@@ -1,12 +1,8 @@
-package main.java.model.chef;
+package model.chef;
 
-import main.java.model.item.Ingredient;
-import main.java.model.item.Item;
-import main.java.model.item.ItemState;
-import main.java.model.item.Plate;
-import main.java.model.map.*;
-import main.java.model.station.Station;
-import main.java.model.station.StationFactory;
+import model.item.*;
+import model.map.*;
+import model.station.*;
 
 import java.util.List;
 
@@ -194,7 +190,7 @@ public class ChefPlayer implements Moveable {
                 nextPos = getPositionAtDistance(this.position, this.direction, i);
             }
 
-            main.java.model.map.Tile nextTile = map.getTile(nextPos.getX(), nextPos.getY());
+            model.map.Tile nextTile = map.getTile(nextPos.getX(), nextPos.getY());
 
             if (nextTile == null || nextTile.isWall(nextPos.getX(), nextPos.getY())) {
                 System.out.println("-> Nabrak Tembok. Jatuh di " + validLandingPos.getX() + "," + validLandingPos.getY());
@@ -223,7 +219,7 @@ public class ChefPlayer implements Moveable {
                 boolean mustLandHere = (i == THROW_DISTANCE);
                 if (!mustLandHere) {
                     Position peekPos = getPositionAtDistance(this.position, this.direction, i + 1);
-                    main.java.model.map.Tile peekTile = map.getTile(peekPos.getX(), peekPos.getY());
+                    model.map.Tile peekTile = map.getTile(peekPos.getX(), peekPos.getY());
 
                     // Jika depannya tembok, maka station ini jadi terminal terakhir
                     if (peekTile == null || peekTile.isWall(peekPos.getX(), peekPos.getY())) {

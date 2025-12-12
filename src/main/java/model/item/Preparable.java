@@ -1,4 +1,4 @@
-package main.java.model.item;
+package model.item;
 
 public interface Preparable {
     boolean canBeChopped();

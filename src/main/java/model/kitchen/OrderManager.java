@@ -1,9 +1,9 @@
-package main.java.model.kitchen;
+package model.kitchen;
 
 import java.util.concurrent.CopyOnWriteArrayList;
-import main.java.model.item.Ingredient;
-import main.java.model.item.Preparable;
-import main.java.model.item.ItemState;
+import model.item.Ingredient;
+import model.item.Preparable;
+import model.item.ItemState;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -71,7 +71,7 @@ public class OrderManager {
     public boolean deliverOrder(Set<Preparable> plateContents) {
         for (Preparable prep : plateContents) {
             if (prep instanceof Ingredient) {
-                Ingredient ing = (main.java.model.item.Ingredient) prep;
+                Ingredient ing = (model.item.Ingredient) prep;
 
                 // Cek Gosong
                 if (ing.getState() == ItemState.BURNED) {

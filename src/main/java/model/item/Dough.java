@@ -1,4 +1,4 @@
-package main.java.model.item;
+package model.item;
 
 public class Dough extends Ingredient{
     public Dough(){

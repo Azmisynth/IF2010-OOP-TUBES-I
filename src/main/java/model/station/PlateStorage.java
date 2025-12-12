@@ -1,8 +1,8 @@
-package main.java.model.station;
+package model.station;
 
-import main.java.model.chef.ChefPlayer;
-import main.java.model.item.Item;
-import main.java.model.item.Plate;
+import model.chef.ChefPlayer;
+import model.item.Item;
+import model.item.Plate;
 import java.util.Stack;
 
 public class PlateStorage extends Station{

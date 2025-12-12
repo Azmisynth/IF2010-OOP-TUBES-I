@@ -1,9 +1,9 @@
-package main.java.model.station;
+package model.station;
 
-import main.java.model.chef.ChefAction;
-import main.java.model.chef.ChefPlayer;
-import main.java.model.chef.Direction;
-import main.java.model.item.*;
+import model.chef.ChefAction;
+import model.chef.ChefPlayer;
+import model.chef.Direction;
+import model.item.*;
 
 import javax.swing.*;
 import java.util.Timer;

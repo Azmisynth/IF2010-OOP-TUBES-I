@@ -1,4 +1,4 @@
-package main.java.model.map;
+package model.map;
 
 public abstract class MapType {
     protected abstract String[] getLayoutData();

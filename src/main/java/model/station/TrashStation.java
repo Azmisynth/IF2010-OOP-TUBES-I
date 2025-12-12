@@ -1,7 +1,7 @@
-package main.java.model.station;
+package model.station;
 
-import main.java.model.chef.ChefPlayer;
-import main.java.model.item.*;
+import model.chef.ChefPlayer;
+import model.item.*;
 
 public class TrashStation extends Station {
     public TrashStation() {

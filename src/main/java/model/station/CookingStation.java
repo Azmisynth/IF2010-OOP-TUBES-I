@@ -1,8 +1,8 @@
-package main.java.model.station;
-import main.java.model.chef.ChefPlayer;
-import main.java.model.item.*;
-import main.java.model.kitchen.Recipe;
-import main.java.model.kitchen.RecipeBook;
+package model.station;
+import model.chef.ChefPlayer;
+import model.item.*;
+import model.kitchen.Recipe;
+import model.kitchen.RecipeBook;
 
 import java.util.Timer;
 import java.util.TimerTask;

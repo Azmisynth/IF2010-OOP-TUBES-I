@@ -1,8 +1,8 @@
-package main.java.model.map;
+package model.map;
 
-import main.java.model.chef.Position;
-import main.java.model.station.*;
-import main.java.model.item.*;
+import model.chef.Position;
+import model.station.*;
+import model.item.*;
 
 import java.util.List;
 import java.util.ArrayList;

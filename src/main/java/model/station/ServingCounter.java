@@ -1,11 +1,11 @@
-package main.java.model.station;
+package model.station;
 
-import main.java.model.chef.ChefPlayer;
-import main.java.model.item.Ingredient;
-import main.java.model.item.Item;
-import main.java.model.item.ItemState;
-import main.java.model.item.Plate;
-import main.java.model.kitchen.OrderManager;
+import model.chef.ChefPlayer;
+import model.item.Ingredient;
+import model.item.Item;
+import model.item.ItemState;
+import model.item.Plate;
+import model.kitchen.OrderManager;
 
 import java.util.Timer;
 import java.util.TimerTask;

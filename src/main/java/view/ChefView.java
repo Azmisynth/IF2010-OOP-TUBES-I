@@ -1,13 +1,13 @@
-package main.java.view;
+package view;
 
-import main.java.model.chef.ChefPlayer;
-import main.java.model.chef.Direction;
-import main.java.model.item.Ingredient;
-import main.java.model.item.Item; // Sesuaikan package Item kamu
-import main.java.model.item.ItemState;
-import main.java.model.item.Plate;
-import main.java.model.kitchen.Recipe;
-import main.java.model.kitchen.RecipeBook;
+import model.chef.ChefPlayer;
+import model.chef.Direction;
+import model.item.Ingredient;
+import model.item.Item; // Sesuaikan package Item kamu
+import model.item.ItemState;
+import model.item.Plate;
+import model.kitchen.Recipe;
+import model.kitchen.RecipeBook;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

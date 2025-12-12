@@ -1,4 +1,4 @@
-package main.java.model.chef;
+package model.chef;
 
 public class Position {
     private final int x;

@@ -1,10 +1,10 @@
-package main.java.model.station;
-import main.java.model.chef.ChefPlayer;
-import main.java.model.item.Item;
-import main.java.model.item.KitchenUtensils;
-import main.java.model.item.Plate;
-import main.java.model.item.Preparable;
-import main.java.model.item.Ingredient;
+package model.station;
+import model.chef.ChefPlayer;
+import model.item.Item;
+import model.item.KitchenUtensils;
+import model.item.Plate;
+import model.item.Preparable;
+import model.item.Ingredient;
 
 public class AssemblyStation extends Station { // class untuk station tempat rakit dish/ingredient
     private Item itemOnStation; // item yang lagi ada di atas assembly station (bisa ingredient, plate, dish, apapun)

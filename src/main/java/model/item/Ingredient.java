@@ -1,4 +1,4 @@
-package main.java.model.item;
+package model.item;
 
 public class Ingredient extends Item implements Preparable {
     private ItemState state = ItemState.RAW;

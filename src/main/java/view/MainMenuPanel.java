@@ -1,6 +1,6 @@
-package main.java.view;
+package view;
 
-import main.java.controller.ChefInputListener;
+import controller.ChefInputListener;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

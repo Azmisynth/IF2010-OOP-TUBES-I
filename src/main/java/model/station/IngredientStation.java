@@ -1,7 +1,7 @@
-package main.java.model.station;
+package model.station;
 
-import main.java.model.chef.ChefPlayer;
-import main.java.model.item.*;
+import model.chef.ChefPlayer;
+import model.item.*;
 
 public class IngredientStation extends Station {
     private Class<? extends Ingredient> ingredientType; // simpen tipe ingredient apa yang ada di station ini (misalnya Lettuce, Tomato, dll)

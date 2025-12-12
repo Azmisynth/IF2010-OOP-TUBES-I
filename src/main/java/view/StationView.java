@@ -1,15 +1,15 @@
-package main.java.view;
+package view;
 
-import main.java.model.chef.Position;
-import main.java.model.item.Item;
-import main.java.model.item.Plate;
-import main.java.model.item.Preparable;
-import main.java.model.item.Ingredient;
-import main.java.model.item.ItemState;
-import main.java.model.map.Tile;
-import main.java.model.station.*;
-import main.java.model.kitchen.Recipe;
-import main.java.model.kitchen.RecipeBook;
+import model.chef.Position;
+import model.item.Item;
+import model.item.Plate;
+import model.item.Preparable;
+import model.item.Ingredient;
+import model.item.ItemState;
+import model.map.Tile;
+import model.station.*;
+import model.kitchen.Recipe;
+import model.kitchen.RecipeBook;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

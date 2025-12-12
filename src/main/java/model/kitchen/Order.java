@@ -1,4 +1,4 @@
-package main.java.model.kitchen;
+package model.kitchen;
 
 public class Order {
     private Recipe recipe;

@@ -1,8 +1,7 @@
-package main.java.model.kitchen;
+package model.kitchen;
 
-import main.java.model.item.Ingredient;
-import main.java.model.item.Preparable;
-
+import model.item.Ingredient;
+import model.item.Preparable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;

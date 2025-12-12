@@ -1,10 +1,10 @@
-package main.java.model.station;
+package model.station;
 
-import main.java.model.chef.ChefAction;
-import main.java.model.chef.ChefPlayer;
-import main.java.model.chef.Direction;
-import main.java.model.item.Item;
-import main.java.model.item.Plate;
+import model.chef.ChefAction;
+import model.chef.ChefPlayer;
+import model.chef.Direction;
+import model.item.Item;
+import model.item.Plate;
 
 import javax.swing.*;
 import java.util.Stack; // utk nyimpen piring kotor dan bersih dengan sistem LIFO (Last In First Out)

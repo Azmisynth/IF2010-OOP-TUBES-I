@@ -1,12 +1,12 @@
-package main.java.view;
+package view;
 
-import main.java.controller.ChefInputListener;
-import main.java.helper.SoundPlayer;
-import main.java.model.chef.ChefPlayer;
-import main.java.model.chef.Position;
-import main.java.model.kitchen.OrderManager;
-import main.java.model.map.Map;
-import main.java.model.map.PizzaMap;
+import controller.ChefInputListener;
+import helper.SoundPlayer;
+import model.chef.ChefPlayer;
+import model.chef.Position;
+import model.kitchen.OrderManager;
+import model.map.Map;
+import model.map.PizzaMap;
 
 import javax.swing.*;
 import java.util.List;

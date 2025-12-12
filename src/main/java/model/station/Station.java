@@ -1,6 +1,6 @@
-package main.java.model.station;
-import main.java.model.chef.ChefPlayer;
-import main.java.model.item.Item;
+package model.station;
+import model.chef.ChefPlayer;
+import model.item.Item;
 
 public abstract class Station {
     protected String symbol; // simbol dari stationnya untuk identifikasi (konsisten dengan TileState)

@@ -1,6 +1,6 @@
-package main.java.model.item;
+package model.item;
 
-import main.java.model.item.Ingredient;
+import model.item.Ingredient;
 import java.util.List;
 import java.util.ArrayList;
 
