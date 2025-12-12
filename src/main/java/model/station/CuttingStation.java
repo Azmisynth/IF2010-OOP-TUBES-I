@@ -1,9 +1,11 @@
 package main.java.model.station;
 
+import main.java.model.chef.ChefAction;
 import main.java.model.chef.ChefPlayer;
 import main.java.model.chef.Direction;
 import main.java.model.item.*;
 
+import javax.swing.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -108,8 +110,11 @@ public class CuttingStation extends Station {
 
         isBusy = true;
         busyChef = chef;
+        chef.startWorking(ChefAction.BUSY_WORKING);
         //chef.setBusy(true);
         // set status chef dan station lgi dipakai alias sibuk
+
+        if (progress >= 1.0) progress = 0.0;
 
         // buat timer untuk proses motong
         cuttingTimer = new Timer();
@@ -122,13 +127,16 @@ public class CuttingStation extends Station {
     }
 
     private void updateProgress(){
-        if(busyChef.getDirection() == Direction.UP && busyChef.getName().equals("Kebin")) {
-            progress += PROGRESS_STEP; // Nambah dikit-dikit
+        if(busyChef == null || !busyChef.isBusy() || busyChef.getCurrentAction() != ChefAction.BUSY_WORKING){
+            finishCutting();
+            System.out.println("Pemotongan dihentikan karena Chef menjauh atau status diubah.");
+            return;
+        }
+        progress += PROGRESS_STEP; // Nambah dikit-dikit
 
-            if (progress >= 1.0) {
-                progress = 1.0;
-                finishCutting();
-            }
+        if (progress >= 1.0) {
+            progress = 1.0;
+            SwingUtilities.invokeLater(() -> finishCutting());
         }
     }
 
@@ -136,12 +144,6 @@ public class CuttingStation extends Station {
         if (cuttingTimer != null){
             cuttingTimer.cancel();
             cuttingTimer = null;
-        }
-
-        if (itemOnStation instanceof Preparable){
-            Preparable prep = (Preparable) itemOnStation;
-            prep.chop(); // ubah state jdi CHOPPED
-            progress = 1.0; // progress dah penuh
         }
 
         if (busyChef != null) {
