@@ -31,6 +31,7 @@ public class GameFrame extends JFrame {
         }
         this.gameMap = gameMap;
         bgmPlayer = new SoundPlayer("/sound/bgm.wav");
+        bgmPlayer.setVolume(0.3);
         bgmPlayer.loop();
         setTitle("KrustyCooked");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -3,10 +3,7 @@ package model.station;
 import helper.SoundPlayer;
 import model.chef.ChefAction;
 import model.chef.ChefPlayer;
-import model.chef.Direction;
 import model.item.*;
-import helper.SoundPlayer;
-
 import javax.swing.*;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -145,17 +142,30 @@ public class CuttingStation extends Station {
     }
 
     public void finishCutting(){
-        if (cuttingTimer != null){
-            cuttingTimer.cancel();
-            cuttingTimer = null;
+        if (itemOnStation instanceof Ingredient) {
+            Ingredient ingredient = (Ingredient) itemOnStation;
+            if (progress >= 1.0 && ingredient.getState() == ItemState.RAW) {
+                ingredient.setState(ItemState.CHOPPED);
+                System.out.println(ingredient.getName() + " berhasil dipotong!");
+            }
         }
 
-        if (busyChef != null) {
-            //busyChef.setBusy(false);
-            busyChef = null;
-        }
+        cuttingSound.stop();
 
-        isBusy = false;
+        SwingUtilities.invokeLater(() -> {
+            if (cuttingTimer != null){
+                cuttingTimer.cancel();
+                cuttingTimer = null;
+            }
+
+            if (busyChef != null) {
+                busyChef.setCurrentAction(ChefAction.IDLE);
+                busyChef = null;
+            }
+
+            isBusy = false;
+            progress = 0.0; // Reset progress bar setelah selesai
+        });
     }
 
     public Item getItemOnStation(){
