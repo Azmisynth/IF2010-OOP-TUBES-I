@@ -21,17 +21,17 @@ public class ServingCounter extends Station {
     public void interact(ChefPlayer chef) { // method yang dipanggil pas chef berinteraksi sama counter ini
         Item chefItem = chef.getInventory(); // ambil item yang lagi dibawa chef
 
-        if (chefItem != null && chefItem instanceof Plate) { // cek apakah item yang dibawa adalah Plate
-            Plate plate = (Plate) chefItem; // cast item jadi Plate biar bisa akses method Plate
-            if (!isPlateReadyToServe(plate)) {
-                System.out.println("LOGIC: Gagal Serve! Ada bahan yang belum matang (COOKED).");
-                return;
-            }
-            boolean isSuccess = OrderManager.getInstance().deliverOrder(plate.getContents());
-
-            chef.setInventory(null);
-            returnPlate(plate);
-        }
+//        if (chefItem != null && chefItem instanceof Plate) { // cek apakah item yang dibawa adalah Plate
+//            Plate plate = (Plate) chefItem; // cast item jadi Plate biar bisa akses method Plate
+//            if (!isPlateReadyToServe(plate)) {
+//                System.out.println("LOGIC: Gagal Serve! Ada bahan yang belum matang (COOKED).");
+//                return;
+//            }
+//            boolean isSuccess = OrderManager.getInstance().deliverOrder(plate.getContents());
+//
+//            chef.setInventory(null);
+//            returnPlate(plate);
+//        }
     }
 
     private boolean isPlateReadyToServe(Plate plate) {

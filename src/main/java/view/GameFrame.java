@@ -19,6 +19,7 @@ public class GameFrame extends JFrame {
     private Map gameMap;
     private MapViewPanel gameView;
     private SoundPlayer bgmPlayer;
+    private SettingsDialog settingsDialog;
 
     public GameFrame(List<ChefPlayer> allChefs, Map gameMap) {
         this.allChefs = allChefs;
@@ -64,7 +65,7 @@ public class GameFrame extends JFrame {
             return;
         }
 
-        MapViewPanel gameView = new MapViewPanel(gameMap, allChefs);
+        MapViewPanel gameView = new MapViewPanel(gameMap, allChefs, this);
         ChefInputListener inputHandler =
                 new ChefInputListener(allChefs, gameMap, gameView, this);
         SwingUtilities.invokeLater(() -> {
@@ -82,7 +83,6 @@ public class GameFrame extends JFrame {
             });
             logicTimer.start();
         });
-
     }
 
     public void showHowToPlay() {
@@ -119,6 +119,32 @@ public class GameFrame extends JFrame {
         newChef.activate();
 
         System.out.println("Switched control to: " + newChef.getName());
+    }
+
+    // File: main/java/view/GameFrame.java (Contoh Method)
+
+    public void showSettingsMenu() {
+        // 1. Pause game loop
+        this.pauseGame();
+
+        // 2. Tampilkan dialog
+        SettingsDialog dialog = new SettingsDialog(this);
+        dialog.setVisible(true);
+    }
+
+    public void pauseGame() {
+        // Logic untuk menghentikan game loop (misalnya, mengatur state game ke PAUSED)
+        // Terapkan di sini
+    }
+
+    public void resumeGame() {
+        // Logic untuk melanjutkan game loop
+        // Terapkan di sini
+    }
+
+    public void restartGame() {
+        // Logic untuk me-restart game
+        // Terapkan di sini
     }
 
     public static void main(String[] args) {

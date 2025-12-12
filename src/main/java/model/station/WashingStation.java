@@ -36,24 +36,24 @@ public class WashingStation extends Station {
     public void interact(ChefPlayer chef) {
         Item chefItem = chef.getInventory(); // ambil item yang lagi dibawa chef
 
-        // chef bawa piring kotor mau ditaro buat dicuci
-        if (chefItem instanceof Plate) { // cek chef bawa Plate
-            Plate plate = (Plate) chefItem; // cast item jadi Plate
-            if (!plate.isClean()) { // cek piringnya kotor apa ngga
-                dirtyPlatesStack.push(plate); // masukin piring kotor ke stack
-                chef.setInventory(null); // kosongin inventory chef
-                System.out.println("Piring kotor diletakkan untuk dicuci. Total: " + dirtyPlatesStack.size());
-            }
-            return;
-        }
-        // chef mau ambil piring bersih
-        if (chefItem == null && !cleanPlatesStack.isEmpty()) { // cek chef ngga bawa apa-apa dan ada piring bersih
-            stopWashing(); // Stop nyuci kalau mau ambil
-            Plate cleanPlate = cleanPlatesStack.pop(); // ambil piring bersih dari stack
-            chef.setInventory(cleanPlate); // kasih piring bersih ke chef
-            System.out.println("Piring bersih diambil"); // kasih tau berhasil ambil
-            return;
-        }
+        // chef bawa piring kotor mau ditaro buat dicuci (drop)
+//        if (chefItem instanceof Plate) { // cek chef bawa Plate
+//            Plate plate = (Plate) chefItem; // cast item jadi Plate
+//            if (!plate.isClean()) { // cek piringnya kotor apa ngga
+//                dirtyPlatesStack.push(plate); // masukin piring kotor ke stack
+//                chef.setInventory(null); // kosongin inventory chef
+//                System.out.println("Piring kotor diletakkan untuk dicuci. Total: " + dirtyPlatesStack.size());
+//            }
+//            return;
+//        }
+        // chef mau ambil piring bersih (pick up)
+//        if (chefItem == null && !cleanPlatesStack.isEmpty()) { // cek chef ngga bawa apa-apa dan ada piring bersih
+//            stopWashing(); // Stop nyuci kalau mau ambil
+//            Plate cleanPlate = cleanPlatesStack.pop(); // ambil piring bersih dari stack
+//            chef.setInventory(cleanPlate); // kasih piring bersih ke chef
+//            System.out.println("Piring bersih diambil"); // kasih tau berhasil ambil
+//            return;
+//        }
         // chef mau mulai cuci piring
         if (chefItem == null && !dirtyPlatesStack.isEmpty() && !isBusy) { // cek chef kosong, ada piring kotor, dan station ngga lagi sibuk
             startOrContinueWashing(chef); // mulai proses cuci

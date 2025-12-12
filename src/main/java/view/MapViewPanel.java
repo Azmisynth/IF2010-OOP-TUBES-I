@@ -4,9 +4,10 @@ import model.chef.ChefPlayer;
 import model.map.Map;
 
 import javax.swing.JPanel;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
+import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.util.List;
 
 public class MapViewPanel extends JPanel {
     private final Map gameMap;
+    private final GameFrame gameFrame;
     private final List<ChefPlayer> allChefs;
 
     // Renderer Modules
@@ -23,29 +25,40 @@ public class MapViewPanel extends JPanel {
     private ChefView chefRenderer;
     private UIView UI;
 
-    // Resource Variables (Sesuai kodemu)
+    // Resource Variables
     private BufferedImage tileImage;
     private BufferedImage wall;
     private BufferedImage chef1UpImage, chef1DownImage, chef1LeftImage, chef1RightImage;
     private BufferedImage chef2UpImage, chef2DownImage, chef2LeftImage, chef2RightImage;
+    private BufferedImage settingsIconImage;
+    private boolean hoveringSettings = false;
+    private BufferedImage settingsHoverImage;
 
     // Maps
     private java.util.Map<String, BufferedImage> stationImages;
     private java.util.Map<String, BufferedImage> itemImages;
 
+    private Rectangle settingsButtonRect;
+
     private static final int TILE_SIZE = 50;
     private static final int WIDTH = 16;
     private static final int HEIGHT = 10;
+    private static final int SETTINGS_BTN_SIZE = 40;
 
-    public MapViewPanel(Map gameMap, List<ChefPlayer> allChefs) {
+    public MapViewPanel(Map gameMap, List<ChefPlayer> allChefs, GameFrame gameFrame) {
         this.gameMap = gameMap;
         this.allChefs = allChefs;
         this.stationImages = new HashMap<>();
         this.itemImages = new HashMap<>();
+        this.gameFrame = gameFrame;
         this.setPreferredSize(new Dimension(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE));
+
+        settingsButtonRect = new Rectangle(723, 14, 64, 53);
 
         loadResources();
         initRenderers();
+
+        addSettingsButtonListener();
     }
 
     private void loadResources() {
@@ -68,6 +81,9 @@ public class MapViewPanel extends JPanel {
             this.chef2DownImage = ImageIO.read(getClass().getResource("/images/chef/chef2_down.png"));
             this.chef2RightImage = ImageIO.read(getClass().getResource("/images/chef/chef2_right.png"));
             this.chef2UpImage = ImageIO.read(getClass().getResource("/images/chef/chef2_up.png"));
+            this.settingsIconImage = ImageIO.read(getClass().getResource("/images/map/settings.png"));
+            this.settingsHoverImage = ImageIO.read(getClass().getResource("/images/map/settings_hover.png"));
+
 
             // 3. Load Station Images (Sesuai key map kodemu)
             stationImages.put("assembly-normal", ImageIO.read(getClass().getResource("/images/station/assembly_station_normal.png")));
@@ -148,7 +164,48 @@ public class MapViewPanel extends JPanel {
         if (UI != null) {
             UI.drawUI(g2d);
         }
+
+        if (settingsButtonRect != null && settingsIconImage != null) {
+            g2d.setColor(new Color(216, 48, 33, 0));
+            g2d.fillRoundRect(settingsButtonRect.x, settingsButtonRect.y, settingsButtonRect.width, settingsButtonRect.height, 10, 10);
+
+            BufferedImage img = hoveringSettings ? settingsHoverImage : settingsIconImage;
+
+            g2d.drawImage(
+                    img,
+                    settingsButtonRect.x,
+                    settingsButtonRect.y,
+                    settingsButtonRect.width,
+                    settingsButtonRect.height,
+                    null
+            );
+        }
     }
+
+    private void addSettingsButtonListener() {
+        addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                boolean hover = settingsButtonRect.contains(e.getPoint());
+                if (hover != hoveringSettings) {
+                    hoveringSettings = hover;
+                    repaint();
+                }
+            }
+        });
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (settingsButtonRect.contains(e.getPoint())) {
+                    if (gameFrame != null) {
+                        gameFrame.showSettingsMenu();
+                    }
+                }
+            }
+        });
+    }
+
 
     public void refreshView() {
         this.repaint();

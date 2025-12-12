@@ -22,14 +22,14 @@ public class PlateStorage extends Station{
     public void interact(ChefPlayer chef) {
         Item chefItem = chef.getInventory();
 
-        //Chef Ambil Piring
-        if (chefItem == null) {
-            if (!plates.isEmpty()) {
-                // Ambil piring paling atas
-                Plate p = plates.pop();
-                chef.setInventory(p);
-            }
-        }
+        //Chef Ambil Piring (pick up)
+//        if (chefItem == null) {
+//            if (!plates.isEmpty()) {
+//                // Ambil piring paling atas
+//                Plate p = plates.pop();
+//                chef.setInventory(p);
+//            }
+//        }
     }
 
     public boolean hasPlates() {
