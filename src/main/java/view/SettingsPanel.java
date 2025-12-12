@@ -74,29 +74,29 @@ public class SettingsPanel extends JPanel {
         g2.drawString(text, tx, ty);
     }
 
-    private void addSettingsButtonListener() {
-        addMouseMotionListener(new MouseAdapter() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                boolean hover = settingsButtonRect.contains(e.getPoint());
-                if (hover != hoveringSettings) {
-                    hoveringSettings = hover;
-                    repaint();
-                }
-            }
-        });
-
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if (settingsButtonRect.contains(e.getPoint())) {
-                    if (gameFrame != null) {
-                        gameFrame.showSettingsMenu();
-                    }
-                }
-            }
-        });
-    }
+//    private void addSettingsButtonListener() {
+//        addMouseMotionListener(new MouseAdapter() {
+//            @Override
+//            public void mouseMoved(MouseEvent e) {
+//                boolean hover = settingsButtonRect.contains(e.getPoint());
+//                if (hover != hoveringSettings) {
+//                    hoveringSettings = hover;
+//                    repaint();
+//                }
+//            }
+//        });
+//
+//        addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mousePressed(MouseEvent e) {
+//                if (settingsButtonRect.contains(e.getPoint())) {
+//                    if (gameFrame != null) {
+//                        gameFrame.showSettingsMenu();
+//                    }
+//                }
+//            }
+//        });
+//    }
 
     @Override
     protected void paintComponent(Graphics g) {
