@@ -11,7 +11,8 @@ public enum TileState {
     PLATE_STORAGE("P"),
     TRASH_STATION("T"),
     WALKABLE("."),
-    SPAWN("V");
+    SPAWN("V"),
+    WASHING_CLEAN("H");
 
     private final String symbol;
 

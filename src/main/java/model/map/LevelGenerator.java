@@ -42,7 +42,7 @@ public class LevelGenerator {
         }
 
         // 2. Gali Lantai (Algoritma Digger)
-        digFloor(width / 2, height / 2, (width * height) / 2);
+        digFloor(width / 2, height / 2, (width * height) / 4);
 
         // 3. Smoothing: Hapus sudut-sudut tajam/tembok jomblo
         smoothMap();
@@ -114,7 +114,7 @@ public class LevelGenerator {
                         // Tembok dikepung lantai -> Hapus
                         if (floorNeighbors > 4) grid[y][x] = FLOOR;
                     }
-                    else if (grid[y][x] == FLOOR) {
+                    if (grid[y][x] == FLOOR) {
                         // Lantai dikepung tembok -> Tutup
                         if (floorNeighbors < 1) grid[y][x] = WALL;
                     }

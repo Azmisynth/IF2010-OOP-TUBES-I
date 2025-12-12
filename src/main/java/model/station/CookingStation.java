@@ -30,48 +30,14 @@ public class CookingStation extends Station {
 
     @Override
     public void interact(ChefPlayer chef) {
-        Item chefItem = chef.getInventory(); // ambil item yang lagi dibawa chef
-
-        if (chefItem != null && itemOnStation == null) {
-            // Oven hanya menerima Plate
-            if (chefItem instanceof Plate) {
-                Plate plate = (Plate) chefItem;
-
-                // Cek apakah isi piring sesuai dengan Resep yang ada di buku?
-                Recipe foundRecipe = RecipeBook.findRecipe(plate.getContents());
-
-                if (foundRecipe != null) {
-                    // Valid! Terima piringnya
-                    this.itemOnStation = plate;
-                    this.currentRecipe = foundRecipe;
-                    chef.setInventory(null);
-
-                    cookingSound.play();
-                    // Langsung mulai masak otomatis
-                    startCooking();
-                    System.out.println("LOGIC: Memasak " + currentRecipe.getName());
-                } else {
-                    System.out.println("LOGIC: Resep salah! Cek bahan atau potongan.");
-                }
+        if (!isCooking && itemOnStation != null) {
+            if (canBeCooked(itemOnStation)) {
+                startCooking();
+                cookingSound.play();
+                System.out.println("Action: Kompor dinyalakan manual.");
             } else {
-                System.out.println("LOGIC: Hanya Plate yang bisa masuk oven.");
+                System.out.println("Action: Item ini tidak bisa dimasak/sudah matang.");
             }
-            return;
-        }
-
-        if (itemOnStation != null && chefItem == null) {
-            // Stop timer
-            stopCooking();
-
-            // Ambil piring
-            chef.setInventory(itemOnStation);
-
-            // Reset station
-            itemOnStation = null;
-            currentRecipe = null;
-            timeElapsed = 0;
-
-            System.out.println("LOGIC: Mengangkat masakan dari oven.");
         }
     }
 
@@ -122,6 +88,39 @@ public class CookingStation extends Station {
         }
     }
 
+    @Override
+    public void setItemOnStation(Item item) {
+        this.itemOnStation = item;
+
+        // RESET STATE TAPI JANGAN MULAI TIMER
+        this.timeElapsed = 0;
+        this.isCooking = false;
+
+        System.out.println("Logistik: " + item.getName() + " diletakkan di kompor. (Tekan V untuk masak)");
+    }
+
+    @Override
+    public boolean allowItem(Item item) {
+        // Syarat 1: Kompor harus kosong
+        if (itemOnStation != null) return false;
+
+        // Syarat 2: Cek apakah item valid untuk ditaruh (Mentah)
+        return canBeCooked(item);
+    }
+
+    @Override
+    public Item getItemOnStation() {
+        return itemOnStation;
+    }
+
+    @Override
+    public void removeItem() {
+        // Kalau diambil pas lagi masak, matikan kompor
+        stopCooking();
+        this.itemOnStation = null;
+        this.timeElapsed = 0;
+    }
+
     private void stopCooking() {
         if (cookingTimer != null) {
             cookingTimer.cancel();
@@ -130,12 +129,18 @@ public class CookingStation extends Station {
         isCooking = false;
     }
 
-    public Item getItemOnStation() {
-        return itemOnStation;
-    }
-
-    public boolean isProcessing() {
-        return itemOnStation != null;
+    private boolean canBeCooked(Item item) {
+        if (item instanceof Plate) {
+            // Cek isi piring, harus ada yang mentah
+            Plate p = (Plate) item;
+            if (p.getContents().isEmpty()) return false;
+            for (Object obj : p.getContents()) {
+                if (obj instanceof Ingredient && ((Ingredient)obj).getState() == ItemState.CHOPPED) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public double getProgress() {

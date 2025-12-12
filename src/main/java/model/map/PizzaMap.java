@@ -14,7 +14,7 @@ public class PizzaMap extends MapType {
             "XXX...........XX",
             "XXX.....A.V...SX",
             "XXX...........SX",
-            "XXXWWAIAIAIAIAPX",
+            "XXXHWAIAIAIAIAPX",
             "XXX............X",
             "XXXXXX..A...XXXX",
             "XXXR...V......RX",

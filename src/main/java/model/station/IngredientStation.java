@@ -15,6 +15,7 @@ public class IngredientStation extends Station {
 
     @Override
     public void interact(ChefPlayer chef) {
+        /*
         Item chefItem = chef.getInventory(); // ambil item yang lagi dibawa chef
 
         // skenario 1: plating - chef bawa plate bersih dan di station ada ingredient
@@ -76,6 +77,8 @@ public class IngredientStation extends Station {
                 System.out.println("Piring kotor atau bahan belum siap.");
             }
         }
+
+         */
     }
 
     public boolean receiveThrownItem(Item item) {

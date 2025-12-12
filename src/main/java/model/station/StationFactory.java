@@ -14,6 +14,7 @@ public class StationFactory {
             case "I" -> new IngredientStation(Tomato.class);
             case "P" -> new PlateStorage();
             case "T" -> new TrashStation();
+            case "H" -> new WashingClean();
             default -> null;
         };
     }
@@ -35,6 +36,7 @@ public class StationFactory {
                 else { yield "null"; }
             }
             case "W" -> "washing";
+            case "H" -> "washing-clean";
             case "I" -> "ingredient";
             case "P" -> "plate";
             case "T" -> "trash";

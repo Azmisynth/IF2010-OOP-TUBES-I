@@ -76,7 +76,7 @@ public class GameFrame extends JFrame {
         OrderManager.getInstance().setLevelDifficulty(level);
         OrderManager.getInstance().startGame();
 
-        MapViewPanel gameView = new MapViewPanel(gameMap, allChefs);
+        MapViewPanel gameView = new MapViewPanel(gameMap, allChefs, this);
         ChefInputListener inputHandler =
                 new ChefInputListener(allChefs, gameMap, gameView, this);
         SwingUtilities.invokeLater(() -> {
