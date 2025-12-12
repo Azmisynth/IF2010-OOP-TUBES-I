@@ -34,8 +34,8 @@ public class Recipe {
         return penalty;
     }
 
-    public Dish createDish(List<Ingredient> ingredients) {
-        return new Dish(this.name, ingredients);
+    public List<String> getRequiredIngredients() {
+        return requiredIngredients;
     }
 
     public boolean matches(Set<Preparable> plateContents) {

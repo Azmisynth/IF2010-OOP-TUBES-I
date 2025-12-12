@@ -167,4 +167,16 @@ public class CuttingStation extends Station {
     public double getProgress(){
         return progress;
     }
+
+    @Override
+    public boolean allowItem(Item item) {
+        if (this.itemOnStation != null) return false;
+        else {
+            return true;
+        }
+    }
+
+    public void removeItem() {
+        this.itemOnStation = null;
+    }
 }

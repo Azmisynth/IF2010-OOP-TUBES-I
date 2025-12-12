@@ -63,6 +63,17 @@ public class GameFrame extends JFrame {
             return;
         }
 
+        int level = 1; // Default
+        switch (stageId) {
+            case "Stage1": level = 1; break;
+            case "Stage2": level = 2; break;
+            case "Stage3": level = 3; break;
+            case "Stage4": level = 4; break;
+        }
+
+        OrderManager.getInstance().setLevelDifficulty(level);
+        OrderManager.getInstance().startGame();
+
         MapViewPanel gameView = new MapViewPanel(gameMap, allChefs);
         ChefInputListener inputHandler =
                 new ChefInputListener(allChefs, gameMap, gameView, this);
@@ -73,15 +84,15 @@ public class GameFrame extends JFrame {
             gameView.requestFocusInWindow();
             javax.swing.Timer timer = new javax.swing.Timer(16, e -> {
                 gameView.refreshView();
+
+                if (OrderManager.getInstance().isGameOver() || OrderManager.getInstance().isStageCleared()) {
+                    ((javax.swing.Timer)e.getSource()).stop();
+                    showStageSelect(); // Ubah ke gameover atau winning view nanti
+                }
             });
             timer.start();
 
-            javax.swing.Timer logicTimer = new javax.swing.Timer(1000, e -> {
-                OrderManager.getInstance().updateOrders();
-            });
-            logicTimer.start();
         });
-
     }
 
     public void showHowToPlay() {

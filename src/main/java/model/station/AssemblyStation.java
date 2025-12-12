@@ -117,6 +117,14 @@ public class AssemblyStation extends Station { // class untuk station tempat rak
         return false;
     }
 
+    @Override
+    public boolean allowItem(Item item) {
+        return true;
+    }
+
+    public void removeItem() {
+        this.itemOnStation = null;
+    }
 
     public Item getItemOnStation() { // getter untuk ambil item yang ada di station
         return itemOnStation; // return item yang ada di station (atau null kalo kosong)

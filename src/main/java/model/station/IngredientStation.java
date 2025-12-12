@@ -38,7 +38,6 @@ public class IngredientStation extends Station {
             chef.setInventory(null); // kosongin inventory chef
             System.out.println("Item diletakkan di Ingredient Station");
         }
-        //}
         // skenario 3: chef mau ambil item dari station
         if (itemOnStation != null && chefItem == null) { // cek station ada item dan chef gak bawa apa-apa
             chef.setInventory(itemOnStation); // kasih item dari station ke chef
@@ -108,11 +107,31 @@ public class IngredientStation extends Station {
     }
 
     public Item getItemOnStation() {
-        return itemOnStation;
+        if (itemOnStation != null) {
+            return itemOnStation;
+        }
+        try {
+            return ingredientType.getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public void setItemOnStation(Item item) {
         this.itemOnStation = item;
+    }
+
+    @Override
+    public boolean allowItem(Item item) {
+        if (this.itemOnStation != null) return false;
+        else return false;
+    }
+
+    public void removeItem() {
+        if (this.itemOnStation != null) {
+            this.itemOnStation = null;
+        }
     }
 
     public String getIngredientName() {
