@@ -1,12 +1,10 @@
 package main.java.model.station;
 
-import main.java.model.chef.ChefAction;
 import main.java.model.chef.ChefPlayer;
 import main.java.model.chef.Direction;
 import main.java.model.item.Item;
 import main.java.model.item.Plate;
 
-import javax.swing.*;
 import java.util.Stack; // utk nyimpen piring kotor dan bersih dengan sistem LIFO (Last In First Out)
 import java.util.Timer;
 import java.util.TimerTask;
@@ -73,7 +71,7 @@ public class WashingStation extends Station {
 
         isBusy = true; // tandain station jadi sibuk
         busyChef = chef; // simpen chef yang lagi cuci
-        chef.startWorking(ChefAction.BUSY_WORKING); // tandain chef jadi sibuk
+        chef.setBusy(true); // tandain chef jadi sibuk
 
         if (progress >= 1.0) progress = 0.0;
 
@@ -105,7 +103,7 @@ public class WashingStation extends Station {
         progress = 0.0; // mulai dari 0% lagi
 
         if (busyChef != null) { // kalau ada chef yang lagi sibuk
-            busyChef.finishWorking(); // bebasin chef dari status sibuk
+            busyChef.setBusy(false); // bebasin chef dari status sibuk
             busyChef = null; // hapus referensi chef
         }
         isBusy = false;
@@ -121,18 +119,13 @@ public class WashingStation extends Station {
     }
 
     private void updateProgress() {
-        if (busyChef == null || !busyChef.isBusy() || busyChef.getCurrentAction() != ChefAction.BUSY_WORKING) {
-            stopWashing();
-            System.out.println("Pencucian dihentikan karena Chef menjauh atau status diubah.");
-            return;
-        }
+        if((busyChef.getDirection() == Direction.UP && busyChef.getName().equals("Stewart")) || (busyChef.getDirection() == Direction.DOWN && busyChef.getName().equals("Kebin"))) {
+            progress += PROGRESS_STEP;
 
-        progress += PROGRESS_STEP;
-
-        if (progress >= 1.0) {
-            progress = 1.0;
-            // Panggil penyelesaian di SwingUtilities.invokeLater karena ini memengaruhi Model
-            SwingUtilities.invokeLater(() -> finishWashingOnePlate());
+            if (progress >= 1.0) {
+                progress = 1.0;
+                finishWashingOnePlate();
+            }
         }
     }
 
