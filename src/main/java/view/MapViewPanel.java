@@ -63,7 +63,6 @@ public class MapViewPanel extends JPanel {
 
     private void loadResources() {
         try {
-            // 1. Load Tile
             URL imageUrl = getClass().getResource("/images/map/tile.png");
             if (imageUrl == null) {
                 System.err.println("FATAL ERROR: File 'tile.png' not found!");
@@ -71,7 +70,6 @@ public class MapViewPanel extends JPanel {
                 tileImage = ImageIO.read(imageUrl);
             }
 
-            // 2. Load Chef Images (Sesuai nama variabelmu)
             this.wall = ImageIO.read(getClass().getResource("/images/map/wall.png"));
             this.chef1UpImage = ImageIO.read(getClass().getResource("/images/chef/chef1_up.png"));
             this.chef1DownImage = ImageIO.read(getClass().getResource("/images/chef/chef1_down.png"));
@@ -85,7 +83,6 @@ public class MapViewPanel extends JPanel {
             this.settingsHoverImage = ImageIO.read(getClass().getResource("/images/map/settings_hover.png"));
 
 
-            // 3. Load Station Images (Sesuai key map kodemu)
             stationImages.put("assembly-normal", ImageIO.read(getClass().getResource("/images/station/assembly_station_normal.png")));
             stationImages.put("assembly-bottom", ImageIO.read(getClass().getResource("/images/station/assembly_station_bottom.png")));
             stationImages.put("cooking-right", ImageIO.read(getClass().getResource("/images/station/cooking_station_right.png")));
@@ -99,8 +96,7 @@ public class MapViewPanel extends JPanel {
             stationImages.put("serving-bottom", ImageIO.read(getClass().getResource("/images/station/serving_bawah.png")));
             stationImages.put("plate", ImageIO.read(getClass().getResource("/images/station/plate_storage.png")));
 
-
-            // 4. Load Item Images (Sesuai key map kodemu + Tomatopick)
+            itemImages.put("Jam", ImageIO.read(getClass().getResource("/images/map/jam.png")));
             itemImages.put("Tomato", ImageIO.read(getClass().getResource("/images/ingredient_tomato_raw.png")));
             itemImages.put("Tomatopick",  ImageIO.read(getClass().getResource("/images/tomat.png"))); // Ini penting buat ChefRenderer
             itemImages.put("Cheese",  ImageIO.read(getClass().getResource("/images/cheese_station.png")));
@@ -162,7 +158,7 @@ public class MapViewPanel extends JPanel {
         }
 
         if (UI != null) {
-            UI.drawUI(g2d);
+            UI.drawUI(g2d, getWidth(), getHeight());
         }
 
         if (settingsButtonRect != null && settingsIconImage != null) {

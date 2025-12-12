@@ -32,16 +32,16 @@ public class CuttingStation extends Station {
     @Override
     public void interact(ChefPlayer chef){
         Item chefItem = chef.getInventory();
-//
-//        if (chefItem != null && itemOnStation == null && !isBusy){ // kalo chef bawa item dan di station cutting ga ada item dan lgi g sibuk
-//            if (chefItem instanceof Preparable || chefItem instanceof Plate) {
-//                itemOnStation = chefItem; // maka taro itemnya
-//                chef.setInventory(null); // jadi set inventory alias bawaansi chef jadi kosong lagi karena udah ditaro
-//                this.progress = 0.0;
-//                System.out.println("Menaruh " + itemOnStation.getName() + " di Cutting Station.");
-//            }
-//            return;
-//        }
+
+        if (chefItem != null && itemOnStation == null && !isBusy){ // kalo chef bawa item dan di station cutting ga ada item dan lgi g sibuk
+            if (chefItem instanceof Preparable || chefItem instanceof Plate) {
+                itemOnStation = chefItem; // maka taro itemnya
+                chef.setInventory(null); // jadi set inventory alias bawaansi chef jadi kosong lagi karena udah ditaro
+                this.progress = 0.0;
+                System.out.println("Menaruh " + itemOnStation.getName() + " di Cutting Station.");
+            }
+            return;
+        }
 
         if (itemOnStation != null && chefItem == null) {
             if (itemOnStation instanceof Ingredient) {
@@ -65,37 +65,37 @@ public class CuttingStation extends Station {
             }
         }
 
-//        if (chefItem instanceof Preparable && itemOnStation instanceof Plate) {
-//
-//            Preparable food = (Preparable) chefItem;
-//            Plate plate = (Plate) itemOnStation;
-//
-//            // Syarat: Piring tidak boleh kotor & Bahan siap disajikan
-//            if (plate.isClean() && food.canBePlacedOnPlate()) {
-//
-//                // Masukkan bahan ke dalam objek Plate
-//                plate.addComponent(food);
-//
-//                // Hapus bahan dari tangan Chef
-//                chef.setInventory(null);
-//
-//                System.out.println("Bahan berhasil ditambahkan ke atas Piring di meja!");
-//                return;
-//            } else {
-//                System.out.println("Piring kotor atau bahan belum siap.");
-//            }
-//        }
-//
-//        if (chefItem instanceof Plate && itemOnStation instanceof Preparable && !isBusy){
-//            Plate plate = (Plate) chefItem;
-//            Preparable prep = (Preparable) itemOnStation;
-//            if (plate.isClean() && prep.canBeCooked()){ // ini yang fungsi assembly
-//                plate.addComponent(prep);
-//                itemOnStation = plate;
-//                chef.setInventory(null); // tangan chef kosong
-//                return;
-//            }
-//        }
+        if (chefItem instanceof Preparable && itemOnStation instanceof Plate) {
+
+            Preparable food = (Preparable) chefItem;
+            Plate plate = (Plate) itemOnStation;
+
+            // Syarat: Piring tidak boleh kotor & Bahan siap disajikan
+            if (plate.isClean() && food.canBePlacedOnPlate()) {
+
+                // Masukkan bahan ke dalam objek Plate
+                plate.addComponent(food);
+
+                // Hapus bahan dari tangan Chef
+                chef.setInventory(null);
+
+                System.out.println("Bahan berhasil ditambahkan ke atas Piring di meja!");
+                return;
+            } else {
+                System.out.println("Piring kotor atau bahan belum siap.");
+            }
+        }
+
+        if (chefItem instanceof Plate && itemOnStation instanceof Preparable && !isBusy){
+            Plate plate = (Plate) chefItem;
+            Preparable prep = (Preparable) itemOnStation;
+            if (plate.isClean() && prep.canBeCooked()){ // ini yang fungsi assembly
+                plate.addComponent(prep);
+                itemOnStation = plate;
+                chef.setInventory(null); // tangan chef kosong
+                return;
+            }
+        }
 
     }
 
@@ -184,5 +184,17 @@ public class CuttingStation extends Station {
 
     public double getProgress(){
         return progress;
+    }
+
+    @Override
+    public boolean allowItem(Item item) {
+        if (this.itemOnStation != null) return false;
+        else {
+            return true;
+        }
+    }
+
+    public void removeItem() {
+        this.itemOnStation = null;
     }
 }

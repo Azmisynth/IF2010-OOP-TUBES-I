@@ -36,6 +36,30 @@ public class PlateStorage extends Station{
         return !plates.isEmpty();
     }
 
+    public Item getItemOnStation() {
+        if (!plates.isEmpty()) {
+            return plates.peek();
+        }
+        return null;
+    }
+
+    public void removeItem() {
+        if (!plates.isEmpty()) {
+            plates.pop();
+        }
+    }
+
+    @Override
+    public boolean allowItem(Item item) {
+        return item instanceof Plate && ((Plate)item).isClean();
+    }
+
+    @Override
+    public void setItemOnStation(Item item) {
+        if (item instanceof Plate) {
+            plates.push((Plate) item);
+        }
+    }
     public boolean hasDirtyPlateOnTop() {
         if (plates.isEmpty()) return false;
         return !plates.peek().isClean();

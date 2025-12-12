@@ -65,20 +65,54 @@ public class ChefPlayer implements Moveable {
         Position targetPosition = Position.getAdjacent(this.position, this.direction);
         Tile targetTile = map.getTile(targetPosition.getX(), targetPosition.getY());
 
-        if (targetTile != null && targetTile.getStation() == null && targetTile.isWalkable(targetPosition.getX(), targetPosition.getY())) {
-            Item floorItem = targetTile.getItem();
-            // SKENARIO 1: DROP (Tangan Penuh -> Lantai Kosong)
-            if (this.inventory != null && floorItem == null) {
-                targetTile.setItem(this.inventory); // Pindahkan item ke lantai
-                this.inventory = null; // Tangan jadi kosong
-                this.currentAction = ChefAction.DROPPING;
+        if (targetTile == null) return;
+
+        Station station = targetTile.getStation();
+        Item handItem = this.inventory;
+
+        if (station != null) {
+            Item stationItem = station.getItemOnStation();
+
+            if (handItem != null && stationItem != null) {
+                if (handlePlating(stationItem, targetTile)) return;
             }
 
-            // SKENARIO 2: PICK UP (Tangan Kosong -> Lantai Ada Barang)
-            else if (this.inventory == null && floorItem != null) {
-                this.inventory = floorItem; // Ambil item ke tangan
-                targetTile.setItem(null); // Lantai jadi kosong
-                this.currentAction = ChefAction.PICKING_UP;
+            if (handItem != null && stationItem == null) {
+                if (station.allowItem(handItem)) {
+                    station.setItemOnStation(handItem);
+                    this.inventory = null;
+                }
+                return;
+            }
+
+            if (handItem == null && stationItem != null) {
+                // Ambil item dari station
+                this.inventory = stationItem;
+                station.removeItem();
+                return;
+            }
+
+            return;
+        }
+
+        if (targetTile.isWalkable(targetPosition.getX(), targetPosition.getY())) {
+            Item floorItem = targetTile.getItem();
+
+            // PLATING
+            if (handItem != null && floorItem != null) {
+                if (handlePlating(floorItem, targetTile)) return;
+            }
+
+            // DROP
+            if (handItem != null && floorItem == null) {
+                targetTile.setItem(handItem);
+                this.inventory = null;
+            }
+
+            // PICKUP
+            else if (handItem == null && floorItem != null) {
+                this.inventory = floorItem;
+                targetTile.setItem(null);
             }
         }
     }
@@ -295,6 +329,65 @@ public class ChefPlayer implements Moveable {
         else {
             System.out.println("LOGIC: Lantai penuh, item hilang.");
         }
+    }
+
+    private boolean handlePlating(Item targetItem, Tile targetTile) {
+        Item heldItem = this.getInventory();
+
+        // Syarat mutlak: Chef harus bawa Plate
+        if (!(heldItem instanceof Plate)) {
+            return false;
+        }
+
+        Plate chefPlate = (Plate) heldItem;
+        Station station = targetTile.getStation();
+
+        // KONDISI 1: Target adalah Ingredient
+        // AKSI: Plate Turun
+        if (targetItem instanceof Ingredient) {
+            Ingredient targetIng = (Ingredient) targetItem;
+
+            // Masukkan ingredient tile ke piring chef
+            chefPlate.addComponent(targetIng);
+
+            // Taruh piring chef ke Station (jika ada) atau Lantai
+            if (station != null) {
+                station.setItemOnStation(chefPlate);
+            } else {
+                targetTile.setItem(chefPlate);
+            }
+
+            // Tangan Chef jadi kosong
+            this.setInventory(null);
+
+            System.out.println("ACTION: Plate Turun (Merged on Tile/Station)");
+            return true;
+        }
+
+        // KONDISI 2: Target adalah Plate lain (yang ada isinya)
+        // AKSI: Ingredient Naik
+        if (targetItem instanceof Plate) {
+            Plate targetPlate = (Plate) targetItem;
+
+            // Kita ambil semua isi dari piring target
+            if (!targetPlate.getContents().isEmpty()) {
+
+                // Pindahkan semua isi target ke piring chef
+                for (Preparable prep : targetPlate.getContents()) {
+                    if (prep instanceof Ingredient) {
+                        Ingredient ing = (Ingredient) prep;
+                        chefPlate.addComponent(ing);
+                    }
+                }
+
+                // Kosongkan piring target (Piringnya tetap di sana, tapi kosong)
+                targetPlate.clearContents();
+
+                System.out.println("ACTION: Ingredient Naik (Merged to Hand)");
+                return true;
+            }
+        }
+        return false;
     }
 
     // Helper untuk fitur tangkap

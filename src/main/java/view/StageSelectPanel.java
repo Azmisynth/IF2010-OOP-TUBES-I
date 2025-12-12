@@ -50,6 +50,7 @@ public class StageSelectPanel extends JPanel {
         circles.add(new Circle(148, 188, r, "Stage1", "1"));
         circles.add(new Circle(402, 309, r, "Stage2", "2"));
         circles.add(new Circle(670, 187, r, "Stage3", "3"));
+        circles.add(new Circle(680, 86, r, "Stage4", "?"));
 
         OutlineLabel backLabel = new OutlineLabel("< Back to Homepage");
         backLabel.setBorder(BorderFactory.createEmptyBorder(0, 30, 40, 0));

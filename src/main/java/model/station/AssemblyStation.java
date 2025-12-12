@@ -22,83 +22,78 @@ public class AssemblyStation extends Station { // class untuk station tempat rak
 
 
         // plating: chef bawa plate bersih dan station ada ingredient/dish
-//        if (chefItem instanceof Plate && itemOnStation != null) { // cek chef bawa plate dan station ada item
-//            Plate plate = (Plate) chefItem; // cast item chef jadi plate
-//            if (plate.isClean() && itemOnStation instanceof Preparable) { // plate harus bersih dan item di station harus bisa dimasak (ingredient/dish)
-//                Preparable prep = (Preparable) itemOnStation; // cast item di station jadi preparable
-//                if (prep.canBePlacedOnPlate()) { // cek apakah item ini boleh ditaro di plate (harus COOKED atau sesuai rule)
-//                    placementSound.play();
-//                    plate.addComponent(prep); // masukin ingredient/dish ke dalam plate
-//                    itemOnStation = plate; // sekarang yang ada di station adalah plate berisi dish
-//                    chef.setInventory(null); // tangan chef jadi kosong
-//                    System.out.println("Plating berhasil di Assembly Station!");
-//                    return;
-//                }
-//            }
-//        }
+        if (chefItem instanceof Plate && itemOnStation != null) { // cek chef bawa plate dan station ada item
+            Plate plate = (Plate) chefItem; // cast item chef jadi plate
+            if (plate.isClean() && itemOnStation instanceof Preparable) { // plate harus bersih dan item di station harus bisa dimasak (ingredient/dish)
+                Preparable prep = (Preparable) itemOnStation; // cast item di station jadi preparable
+                if (prep.canBePlacedOnPlate()) { // cek apakah item ini boleh ditaro di plate (harus COOKED atau sesuai rule)
+                    placementSound.play();
+                    plate.addComponent(prep); // masukin ingredient/dish ke dalam plate
+                    itemOnStation = plate; // sekarang yang ada di station adalah plate berisi dish
+                    chef.setInventory(null); // tangan chef jadi kosong
+                    System.out.println("Plating berhasil di Assembly Station!");
+                    return;
+                }
+            }
+        }
 
         // chef bawa kitchen utensils berisi ingredient, station ada plate bersih
-//        if (chefItem instanceof KitchenUtensils && itemOnStation instanceof Plate) { // cek chef bawa utensil dan station ada plate
-//            KitchenUtensils utensil = (KitchenUtensils) chefItem; // cast item chef jadi kitchen utensils
-//            Plate plate = (Plate) itemOnStation; // cast item di station jadi plate
-//
-//            if (plate.isClean() && !utensil.isEmpty()) { // plate harus bersih dan utensil harus ada isinya
-//                // transfer ingredients ke plate
-//                for (Object ingredient : utensil.getContents()) { // loop semua ingredient yang ada di utensil
-//                    if (ingredient instanceof Preparable) { // cek apakah ingredient boleh ditaro di plate
-//                        Preparable ing = (Preparable) ingredient;// masukin ingredient ke plate
-//                        if (ing.canBePlacedOnPlate()) {
-//                            placementSound.play();
-//                            plate.addComponent(ing);
-//                        }
-//                    }
-//                }
-//                utensil.clearContents(); // utensil jadi kosong setelah semua ingredient dipindah
-//                //chef.setInventory(utensil); // utensil kosong kembali ke tangan chef
-//                System.out.println("Ingredients dipindah dari utensils ke plate!");
-//                return;
-//            }
-//        }
+        if (chefItem instanceof KitchenUtensils && itemOnStation instanceof Plate) { // cek chef bawa utensil dan station ada plate
+            KitchenUtensils utensil = (KitchenUtensils) chefItem; // cast item chef jadi kitchen utensils
+            Plate plate = (Plate) itemOnStation; // cast item di station jadi plate
 
-        // drop
-//        if (chefItem != null && itemOnStation == null) { // chef bawa item dan station kosong
-//            itemOnStation = chefItem; // item yang dibawa chef sekarang ada di station
-//            placementSound.play();
-//            chef.setInventory(null); // tangan chef jadi kosong
-//            System.out.println("Item diletakkan di Assembly Station");
-//            return;
-//        }
+            if (plate.isClean() && !utensil.isEmpty()) { // plate harus bersih dan utensil harus ada isinya
+                // transfer ingredients ke plate
+                for (Object ingredient : utensil.getContents()) { // loop semua ingredient yang ada di utensil
+                    if (ingredient instanceof Preparable) { // cek apakah ingredient boleh ditaro di plate
+                        Preparable ing = (Preparable) ingredient;// masukin ingredient ke plate
+                        if (ing.canBePlacedOnPlate()) {
+                            plate.addComponent(ing);
+                        }
+                    }
+                }
+                utensil.clearContents(); // utensil jadi kosong setelah semua ingredient dipindah
+                //chef.setInventory(utensil); // utensil kosong kembali ke tangan chef
+                System.out.println("Ingredients dipindah dari utensils ke plate!");
+                return;
+            }
+        }
 
-        // pick up
-//        if (itemOnStation != null && chefItem == null) { // station ada item dan tangan chef kosong
-//            placementSound.play();
-//            chef.setInventory(itemOnStation); // item di station pindah ke tangan chef
-//            itemOnStation = null; // station jadi kosong
-//            System.out.println("Item diambil dari Assembly Station");
-//            return;
-//        }
+        if (chefItem != null && itemOnStation == null) { // chef bawa item dan station kosong
+            itemOnStation = chefItem; // item yang dibawa chef sekarang ada di station
+            chef.setInventory(null); // tangan chef jadi kosong
+            System.out.println("Item diletakkan di Assembly Station");
+            return;
+        }
+
+        if (itemOnStation != null && chefItem == null) { // station ada item dan tangan chef kosong
+            chef.setInventory(itemOnStation); // item di station pindah ke tangan chef
+            itemOnStation = null; // station jadi kosong
+            System.out.println("Item diambil dari Assembly Station");
+            return;
+        }
 
         //Di station ada plate, chef membawa ingerdient
-//        if (chefItem instanceof Preparable && itemOnStation instanceof Plate) {
-//
-//            Preparable food = (Preparable) chefItem;
-//            Plate plate = (Plate) itemOnStation;
-//
-//            // Syarat: Piring tidak boleh kotor & Bahan siap disajikan
-//            if (plate.isClean() && food.canBePlacedOnPlate()) {
-//                placementSound.play();
-//                // Masukkan bahan ke dalam objek Plate
-//                plate.addComponent(food);
-//
-//                // Hapus bahan dari tangan Chef
-//                chef.setInventory(null);
-//
-//                System.out.println("Bahan berhasil ditambahkan ke atas Piring di meja!");
-//                return;
-//            } else {
-//                System.out.println("Piring kotor atau bahan belum siap.");
-//            }
-//        }
+        if (chefItem instanceof Preparable && itemOnStation instanceof Plate) {
+
+            Preparable food = (Preparable) chefItem;
+            Plate plate = (Plate) itemOnStation;
+
+            // Syarat: Piring tidak boleh kotor & Bahan siap disajikan
+            if (plate.isClean() && food.canBePlacedOnPlate()) {
+
+                // Masukkan bahan ke dalam objek Plate
+                plate.addComponent(food);
+
+                // Hapus bahan dari tangan Chef
+                chef.setInventory(null);
+
+                System.out.println("Bahan berhasil ditambahkan ke atas Piring di meja!");
+                return;
+            } else {
+                System.out.println("Piring kotor atau bahan belum siap.");
+            }
+        }
     }
 
     @Override
@@ -125,6 +120,15 @@ public class AssemblyStation extends Station { // class untuk station tempat rak
         }
 
         return false;
+    }
+
+    @Override
+    public boolean allowItem(Item item) {
+        return true;
+    }
+
+    public void removeItem() {
+        this.itemOnStation = null;
     }
 
 

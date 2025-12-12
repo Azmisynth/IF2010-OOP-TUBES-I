@@ -62,7 +62,7 @@ public class ChefInputListener implements KeyListener {
             case KeyEvent.VK_C:
                 activeChef.pickUpOrDrop(gameMap);
                 break;
-            case KeyEvent.VK_F:
+            case KeyEvent.VK_T:
                 activeChef.throwItem(gameMap, allChefs);
                 break;
             case KeyEvent.VK_SPACE:

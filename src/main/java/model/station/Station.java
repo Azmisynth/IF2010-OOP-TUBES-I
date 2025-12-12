@@ -20,4 +20,16 @@ public abstract class Station {
     public boolean receiveThrownItem(Item item) {
         return false; // Default: Menolak semua lemparan
     }
+
+    public Item getItemOnStation() {
+        return null;
+    }
+
+    public void setItemOnStation(Item item) {}
+
+    public boolean allowItem(Item item) {
+        return false;
+    }
+
+    public void removeItem() {}
 }
