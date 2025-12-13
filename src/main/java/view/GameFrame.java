@@ -177,9 +177,10 @@ public class GameFrame extends JFrame {
         dialog.setVisible(true);
     }
     public void adjustVolume() {
-        if(bgmPlayer.getVolume() == 0) {
+        if (bgmPlayer.getVolume() == 0) {
             bgmPlayer.setVolume(0.3);
         } else bgmPlayer.setVolume(0);
+    }
 
     public static void main(String[] args) {
         PizzaMap config = new PizzaMap(1);
