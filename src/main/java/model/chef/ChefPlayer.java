@@ -1,6 +1,7 @@
 package model.chef;
 
 import model.item.*;
+import model.kitchen.EventManager;
 import model.map.*;
 import model.station.*;
 
@@ -98,6 +99,7 @@ public class ChefPlayer implements Moveable {
 
     public void dash(Map map) {
         if (!active) return;
+        boolean isUnlimited = EventManager.getInstance().getActiveEvent() == EventManager.EventType.UNLIMITED_DASH;
 
         // Cek  Cooldown
         long currentTime = System.currentTimeMillis();
@@ -110,15 +112,19 @@ public class ChefPlayer implements Moveable {
         boolean dashed = false;
         for (int i = 0; i < DASH_DISTANCE; i++) {
             Position nextPos = Position.getAdjacent(this.position, this.direction);
-
+            int nx = nextPos.getX();
+            int ny = nextPos.getY();
             // Cek apakah kotak di depan bisa diinjak
             if (map.isWalkable(nextPos.getX(), nextPos.getY())) {
                 Tile nextTile = map.getTile(nextPos.getX(), nextPos.getY());
                 if (nextTile != null && nextTile.getStation() != null) {
                     break;
                 }
-                dashed = true;
-                this.position = nextPos;
+                boolean chefCollision = map.isChefAt(nx, ny);
+                if (!chefCollision) {
+                    dashed = true;
+                    this.position = nextPos;
+                }
             } else {
                 break; // Berhenti kalau nabrak tembok
             }
@@ -127,7 +133,9 @@ public class ChefPlayer implements Moveable {
         // 3. Set Waktu Cooldown
         if (dashed) {
             this.currentAction = ChefAction.DASHING;
-            lastDashTime = currentTime;
+            if (!isUnlimited) {
+                lastDashTime = currentTime;
+            }
         } else {
             this.currentAction = ChefAction.IDLE;
         }
@@ -176,6 +184,18 @@ public class ChefPlayer implements Moveable {
     private void handleTileInteraction(Tile targetTile) {
         Item handItem = this.inventory;
         Item floorItem = targetTile.getItem();
+        if (floorItem instanceof EventItem) {
+            EventItem potion = (EventItem) floorItem;
+
+            // 1. Aktifkan Efek (Durasi 15 detik)
+            EventManager.getInstance().triggerEvent(potion.getType(), 10);
+
+            // 2. Hapus Item dari Lantai
+            targetTile.setItem(null);
+
+            System.out.println("GLUK GLUK! Efek " + potion.getType() + " aktif!");
+            return;
+        }
 
         // PLATING / ASSEMBLY
         if (handItem != null && floorItem != null) {
@@ -451,8 +471,9 @@ public class ChefPlayer implements Moveable {
         }
 
         Position targetPosition = Position.getAdjacent(position, newDirection);
+        boolean chefCollision = map.isChefAt(targetPosition.getX(), targetPosition.getY());
 
-        if(map.isWalkable(targetPosition.getX(), targetPosition.getY())) {
+        if(map.isWalkable(targetPosition.getX(), targetPosition.getY()) && !chefCollision) {
             this.position = targetPosition;
             this.currentAction = ChefAction.MOVING;
         } else {
@@ -477,6 +498,10 @@ public class ChefPlayer implements Moveable {
 
     public void moveRight(Map map) {
         attemptMove(map, Direction.RIGHT);
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     public void stopInteract(Map map) {

@@ -1,6 +1,7 @@
 package controller;
 
 import model.chef.ChefPlayer;
+import model.kitchen.EventManager;
 import model.map.Map;
 import view.MapViewPanel;
 import java.awt.event.KeyEvent;
@@ -68,6 +69,10 @@ public class ChefInputListener implements KeyListener {
             case KeyEvent.VK_SPACE:
                 activeChef.dash(gameMap);
                 break;
+            case KeyEvent.VK_K:
+                EventManager.getInstance().triggerEvent(EventManager.EventType.BLACKOUT, 10);
+                break;
+
         }
 
         gameView.refreshView();

@@ -1,7 +1,7 @@
 package model.station;
 
 import model.chef.Position;
-import model.item.Tomato;
+import model.item.*;
 
 public class StationFactory {
     public static Station createStationObject(String symbol) {
@@ -11,10 +11,15 @@ public class StationFactory {
             case "A" -> new AssemblyStation();
             case "S" -> new ServingCounter();
             case "W" -> new WashingStation();
-            case "I" -> new IngredientStation(Tomato.class);
             case "P" -> new PlateStorage();
             case "T" -> new TrashStation();
             case "H" -> new WashingClean();
+
+            case "O" -> new IngredientStation(Tomato.class);
+            case "D" -> new IngredientStation(Dough.class);
+            case "K" -> new IngredientStation(Cheese.class);
+            case "U" -> new IngredientStation(Sausage.class);
+            case "Y" -> new IngredientStation(Chicken.class);
             default -> null;
         };
     }
@@ -33,13 +38,18 @@ public class StationFactory {
             case "S" -> {
                 if(position.getX() == 14 && position.getY() == 3) { yield "serving-bottom"; }
                 else if  (position.getX() == 14 && position.getY() == 2) { yield "serving"; }
-                else { yield "null"; }
+                else { yield "serving"; }
             }
             case "W" -> "washing";
             case "H" -> "washing-clean";
-            case "I" -> "ingredient";
             case "P" -> "plate";
             case "T" -> "trash";
+
+            case "O" -> "Tomato";
+            case "D" -> "Dough";
+            case "K" -> "Cheese";
+            case "U" -> "Sausage";
+            case "Y" -> "Chicken";
             default -> null;
         };
     }

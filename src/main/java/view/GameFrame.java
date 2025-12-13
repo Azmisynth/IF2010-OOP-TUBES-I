@@ -4,6 +4,7 @@ import controller.ChefInputListener;
 import helper.SoundPlayer;
 import model.chef.ChefPlayer;
 import model.chef.Position;
+import model.kitchen.EventManager;
 import model.kitchen.OrderManager;
 import model.map.Map;
 import model.map.PizzaMap;
@@ -73,8 +74,24 @@ public class GameFrame extends JFrame {
             case "Stage4": level = 4; break;
         }
 
+        this.gameMap = new Map(new PizzaMap(level), allChefs);
+
         OrderManager.getInstance().setLevelDifficulty(level);
         OrderManager.getInstance().startGame();
+        EventManager.getInstance().setLevel(level);
+
+        PizzaMap mapConfig = new PizzaMap(level);
+        List<Position> newSpawns = mapConfig.getChefPositions();
+
+        for (int i = 0; i < allChefs.size(); i++) {
+            if (i < newSpawns.size()) {
+                // Pindahkan chef ke titik spawn map baru
+                allChefs.get(i).setPosition(newSpawns.get(i));
+
+                // Reset inventory chef biar fair (opsional, tapi disarankan)
+                allChefs.get(i).setInventory(null);
+            }
+        }
 
         MapViewPanel gameView = new MapViewPanel(gameMap, allChefs, this);
         ChefInputListener inputHandler =
@@ -85,6 +102,7 @@ public class GameFrame extends JFrame {
             gameView.setFocusable(true);
             gameView.requestFocusInWindow();
             javax.swing.Timer timer = new javax.swing.Timer(16, e -> {
+                EventManager.getInstance().update(this.gameMap);
                 gameView.refreshView();
 
                 if (OrderManager.getInstance().isGameOver() || OrderManager.getInstance().isStageCleared()) {
@@ -161,7 +179,7 @@ public class GameFrame extends JFrame {
     }
 
     public static void main(String[] args) {
-        PizzaMap config = new PizzaMap();
+        PizzaMap config = new PizzaMap(1);
         List<Position> chefPositions = config.getChefPositions();
         if (chefPositions.size() < 2) {
             System.err.println("FATAL ERROR: Only " + chefPositions.size() + " spawn points found. Minimum 2 required.");

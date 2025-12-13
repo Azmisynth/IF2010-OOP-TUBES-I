@@ -19,6 +19,7 @@ public class OrderManager implements Runnable{
     private int spawnTimer;
     private int score;
     private int ordersSpawnedCount;
+    private boolean isTimeFrozen = false;
 
     private int orderDuration;      // Durasi per order
     private int maxFailedOrders;    // Batas nyawa order gagal
@@ -109,9 +110,7 @@ public class OrderManager implements Runnable{
     public void run() {
         while (isRunning) {
             try {
-                // Logic Game (Tick)
                 tick();
-
                 // Cek Kondisi Berhenti (Game Over / Menang)
                 if (isGameOver || isStageCleared) {
                     isRunning = false; // Keluar loop
@@ -129,7 +128,9 @@ public class OrderManager implements Runnable{
 
     private void tick() {
         if (isGameOver || isStageCleared) return;
-
+        if (isTimeFrozen) {
+            return;
+        }
         // Update Waktu Game
         if (timeRemaining > 0) {
             timeRemaining--;
@@ -248,6 +249,12 @@ public class OrderManager implements Runnable{
         gameLoopTimer.stop();
         if (score >= targetScore) isStageCleared = true;
         else isGameOver = true;
+    }
+
+    public void setTimeFrozen(boolean frozen) {
+        this.isTimeFrozen = frozen;
+        if (frozen) System.out.println("Waktu Beku!");
+        else System.out.println("Waktu Jalan Lagi!");
     }
 
     public int getScore() { return score; }

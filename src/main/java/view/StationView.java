@@ -1,11 +1,7 @@
 package view;
 
 import model.chef.Position;
-import model.item.Item;
-import model.item.Plate;
-import model.item.Preparable;
-import model.item.Ingredient;
-import model.item.ItemState;
+import model.item.*;
 import model.map.Tile;
 import model.station.*;
 import model.kitchen.Recipe;
