@@ -101,6 +101,7 @@ public class MapViewPanel extends JPanel {
             stationImages.put("ingredient-bottom", ImageIO.read(getClass().getResource("/images/station/assembly_station_bottom.png")));
             stationImages.put("serving-bottom", ImageIO.read(getClass().getResource("/images/station/serving_bawah.png")));
             stationImages.put("plate", ImageIO.read(getClass().getResource("/images/station/plate_storage.png")));
+            stationImages.put("washing-clean", ImageIO.read(getClass().getResource("/images/station/washing_clean.png")));
 
             itemImages.put("Jam", ImageIO.read(getClass().getResource("/images/map/jam.png")));
             itemImages.put("Tomato", ImageIO.read(getClass().getResource("/images/item/ingredient_tomato_raw.png")));

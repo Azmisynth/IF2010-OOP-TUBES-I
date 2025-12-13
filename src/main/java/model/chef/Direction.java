@@ -14,6 +14,15 @@ public enum Direction {
         this.y = y;
     }
 
+    public Direction getOpposite() {
+        return switch (this) {
+            case UP -> DOWN;
+            case DOWN -> UP;
+            case LEFT -> RIGHT;
+            case RIGHT -> LEFT;
+        };
+    }
+
     public int getX() {
         return x;
     }

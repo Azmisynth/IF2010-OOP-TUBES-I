@@ -21,7 +21,7 @@ public class CuttingStation extends Station {
     private static final double PROGRESS_STEP = (double) TICK_RATE / CUTTING_DURATION;
     private SoundPlayer cuttingSound = new SoundPlayer("/sound/cutting.wav");
 
-    public CuttingStation(){
+    public CuttingStation() {
         super("C"); // simbol C sebagai String
         this.itemOnStation = null;
         this.isBusy = false;
@@ -30,8 +30,18 @@ public class CuttingStation extends Station {
     }
 
     @Override
-    public void interact(ChefPlayer chef){
-      Item chefItem = chef.getInventory();
+    public void interact(ChefPlayer chef) {
+        Item chefItem = chef.getInventory();
+
+        if (chefItem != null && itemOnStation == null && !isBusy) { // kalo chef bawa item dan di station cutting ga ada item dan lgi g sibuk
+            if (chefItem instanceof Preparable || chefItem instanceof Plate) {
+                itemOnStation = chefItem; // maka taro itemnya
+                chef.setInventory(null); // jadi set inventory alias bawaansi chef jadi kosong lagi karena udah ditaro
+                //this.progress = 0.0;
+                System.out.println("Menaruh " + itemOnStation.getName() + " di Cutting Station.");
+            }
+            return;
+        }
 //
 //        if (chefItem != null && itemOnStation == null && !isBusy){ // kalo chef bawa item dan di station cutting ga ada item dan lgi g sibuk
 //            if (chefItem instanceof Preparable || chefItem instanceof Plate) {
@@ -53,11 +63,48 @@ public class CuttingStation extends Station {
                     } else {
                         System.out.println("Sedang memotong... " + (int) (progress * 100) + "%");
                     }
+                    return;
+                } else if (ingredient.getState() == ItemState.CHOPPED) {
+                    takeItem(chef);
+                    return;
                 }
-
+            }
+            if (!isBusy) {
+                takeItem(chef);
             }
         }
 
+        if (chefItem instanceof Preparable && itemOnStation instanceof Plate) {
+
+            Preparable food = (Preparable) chefItem;
+            Plate plate = (Plate) itemOnStation;
+
+            // Syarat: Piring tidak boleh kotor & Bahan siap disajikan
+            if (plate.isClean() && food.canBePlacedOnPlate()) {
+
+                // Masukkan bahan ke dalam objek Plate
+                plate.addComponent(food);
+
+                // Hapus bahan dari tangan Chef
+                chef.setInventory(null);
+
+                System.out.println("Bahan berhasil ditambahkan ke atas Piring di meja!");
+                return;
+            } else {
+                System.out.println("Piring kotor atau bahan belum siap.");
+            }
+        }
+
+        if (chefItem instanceof Plate && itemOnStation instanceof Preparable && !isBusy) {
+            Plate plate = (Plate) chefItem;
+            Preparable prep = (Preparable) itemOnStation;
+            if (plate.isClean() && prep.canBeCooked()) { // ini yang fungsi assembly
+                plate.addComponent(prep);
+                itemOnStation = plate;
+                chef.setInventory(null); // tangan chef kosong
+                return;
+            }
+        }
 //        if (chefItem instanceof Preparable && itemOnStation instanceof Plate) {
 //
 //            Preparable food = (Preparable) chefItem;
@@ -99,14 +146,15 @@ public class CuttingStation extends Station {
         System.out.println("Mengambil item dari Cutting Station.");
     }
 
-    public void startOrContinueCutting(ChefPlayer chef){
-        if (isBusy){ // klo station lgi motong jangan mulai apa2
+    public void startOrContinueCutting(ChefPlayer chef) {
+        if (isBusy) { // klo station lgi motong jangan mulai apa2
             return;
         }
 
         isBusy = true;
         busyChef = chef;
         chef.startWorking(ChefAction.BUSY_WORKING);
+        //chef.setBusy(true);
         chef.setBusy(true);
         // set status chef dan station lgi dipakai alias sibuk
 
@@ -116,14 +164,14 @@ public class CuttingStation extends Station {
         cuttingTimer = new Timer();
         cuttingTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
-            public void run(){
+            public void run() {
                 updateProgress(); // panggil method ini kalo waktunya dah abis
             }
         }, 0, TICK_RATE);
     }
 
-    private void updateProgress(){
-        if(busyChef == null || !busyChef.isBusy() || busyChef.getCurrentAction() != ChefAction.BUSY_WORKING){
+    private void updateProgress() {
+        if (busyChef == null || !busyChef.isBusy() || busyChef.getCurrentAction() != ChefAction.BUSY_WORKING) {
             finishCutting();
             System.out.println("Pemotongan dihentikan karena Chef menjauh atau status diubah.");
             return;
@@ -136,7 +184,7 @@ public class CuttingStation extends Station {
         }
     }
 
-    public void finishCutting(){
+    public void finishCutting() {
         if (itemOnStation instanceof Ingredient) {
             Ingredient ingredient = (Ingredient) itemOnStation;
             if (progress >= 1.0 && ingredient.getState() == ItemState.RAW) {
@@ -148,7 +196,7 @@ public class CuttingStation extends Station {
         cuttingSound.stop();
 
         SwingUtilities.invokeLater(() -> {
-            if (cuttingTimer != null){
+            if (cuttingTimer != null) {
                 cuttingTimer.cancel();
                 cuttingTimer = null;
             }
@@ -159,23 +207,23 @@ public class CuttingStation extends Station {
             }
 
             isBusy = false;
-            progress = 0.0; // Reset progress bar setelah selesai
+//            progress = 0.0; // Reset progress bar setelah selesai
         });
     }
 
-    public Item getItemOnStation(){
+    public Item getItemOnStation() {
         return itemOnStation;
     }
 
-    public void setItemOnStation(Item item){
+    public void setItemOnStation(Item item) {
         this.itemOnStation = item;
     }
 
-    public boolean isBusy(){
+    public boolean isBusy() {
         return isBusy;
     }
 
-    public double getProgress(){
+    public double getProgress() {
         return progress;
     }
 

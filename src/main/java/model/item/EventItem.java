@@ -17,8 +17,8 @@ public class EventItem extends Item {
 
     private static String getNameFromType(EventManager.EventType type) {
         return switch (type) {
-            case TIME_FREEZE -> "Tomato";
-            case UNLIMITED_DASH -> "Dough";
+            case TIME_FREEZE -> "Jam";
+            case UNLIMITED_DASH -> "Jam";
             default -> "null";
         };
     }
