@@ -13,7 +13,6 @@ import java.util.TimerTask;
 
 public class WashingStation extends Station {
     private Stack<Plate> dirtyPlatesStack; // stack buat nyimpen piring-piring kotor yang nunggu dicuci
-    private Stack<Plate> cleanPlatesStack; // stack buat nyimpen piring-piring yang udah dicuci
     private boolean isBusy; // buat tandain station lagi sibuk cuci atau ngga
     private double progress; // simpen progress pencucian dari 0.0 (belum mulai) sampai 1.0 (selesai)
     private Timer washingTimer; // timer buat ngatur durasi proses cuci
@@ -26,7 +25,6 @@ public class WashingStation extends Station {
     public WashingStation() {
         super("W"); // simbol W sebagai String
         this.dirtyPlatesStack = new Stack<>(); // bikin stack baru buat piring kotor
-        this.cleanPlatesStack = new Stack<>(); // bikin stack baru buat piring bersih
         this.isBusy = false; // awalnya station ngga sibuk
         this.progress = 0.0; // progress awalnya 0%
         this.busyChef = null; // belum ada chef yang cuci
@@ -34,35 +32,47 @@ public class WashingStation extends Station {
 
     @Override
     public void interact(ChefPlayer chef) {
-        Item chefItem = chef.getInventory(); // ambil item yang lagi dibawa chef
-
-        // chef bawa piring kotor mau ditaro buat dicuci
-        if (chefItem instanceof Plate) { // cek chef bawa Plate
-            Plate plate = (Plate) chefItem; // cast item jadi Plate
-            if (!plate.isClean()) { // cek piringnya kotor apa ngga
-                dirtyPlatesStack.push(plate); // masukin piring kotor ke stack
-                chef.setInventory(null); // kosongin inventory chef
-                System.out.println("Piring kotor diletakkan untuk dicuci. Total: " + dirtyPlatesStack.size());
-            }
-            return;
-        }
-        // chef mau ambil piring bersih
-        if (chefItem == null && !cleanPlatesStack.isEmpty()) { // cek chef ngga bawa apa-apa dan ada piring bersih
-            stopWashing(); // Stop nyuci kalau mau ambil
-            Plate cleanPlate = cleanPlatesStack.pop(); // ambil piring bersih dari stack
-            chef.setInventory(cleanPlate); // kasih piring bersih ke chef
-            System.out.println("Piring bersih diambil"); // kasih tau berhasil ambil
-            return;
-        }
         // chef mau mulai cuci piring
-        if (chefItem == null && !dirtyPlatesStack.isEmpty() && !isBusy) { // cek chef kosong, ada piring kotor, dan station ngga lagi sibuk
-            startOrContinueWashing(chef); // mulai proses cuci
-       }
+        if (!dirtyPlatesStack.isEmpty() && !isBusy) {
+            startOrContinueWashing(chef);
+        }
+    }
+    @Override
+    public boolean allowItem(Item item) {
+        return item instanceof Plate && !((Plate)item).isClean();
+    }
+
+    @Override
+    public void setItemOnStation(Item item) {
+        if (item instanceof Plate) {
+            dirtyPlatesStack.push((Plate) item);
+            System.out.println("Logistik: Piring kotor masuk. Total: " + dirtyPlatesStack.size());
+        }
+    }
+
+    @Override
+    public Item getItemOnStation() {
+        if (!dirtyPlatesStack.isEmpty() && !isBusy) {
+            return dirtyPlatesStack.peek();
+        }
+        return null;
+    }
+
+    @Override
+    public void removeItem() {
+        if (!dirtyPlatesStack.isEmpty() && !isBusy) {
+            dirtyPlatesStack.pop();
+        }
     }
 
     private void startOrContinueWashing(ChefPlayer chef) { // method buat mulai atau lanjutin proses cuci piring
         if (isBusy) { // kalau station lagi sibuk
             System.out.println("Sedang mencuci..."); // kasih tau lagi cuci
+            return;
+        }
+
+        if (WashingClean.instance == null) {
+            System.out.println("ERROR: Tidak ada WashingClean station untuk menampung hasil!");
             return;
         }
 
@@ -97,9 +107,10 @@ public class WashingStation extends Station {
             Plate plate = dirtyPlatesStack.pop(); // ambil piring kotor dari stack
             plate.setClean(true); // tandain piring jadi bersih
             plate.clearContents(); // bersihin isi piring (dish/component)
-            cleanPlatesStack.push(plate); // masukin piring bersih ke stack piring bersih
+            WashingClean.instance.addCleanPlate(plate);
             System.out.println("1 piring selesai dicuci! Sisa piring kotor: " + dirtyPlatesStack.size());
         }
+
 
         // reset progress buat piring berikutnya (kalau mau cuci lagi)
         progress = 0.0; // mulai dari 0% lagi
@@ -138,10 +149,6 @@ public class WashingStation extends Station {
 
     public boolean hasDirtyPlates() {
         return !dirtyPlatesStack.isEmpty();
-    }
-
-    public boolean hasCleanPlates() {
-        return !cleanPlatesStack.isEmpty();
     }
 
     public boolean isBusy() {

@@ -1,4 +1,4 @@
-package main.java.model.map;
+package model.map;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,15 +14,15 @@ public class LevelGenerator {
     private static final char WALL = 'X';
     private static final char FLOOR = '.';
 
-    // 1. KIRI ATAS (Score & Orders)
+    // Score & Orders)
     private static final int UI_TL_WIDTH = 3;
     private static final int UI_TL_HEIGHT = 8;
 
-    // 2. KANAN BAWAH (Timer)
+    //  (Timer)
     private static final int UI_BR_WIDTH = 2;
     private static final int UI_BR_HEIGHT = 1;
 
-    // 3. KIRI BAWAH (Fail Streak Count)
+    //  (Fail Streak Count)
     private static final int UI_BL_WIDTH = 2;
     private static final int UI_BL_HEIGHT = 2;
 
@@ -42,12 +42,12 @@ public class LevelGenerator {
         }
 
         // 2. Gali Lantai (Algoritma Digger)
-        digFloor(width / 2, height / 2, (width * height) / 2);
+        digFloor(width / 2, height / 2, (width * height) / 4);
 
-        // 3. Smoothing: Hapus sudut-sudut tajam/tembok jomblo
+        // 3. Smoothing
         smoothMap();
 
-        // 4. Tempatkan Station dengan Validasi Ketat
+        // 4. Tempatkan Station dengan Validasi
         placeStationsSmartly();
 
         // 5. Convert ke String
@@ -81,7 +81,7 @@ public class LevelGenerator {
         int y = startY;
         int floorCount = 0;
         int attempts = 0;
-        int maxAttempts = 10000;
+        int maxAttempts = 5000;
 
         while (floorCount < targetFloors && attempts < maxAttempts) {
             attempts++;
@@ -114,7 +114,7 @@ public class LevelGenerator {
                         // Tembok dikepung lantai -> Hapus
                         if (floorNeighbors > 4) grid[y][x] = FLOOR;
                     }
-                    else if (grid[y][x] == FLOOR) {
+                    if (grid[y][x] == FLOOR) {
                         // Lantai dikepung tembok -> Tutup
                         if (floorNeighbors < 1) grid[y][x] = WALL;
                     }
@@ -137,9 +137,11 @@ public class LevelGenerator {
         Collections.shuffle(candidates);
 
         char[] stations = {
-                'D', 'A', 'W', 'P',
-                'S', 'S', 'C', 'C', 'R',
-                'T', 'K', 'B', 'Z', 'M'
+                'O', 'D', 'K', 'U', 'V',
+                'Y', 'S', 'C', 'C', 'S', 'R', 'R',
+                'W', 'H', 'P', 'T', 'A', 'A', 'A',
+                'A', 'A', 'A', 'A', 'A'
+
         };
 
         for (char station : stations) {
@@ -168,35 +170,19 @@ public class LevelGenerator {
     private int countFloorNeighbors(int x, int y) {
         int count = 0;
 
-        // Loop dari -1 (Kiri/Atas) sampai +1 (Kanan/Bawah)
-        for (int dy = -1; dy <= 1; dy++) {
-            for (int dx = -1; dx <= 1; dx++) {
+        if (isFloor(x, y - 1)) count++; // up
+        if (isFloor(x, y + 1)) count++; // down
+        if (isFloor(x - 1, y)) count++; // left
+        if (isFloor(x + 1, y)) count++; // right
 
-                // Skip titik tengah (diri sendiri)
-                if (dx == 0 && dy == 0) continue;
-
-                int nx = x + dx;
-                int ny = y + dy;
-
-                // Pastikan koordinat valid (tidak keluar array)
-                if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
-                    if (grid[ny][nx] == FLOOR) {
-                        count++;
-                    }
-                }
-            }
-        }
         return count;
     }
+    private boolean isFloor(int x, int y) {
+        return isInside(x, y) && grid[y][x] == FLOOR;
+    }
 
-    public static void main(String[] args) {
-        System.out.println("=== TEST GENERATOR ===\n");
 
-        for (int i = 1; i <= 3; i++) {
-            System.out.println("MAP #" + i);
-            LevelGenerator gen = new LevelGenerator(16, 10);
-            System.out.println(gen.generate());
-            System.out.println("--------------------------------");
-        }
+    private boolean isInside(int x, int y) {
+        return x > 0 && x < width - 1 && y > 0 && y < height - 1;
     }
 }

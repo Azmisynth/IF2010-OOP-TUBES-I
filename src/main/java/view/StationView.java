@@ -1,11 +1,7 @@
 package view;
 
 import model.chef.Position;
-import model.item.Item;
-import model.item.Plate;
-import model.item.Preparable;
-import model.item.Ingredient;
-import model.item.ItemState;
+import model.item.*;
 import model.map.Tile;
 import model.station.*;
 import model.kitchen.Recipe;
@@ -50,6 +46,10 @@ public class StationView {
         if (tileModel.getItem() != null) {
             // Gambar item di lantai (agak kecil 30x30)
             drawItemAt(g2d, tileModel.getItem(), px + 10, py + 10, 30);
+
+            if (tileModel.getItem() instanceof Plate) {
+                drawPlateContent(g2d, (Plate) tileModel.getItem(), px, py);
+            }
         }
 
         //Station
@@ -86,6 +86,9 @@ public class StationView {
             }
             else if (currentStation instanceof WashingStation) {
                 drawWashingStation(g2d, (WashingStation) currentStation, px, py);
+            }
+            else if (currentStation instanceof WashingClean) {
+                drawWashingClean(g2d, (WashingClean) currentStation, px, py);
             }
         }
     }
@@ -216,16 +219,6 @@ public class StationView {
             }
         }
 
-        if (station.hasCleanPlates()) {
-            BufferedImage cleanImg = itemImages.get("Plate");
-            if (cleanImg != null) {
-                // Gambar di kanan agak bawah
-                g2d.drawImage(cleanImg, px + 22, py + 10, 25, 25, null);
-                // Efek tumpukan
-                g2d.drawImage(cleanImg, px + 22, py + 7, 25, 25, null);
-            }
-        }
-
         if (station.isBusy()) {
             double progress = station.getProgress();
             int barY = py - 8; // Di atas wastafel
@@ -236,6 +229,16 @@ public class StationView {
             g2d.fillRect(px + 5, barY, (int)(40 * progress), 6);
             g2d.setColor(Color.WHITE);
             g2d.drawRect(px + 5, barY, 40, 6);
+        }
+    }
+
+    private void drawWashingClean(Graphics2D g2d, WashingClean station, int px, int py) {
+        if (station.hasPlates()) {
+            BufferedImage cleanImg = itemImages.get("Plate");
+            if (cleanImg != null) {
+                g2d.drawImage(cleanImg, px + 10, py + 10, 30, 30, null);
+                g2d.drawImage(cleanImg, px + 10, py + 6, 30, 30, null);
+            }
         }
     }
 

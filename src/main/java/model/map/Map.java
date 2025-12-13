@@ -45,6 +45,23 @@ public class Map {
         return x >= 0 && x < width && y >= 0 && y < height;
     }
 
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public boolean isChefAt(int x, int y) {
+        for (ChefPlayer chef : this.allChefs) {
+            if (chef.getPosition().getX() == x && chef.getPosition().getY() == y) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 //    public void placeItemOnMap(int x, int y, Item item) {
 //        getTile(x, y).setItem(item);
 //    }

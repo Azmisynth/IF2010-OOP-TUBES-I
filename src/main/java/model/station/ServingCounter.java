@@ -18,64 +18,47 @@ public class ServingCounter extends Station {
     }
 
     @Override // override method interactnya Station
-    public void interact(ChefPlayer chef) { // method yang dipanggil pas chef berinteraksi sama counter ini
-        Item chefItem = chef.getInventory(); // ambil item yang lagi dibawa chef
-
-        if (chefItem != null && chefItem instanceof Plate) { // cek apakah item yang dibawa adalah Plate
-            Plate plate = (Plate) chefItem; // cast item jadi Plate biar bisa akses method Plate
-            if (!isPlateReadyToServe(plate)) {
-                System.out.println("LOGIC: Gagal Serve! Ada bahan yang belum matang (COOKED).");
-                return;
-            }
-            boolean isSuccess = OrderManager.getInstance().deliverOrder(plate.getContents());
-
-            chef.setInventory(null);
-            returnPlate(plate);
-        }
+    public void interact(ChefPlayer chef) {
     }
 
-    private boolean isPlateReadyToServe(Plate plate) {
-        if (plate.getContents() == null || plate.getContents().isEmpty()) {
-            return false;
-        }
+    @Override
+    public boolean allowItem(Item item) {
+        // Hanya terima Piring
+        return item instanceof Plate;
+    }
 
-        // Cek satu per satu
-        for (Object obj : plate.getContents()) {
-            if (obj instanceof Ingredient) {
-                Ingredient ing = (Ingredient) obj;
+    @Override
+    public void setItemOnStation(Item item) {
+        if (item instanceof Plate) {
+            Plate plate = (Plate) item;
 
-                // Syarat Mutlak: Harus COOKED
-                // (Kecuali ada resep salad/sushi mentah, tapi di Pizza Map semua harus Cooked)
-                if (ing.getState() != ItemState.COOKED) {
-                    // Kalau Gosong -> Boleh disajikan tapi nanti kena penalti di OrderManager (opsional)
-                    // Tapi biasanya game Overcooked menolak barang gosong juga di sini.
-                    if (ing.getState() == ItemState.BURNED) {
-                        System.out.println("Info: Ada bahan GOSONG!");
-                        return false;
-                    }
+            // Logic Kirim Order
+            // Panggil OrderManager untuk cek resep
+            boolean success = OrderManager.getInstance().deliverOrder(plate.getContents());
 
-                    System.out.println("Info: " + ing.getName() + " masih " + ing.getState());
-                    return false;
-                }
+            if (success) {
+                System.out.println("Order Terkirim!");
+                returnPlate(plate); // Kembalikan piring kotor nanti
+            } else {
+                returnPlate(plate);
             }
         }
-        return true; // Semua lolos seleksi
     }
 
     private void returnPlate(Plate plate) {
         plate.clearContents();
-        plate.setClean(false);
+        plate.setClean(false); // Jadi kotor
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                // Kembalikan ke PlateStorage (Static Instance)
                 if (PlateStorage.instance != null) {
                     PlateStorage.instance.returnPlate(plate);
-                    System.out.println("LOGIC: Piring kotor muncul kembali di Storage!");
-                } else {
-                    System.err.println("ERROR: PlateStorage instance belum di-set!");
                 }
             }
         }, PLATE_RETURN_DELAY);
     }
+
+    // Override getItemOnStation return null agar Chef tidak bisa ambil balik piring yg sdh ditaruh
+    @Override
+    public Item getItemOnStation() { return null; }
 }

@@ -66,8 +66,16 @@ public class PlateStorage extends Station{
     }
 
     public void returnPlate(Plate dirtyPlate) {
+        dirtyPlate.setClean(false);
+        dirtyPlate.clearContents();
+        // --------------------------------------
+
         plates.push(dirtyPlate);
-        System.out.println("LOGIC: Piring kotor ditambahkan ke tumpukan.");
+
+        // --- [DEBUG LOGS] ---
+        System.out.println("DEBUG STORAGE: Plate returned.");
+        System.out.println("  -> Total Plates: " + plates.size());
+        System.out.println("  -> Top Plate Dirty: " + !dirtyPlate.isClean());
     }
 
 }

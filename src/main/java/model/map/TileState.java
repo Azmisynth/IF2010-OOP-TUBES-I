@@ -7,11 +7,16 @@ public enum TileState {
     ASSEMBLY_STATION("A"),
     SERVING_COUNTER("S"),
     WASHING_STATION("W"),
-    INGREDIENT_STORAGE("I"),
+    TOMATO_STATION("O"),
+    DOUGH_STATION("D"),
+    CHEESE_STATION("K"),
+    SAUCE_STATION("U"),
+    CHICKEN_STATION("Y"),
     PLATE_STORAGE("P"),
     TRASH_STATION("T"),
     WALKABLE("."),
-    SPAWN("V");
+    SPAWN("V"),
+    WASHING_CLEAN("H");
 
     private final String symbol;
 

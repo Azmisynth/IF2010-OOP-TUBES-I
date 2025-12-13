@@ -4,6 +4,7 @@ import controller.ChefInputListener;
 import helper.SoundPlayer;
 import model.chef.ChefPlayer;
 import model.chef.Position;
+import model.kitchen.EventManager;
 import model.kitchen.OrderManager;
 import model.map.Map;
 import model.map.PizzaMap;
@@ -74,8 +75,24 @@ public class GameFrame extends JFrame {
             case "Stage4": level = 4; break;
         }
 
+        this.gameMap = new Map(new PizzaMap(level), allChefs);
+
         OrderManager.getInstance().setLevelDifficulty(level);
         OrderManager.getInstance().startGame();
+        EventManager.getInstance().setLevel(level);
+
+        PizzaMap mapConfig = new PizzaMap(level);
+        List<Position> newSpawns = mapConfig.getChefPositions();
+
+        for (int i = 0; i < allChefs.size(); i++) {
+            if (i < newSpawns.size()) {
+                // Pindahkan chef ke titik spawn map baru
+                allChefs.get(i).setPosition(newSpawns.get(i));
+
+                // Reset inventory chef biar fair (opsional, tapi disarankan)
+                allChefs.get(i).setInventory(null);
+            }
+        }
 
         MapViewPanel gameView = new MapViewPanel(gameMap, allChefs, this);
         ChefInputListener inputHandler =
@@ -85,7 +102,8 @@ public class GameFrame extends JFrame {
             switchPanel(gameView);
             gameView.setFocusable(true);
             gameView.requestFocusInWindow();
-            gameTimer = new javax.swing.Timer(16, e -> {
+            javax.swing.Timer timer = new javax.swing.Timer(16, e -> {
+                EventManager.getInstance().update(this.gameMap);
                 gameView.refreshView();
 
                 if (OrderManager.getInstance().isGameOver() ||
@@ -94,10 +112,15 @@ public class GameFrame extends JFrame {
                     showStageSelect();
                 }
             });
-            gameTimer.start();
+            timer.start();
 
         });
 
+    }
+
+    public void showHowToPlay() {
+        HowToPlayPanel howToPlayView = new HowToPlayPanel(this);
+        switchPanel(howToPlayView);
     }
 
     public void switchPanel(JPanel newPanel) {
@@ -143,23 +166,23 @@ public class GameFrame extends JFrame {
         System.out.println("Switched control to: " + newChef.getName());
     }
 
+    // File: main/java/view/GameFrame.java (Contoh Method)
+
     public void showSettingsMenu() {
         // 1. Pause game loop
         this.pauseGame();
 
+        // 2. Tampilkan dialog
         SettingsDialog dialog = new SettingsDialog(this);
         dialog.setVisible(true);
     }
-
-
     public void adjustVolume() {
         if(bgmPlayer.getVolume() == 0) {
             bgmPlayer.setVolume(0.3);
         } else bgmPlayer.setVolume(0);
-    }
 
     public static void main(String[] args) {
-        PizzaMap config = new PizzaMap();
+        PizzaMap config = new PizzaMap(1);
         List<Position> chefPositions = config.getChefPositions();
         if (chefPositions.size() < 2) {
             System.err.println("FATAL ERROR: Only " + chefPositions.size() + " spawn points found. Minimum 2 required.");
