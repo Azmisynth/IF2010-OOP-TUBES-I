@@ -21,9 +21,9 @@ public class OrderManager implements Runnable{
     private int ordersSpawnedCount;
     private boolean isTimeFrozen = false;
 
-    private int orderDuration;      // Durasi per order
-    private int maxFailedOrders;    // Batas nyawa order gagal
-    private int targetScore;        // Target untuk lolos stage
+    private int orderDuration;
+    private int maxFailedOrders;
+    private int targetScore;
 
     private List<Order> activeOrders;
     private Timer gameLoopTimer;
@@ -34,9 +34,10 @@ public class OrderManager implements Runnable{
 
     private static final int MAX_ACTIVE_ORDERS = 3;
     private static final int SPAWN_INTERVAL = 15;
-    private static final int GAME_DURATION_SECONDS = 240;
+    private static final int GAME_DURATION_SECONDS = 10;
 
     private Thread gameThread;
+    private GameStatusListener statusListener;
 
     private OrderManager() {
         this.activeOrders = new CopyOnWriteArrayList<>();
@@ -76,6 +77,10 @@ public class OrderManager implements Runnable{
         }
     }
 
+    public void setStatusListener(GameStatusListener listener) {
+        this.statusListener = listener;
+    }
+
     public void startGame() {
         stopGameLoop();
         this.score = 0;
@@ -90,17 +95,16 @@ public class OrderManager implements Runnable{
         addOrder();
         this.ordersSpawnedCount = 1;
 
-        // Jalankan Timer
         this.isRunning = true;
         this.gameThread = new Thread(this, "GameLogicThread");
         this.gameThread.start();
     }
 
     public synchronized void stopGameLoop() {
-        isRunning = false; // Matikan flag loop
+        isRunning = false;
         if (gameThread != null) {
             try {
-                gameThread.join(500); // Tunggu thread mati max 0.5 detik
+                gameThread.join(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -241,14 +245,26 @@ public class OrderManager implements Runnable{
         failedOrdersCount++;
         if (failedOrdersCount >= maxFailedOrders) {
             isGameOver = true;
-            gameLoopTimer.stop();
+            stopGameLoop();
+            if (statusListener != null) {
+                statusListener.onGameOver(score);
+            }
         }
     }
 
     private void checkWinCondition() {
-        gameLoopTimer.stop();
-        if (score >= targetScore) isStageCleared = true;
-        else isGameOver = true;
+        stopGameLoop();
+        if (score >= targetScore) {
+            isStageCleared = true;
+            if (statusListener != null) {
+                statusListener.onStageCleared(score);
+            }
+        } else {
+            isGameOver = true;
+            if (statusListener != null) {
+                statusListener.onGameOver(score);
+            }
+        }
     }
 
     public void setTimeFrozen(boolean frozen) {

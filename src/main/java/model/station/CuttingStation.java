@@ -159,7 +159,7 @@ public class CuttingStation extends Station {
             }
 
             isBusy = false;
-            progress = 0.0; // Reset progress bar setelah selesai
+//            progress = 0.0; // Reset progress bar setelah selesai
         });
     }
 

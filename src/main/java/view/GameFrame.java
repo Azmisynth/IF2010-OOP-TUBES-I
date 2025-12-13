@@ -5,6 +5,7 @@ import helper.SoundPlayer;
 import model.chef.ChefPlayer;
 import model.chef.Position;
 import model.kitchen.EventManager;
+import model.kitchen.GameStatusListener;
 import model.kitchen.OrderManager;
 import model.map.Map;
 import model.map.PizzaMap;
@@ -13,7 +14,7 @@ import javax.swing.*;
 import java.util.List;
 import java.util.ArrayList;
 
-public class GameFrame extends JFrame {
+public class GameFrame extends JFrame implements GameStatusListener {
     private final List<ChefPlayer> allChefs;
     private int activeChefIndex;
     private ChefPlayer activeChef;
@@ -53,6 +54,11 @@ public class GameFrame extends JFrame {
     public void showStageSelect() {
         StageSelectPanel stageSelect = new StageSelectPanel(this);
         switchPanel(stageSelect);
+    }
+
+    public void howToPlayScreen() {
+        HowToPlayPanel howToPlay = new HowToPlayPanel(this);
+        switchPanel(howToPlay);
     }
 
     public void startGame(String stageId) {
@@ -102,17 +108,25 @@ public class GameFrame extends JFrame {
             switchPanel(gameView);
             gameView.setFocusable(true);
             gameView.requestFocusInWindow();
-            javax.swing.Timer timer = new javax.swing.Timer(16, e -> {
+            this.gameTimer = new javax.swing.Timer(16, e -> {
                 EventManager.getInstance().update(this.gameMap);
-                gameView.refreshView();
+//                gameView.refreshView();
 
                 if (OrderManager.getInstance().isGameOver() ||
                         OrderManager.getInstance().isStageCleared()) {
                     gameTimer.stop();
+                    showGameOverScreen();
                     showStageSelect();
                 }
+//                if (gameMap != null) {
+//                    EventManager.getInstance().update(this.gameMap);
+//                }
+//                if (gameView != null) {
+//                    gameView.refreshView();
+//                }
             });
-            timer.start();
+            gameTimer.start();
+
 
         });
 
@@ -194,5 +208,40 @@ public class GameFrame extends JFrame {
         List<ChefPlayer> allChefs = new ArrayList<>(List.of(chef1, chef2));
         Map gameMap = new Map(config, allChefs);
         GameFrame gameController = new GameFrame(allChefs, gameMap);
+    }
+
+    public void showTimesUpOverlay() {
+        if (gameView != null) {
+            gameView.setTimesUp(true);
+        }
+    }
+
+    public void showGameOverScreen() {
+        if(gameView != null) {
+            gameView.setGameOver(true);
+        }
+        System.out.println("Game Over :(");
+    }
+
+    public void showResultScreen(int finalScore) {
+        ResultScreenDialog dialog = new ResultScreenDialog(this, finalScore, true);
+         dialog.setVisible(true);
+    }
+
+    @Override
+    public void onStageCleared(int finalScore) {
+        if (gameView != null) gameView.setTimesUp(false);
+        showResultScreen(finalScore);
+    }
+
+    @Override
+    public void onGameOver(int finalScore) {
+        if (gameView != null) gameView.setTimesUp(false);
+        showGameOverScreen();
+    }
+
+    @Override
+    public void onTimesUp() {
+        showTimesUpOverlay();
     }
 }

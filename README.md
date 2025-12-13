@@ -310,8 +310,7 @@ Buka terminal di root project (atau terminal bawaan IDE), lalu jalankan:
 Pada Windows (PowerShell):
 
 ```powershell
-.\gradlew build
-.\gradlew run
+.\gradlew.bat run
 ```
 
 3. Game akan terbuka dalam jendela aplikasi
