@@ -10,15 +10,14 @@ public class SettingsDialog extends JDialog {
         super(gameFrame, "Settings", true);
         this.gameFrame = gameFrame;
 
-        // Setup Dialog
-        this.setUndecorated(true);
-        this.setLayout(new BorderLayout());
+        setUndecorated(true);
+        setLayout(new BorderLayout());
 
         SettingsPanel panel = new SettingsPanel(this);
-        this.add(panel, BorderLayout.CENTER);
+        add(panel, BorderLayout.CENTER);
 
-        this.pack();
-        this.setLocationRelativeTo(gameFrame);
+        pack();
+        setLocationRelativeTo(gameFrame);
     }
 
     public void resumeGame() {
@@ -34,5 +33,9 @@ public class SettingsDialog extends JDialog {
 
     public void quitGame() {
         System.exit(0);
+    }
+
+    public void adjustVolume() {
+        gameFrame.adjustVolume();
     }
 }

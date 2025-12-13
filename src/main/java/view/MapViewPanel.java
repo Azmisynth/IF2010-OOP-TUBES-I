@@ -25,6 +25,9 @@ public class MapViewPanel extends JPanel {
     private ChefView chefRenderer;
     private UIView UI;
 
+    private boolean isGameOver = false;
+    private boolean isTimesUp = false;
+
     // Resource Variables
     private BufferedImage tileImage;
     private BufferedImage wall;
@@ -33,6 +36,7 @@ public class MapViewPanel extends JPanel {
     private BufferedImage settingsIconImage;
     private boolean hoveringSettings = false;
     private BufferedImage settingsHoverImage;
+    private BufferedImage timesUpImage, gameOverImage;
 
     // Maps
     private java.util.Map<String, BufferedImage> stationImages;
@@ -81,7 +85,8 @@ public class MapViewPanel extends JPanel {
             this.chef2UpImage = ImageIO.read(getClass().getResource("/images/chef/chef2_up.png"));
             this.settingsIconImage = ImageIO.read(getClass().getResource("/images/map/settings.png"));
             this.settingsHoverImage = ImageIO.read(getClass().getResource("/images/map/settings_hover.png"));
-
+            this.timesUpImage = ImageIO.read(getClass().getResource("/images/stage/times_up.png"));
+            this.gameOverImage = ImageIO.read(getClass().getResource("/images/stage/game_over.png"));
 
             stationImages.put("assembly-normal", ImageIO.read(getClass().getResource("/images/station/assembly_station_normal.png")));
             stationImages.put("assembly-bottom", ImageIO.read(getClass().getResource("/images/station/assembly_station_bottom.png")));
@@ -97,31 +102,31 @@ public class MapViewPanel extends JPanel {
             stationImages.put("plate", ImageIO.read(getClass().getResource("/images/station/plate_storage.png")));
 
             itemImages.put("Jam", ImageIO.read(getClass().getResource("/images/map/jam.png")));
-            itemImages.put("Tomato", ImageIO.read(getClass().getResource("/images/ingredient_tomato_raw.png")));
-            itemImages.put("Tomatopick",  ImageIO.read(getClass().getResource("/images/tomat.png"))); // Ini penting buat ChefRenderer
-            itemImages.put("Cheese",  ImageIO.read(getClass().getResource("/images/cheese_station.png")));
-            itemImages.put("Cheesepick", ImageIO.read(getClass().getResource("/images/ingredient_keju_raw.png")));
-            itemImages.put("Chicken", ImageIO.read(getClass().getResource("/images/chicken_station.png")));
-            itemImages.put("Chickenpick", ImageIO.read(getClass().getResource("/images/ingredient_ayam_raw.png")));
-            itemImages.put("Sausage",   ImageIO.read(getClass().getResource("/images/sausage_station.png")));
-            itemImages.put("Sausagepick", ImageIO.read(getClass().getResource("/images/ingredient_sosis_raw.png")));
-            itemImages.put("Dough", ImageIO.read(getClass().getResource("/images/dough_station.png")));
-            itemImages.put("Doughpick",  ImageIO.read(getClass().getResource("/images/dough.png")));
-            itemImages.put("Cheese_CHOPPED", ImageIO.read(getClass().getResource("/images/Cheese_CHOPPED.png")));
-            itemImages.put("Sausage_CHOPPED", ImageIO.read(getClass().getResource("/images/ingredient_sosis_chopped.png")));
-            itemImages.put("Tomato_CHOPPED", ImageIO.read(getClass().getResource("/images/tomat_slice.png")));
-            itemImages.put("Chicken_CHOPPED", ImageIO.read(getClass().getResource("/images/ingredient_ayam_chopped.png")));
-            itemImages.put("Dough_CHOPPED", ImageIO.read(getClass().getResource("/images/pizza_polosan.png")));
-            itemImages.put("Plate", ImageIO.read(getClass().getResource("/images/plate.png")));
-            itemImages.put("Plate_DIRTY", ImageIO.read(getClass().getResource("/images/plate_DIRTY.png")));
-            itemImages.put("Pizza_Margherita_RAW", ImageIO.read(getClass().getResource("/images/pizza_margherita.png")));
-            itemImages.put("Pizza_Ayam_RAW", ImageIO.read(getClass().getResource("/images/pizza_ayam.png")));
-            itemImages.put("Pizza_Sosis_RAW",  ImageIO.read(getClass().getResource("/images/pizza_sosis.png")));
-            itemImages.put("Pizza_Tomat_RAW",   ImageIO.read(getClass().getResource("/images/pizza_tomat.png")));
-            itemImages.put("Pizza_Margherita",  ImageIO.read(getClass().getResource("/images/pizza_margherita.png")));
-            itemImages.put("Pizza_Sosis", ImageIO.read(getClass().getResource("/images/pizza_sosis.png")));
-            itemImages.put("Pizza_Ayam",  ImageIO.read(getClass().getResource("/images/pizza_ayam.png")));
-            itemImages.put("Burnt", ImageIO.read(getClass().getResource("/images/burnt.png")));
+            itemImages.put("Tomato", ImageIO.read(getClass().getResource("/images/item/ingredient_tomato_raw.png")));
+            itemImages.put("Tomatopick",  ImageIO.read(getClass().getResource("/images/item/tomat.png"))); // Ini penting buat ChefRenderer
+            itemImages.put("Cheese",  ImageIO.read(getClass().getResource("/images/item/cheese_station.png")));
+            itemImages.put("Cheesepick", ImageIO.read(getClass().getResource("/images/item/ingredient_keju_raw.png")));
+            itemImages.put("Chicken", ImageIO.read(getClass().getResource("/images/item/chicken_station.png")));
+            itemImages.put("Chickenpick", ImageIO.read(getClass().getResource("/images/item/ingredient_ayam_raw.png")));
+            itemImages.put("Sausage",   ImageIO.read(getClass().getResource("/images/item/sausage_station.png")));
+            itemImages.put("Sausagepick", ImageIO.read(getClass().getResource("/images/item/ingredient_sosis_raw.png")));
+            itemImages.put("Dough", ImageIO.read(getClass().getResource("/images/item/dough_station.png")));
+            itemImages.put("Doughpick",  ImageIO.read(getClass().getResource("/images/item/dough.png")));
+            itemImages.put("Cheese_CHOPPED", ImageIO.read(getClass().getResource("/images/item/Cheese_CHOPPED.png")));
+            itemImages.put("Sausage_CHOPPED", ImageIO.read(getClass().getResource("/images/item/ingredient_sosis_chopped.png")));
+            itemImages.put("Tomato_CHOPPED", ImageIO.read(getClass().getResource("/images/item/tomat_slice.png")));
+            itemImages.put("Chicken_CHOPPED", ImageIO.read(getClass().getResource("/images/item/ingredient_ayam_chopped.png")));
+            itemImages.put("Dough_CHOPPED", ImageIO.read(getClass().getResource("/images/item/pizza_polosan.png")));
+            itemImages.put("Plate", ImageIO.read(getClass().getResource("/images/item/plate.png")));
+            itemImages.put("Plate_DIRTY", ImageIO.read(getClass().getResource("/images/item/plate_DIRTY.png")));
+            itemImages.put("Pizza_Margherita_RAW", ImageIO.read(getClass().getResource("/images/item/pizza_margherita.png")));
+            itemImages.put("Pizza_Ayam_RAW", ImageIO.read(getClass().getResource("/images/item/pizza_ayam.png")));
+            itemImages.put("Pizza_Sosis_RAW",  ImageIO.read(getClass().getResource("/images/item/pizza_sosis.png")));
+            itemImages.put("Pizza_Tomat_RAW",   ImageIO.read(getClass().getResource("/images/item/pizza_tomat.png")));
+            itemImages.put("Pizza_Margherita",  ImageIO.read(getClass().getResource("/images/item/pizza_margherita.png")));
+            itemImages.put("Pizza_Sosis", ImageIO.read(getClass().getResource("/images/item/pizza_sosis.png")));
+            itemImages.put("Pizza_Ayam",  ImageIO.read(getClass().getResource("/images/item/pizza_ayam.png")));
+            itemImages.put("Burnt", ImageIO.read(getClass().getResource("/images/item/burnt.png")));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -136,6 +141,16 @@ public class MapViewPanel extends JPanel {
                 chef2UpImage, chef2DownImage, chef2LeftImage, chef2RightImage
         );
         this.UI = new UIView(itemImages);
+    }
+
+    public void setTimesUp(boolean isTimesUp) {
+        this.isTimesUp = isTimesUp;
+        this.repaint();
+    }
+
+    public void setGameOver(boolean isGameOver) {
+        this.isGameOver = isGameOver;
+        this.repaint();
     }
 
     @Override
@@ -159,6 +174,38 @@ public class MapViewPanel extends JPanel {
 
         if (UI != null) {
             UI.drawUI(g2d, getWidth(), getHeight());
+        }
+
+        if(isGameOver && gameOverImage != null) {
+            int imgWidth = gameOverImage.getWidth();
+            int imgHeight = gameOverImage.getHeight();
+
+            final int PANEL_WIDTH = WIDTH * TILE_SIZE;
+            final int PANEL_HEIGHT = HEIGHT * TILE_SIZE;
+
+            int x = (PANEL_WIDTH - imgWidth) / 2;
+            int y = (PANEL_HEIGHT - imgHeight) / 2;
+
+            g2d.setColor(new Color(0, 0, 0, 150));
+            g2d.fillRect(0, 0, PANEL_WIDTH, PANEL_HEIGHT);
+
+            g2d.drawImage(gameOverImage, x, y, null);
+        }
+
+        if(isTimesUp && timesUpImage != null) {
+            int imgWidth = timesUpImage.getWidth();
+            int imgHeight = timesUpImage.getHeight();
+
+            final int PANEL_WIDTH = WIDTH * TILE_SIZE;
+            final int PANEL_HEIGHT = HEIGHT * TILE_SIZE;
+
+            int x = (PANEL_WIDTH - imgWidth) / 2;
+            int y = (PANEL_HEIGHT - imgHeight) / 2;
+
+            g2d.setColor(new Color(0, 0, 0, 150));
+            g2d.fillRect(0, 0, PANEL_WIDTH, PANEL_HEIGHT);
+
+            g2d.drawImage(timesUpImage, x, y, null);
         }
 
         if (settingsButtonRect != null && settingsIconImage != null) {

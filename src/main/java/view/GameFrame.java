@@ -20,6 +20,7 @@ public class GameFrame extends JFrame {
     private MapViewPanel gameView;
     private SoundPlayer bgmPlayer;
     private SettingsDialog settingsDialog;
+    private javax.swing.Timer gameTimer;
 
     public GameFrame(List<ChefPlayer> allChefs, Map gameMap) {
         this.allChefs = allChefs;
@@ -76,7 +77,7 @@ public class GameFrame extends JFrame {
         OrderManager.getInstance().setLevelDifficulty(level);
         OrderManager.getInstance().startGame();
 
-        MapViewPanel gameView = new MapViewPanel(gameMap, allChefs);
+        MapViewPanel gameView = new MapViewPanel(gameMap, allChefs, this);
         ChefInputListener inputHandler =
                 new ChefInputListener(allChefs, gameMap, gameView, this);
         SwingUtilities.invokeLater(() -> {
@@ -84,23 +85,19 @@ public class GameFrame extends JFrame {
             switchPanel(gameView);
             gameView.setFocusable(true);
             gameView.requestFocusInWindow();
-            javax.swing.Timer timer = new javax.swing.Timer(16, e -> {
+            gameTimer = new javax.swing.Timer(16, e -> {
                 gameView.refreshView();
 
-                if (OrderManager.getInstance().isGameOver() || OrderManager.getInstance().isStageCleared()) {
-                    ((javax.swing.Timer)e.getSource()).stop();
-                    showStageSelect(); // Ubah ke gameover atau winning view nanti
+                if (OrderManager.getInstance().isGameOver() ||
+                        OrderManager.getInstance().isStageCleared()) {
+                    gameTimer.stop();
+                    showStageSelect();
                 }
             });
-            timer.start();
+            gameTimer.start();
 
         });
 
-    }
-
-    public void showHowToPlay() {
-        HowToPlayPanel howToPlayView = new HowToPlayPanel(this);
-        switchPanel(howToPlayView);
     }
 
     public void switchPanel(JPanel newPanel) {
@@ -110,6 +107,18 @@ public class GameFrame extends JFrame {
         setLocationRelativeTo(null);
         revalidate();
         repaint();
+    }
+
+    public void pauseGame() {
+        if (gameTimer != null && gameTimer.isRunning()) {
+            gameTimer.stop();
+        }
+    }
+
+    public void resumeGame() {
+        if (gameTimer != null && !gameTimer.isRunning()) {
+            gameTimer.start();
+        }
     }
 
     public void handleExitRequest() {
@@ -134,30 +143,19 @@ public class GameFrame extends JFrame {
         System.out.println("Switched control to: " + newChef.getName());
     }
 
-    // File: main/java/view/GameFrame.java (Contoh Method)
-
     public void showSettingsMenu() {
         // 1. Pause game loop
         this.pauseGame();
 
-        // 2. Tampilkan dialog
         SettingsDialog dialog = new SettingsDialog(this);
         dialog.setVisible(true);
     }
 
-    public void pauseGame() {
-        // Logic untuk menghentikan game loop (misalnya, mengatur state game ke PAUSED)
-        // Terapkan di sini
-    }
 
-    public void resumeGame() {
-        // Logic untuk melanjutkan game loop
-        // Terapkan di sini
-    }
-
-    public void restartGame() {
-        // Logic untuk me-restart game
-        // Terapkan di sini
+    public void adjustVolume() {
+        if(bgmPlayer.getVolume() == 0) {
+            bgmPlayer.setVolume(0.3);
+        } else bgmPlayer.setVolume(0);
     }
 
     public static void main(String[] args) {

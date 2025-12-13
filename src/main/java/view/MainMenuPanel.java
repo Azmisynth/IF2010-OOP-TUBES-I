@@ -10,7 +10,6 @@ import java.io.IOException;
 
 public class MainMenuPanel extends JPanel {
     private final GameFrame controller;
-    private ChefInputListener inputHandler;
     BufferedImage backgroundImage;
     BufferedImage startGameButton;
     BufferedImage startGameButtonHover;
@@ -21,7 +20,7 @@ public class MainMenuPanel extends JPanel {
 
     public MainMenuPanel(GameFrame controller) {
         this.controller = controller;
-        this.setPreferredSize(new Dimension(800, 500)); // Ukuran default
+        this.setPreferredSize(new Dimension(800, 500));
         this.setLayout(new GridBagLayout());
         try {
             this.backgroundImage = ImageIO.read(getClass().getResource("/images/main/background.png"));
@@ -76,7 +75,6 @@ public class MainMenuPanel extends JPanel {
         }
 
         startButton.addActionListener(e -> controller.showStageSelect());
-        howToButton.addActionListener(e -> controller.showHowToPlay());
         exit.addActionListener(e -> controller.handleExitRequest());
 
         GridBagConstraints gbc = new GridBagConstraints();
