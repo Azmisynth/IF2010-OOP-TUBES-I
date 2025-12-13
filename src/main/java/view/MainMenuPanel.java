@@ -75,6 +75,7 @@ public class MainMenuPanel extends JPanel {
         }
 
         startButton.addActionListener(e -> controller.showStageSelect());
+        howToButton.addActionListener(e -> controller.howToPlayScreen());
         exit.addActionListener(e -> controller.handleExitRequest());
 
         GridBagConstraints gbc = new GridBagConstraints();

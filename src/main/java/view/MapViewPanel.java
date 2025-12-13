@@ -210,8 +210,6 @@ public class MapViewPanel extends JPanel {
             g2d.drawImage(timesUpImage, x, y, null);
         }
 
-        drawEventEffects(g2d);
-
         if (settingsButtonRect != null && settingsIconImage != null) {
             g2d.setColor(new Color(216, 48, 33, 0));
             g2d.fillRoundRect(settingsButtonRect.x, settingsButtonRect.y, settingsButtonRect.width, settingsButtonRect.height, 10, 10);
@@ -226,42 +224,6 @@ public class MapViewPanel extends JPanel {
                     settingsButtonRect.height,
                     null
             );
-        }
-    }
-
-    private void drawEventEffects(Graphics2D g2d) {
-        EventManager.EventType currentEvent = EventManager.getInstance().getActiveEvent();
-
-        // Lampu mati
-        if (currentEvent == EventManager.EventType.BLACKOUT) {
-            // Ambil posisi Chef Aktif
-            ChefPlayer activeChef = null;
-            for (ChefPlayer c : allChefs) {
-                if (c.isActive()) {
-                    activeChef = c;
-                    break;
-                }
-            }
-
-            if (activeChef != null) {
-                // Koordinat Pixel Chef (tengah tile)
-                int cx = activeChef.getPosition().getX() * 50 + 25;
-                int cy = activeChef.getPosition().getY() * 50 + 25;
-
-                // Buat area Gelap yang menutupi seluruh layar
-                java.awt.geom.Area darkArea = new java.awt.geom.Area(new java.awt.Rectangle(0, 0, getWidth(), getHeight()));
-
-                // Buat area Cahaya
-                int radius = 90; // Radius cahaya
-                java.awt.geom.Ellipse2D lightCircle = new java.awt.geom.Ellipse2D.Double(cx - radius, cy - radius, radius * 2, radius * 2);
-
-                // Kurangi area gelap dengan area cahaya
-                darkArea.subtract(new java.awt.geom.Area(lightCircle));
-
-                // Gambar Area Gelap
-                g2d.setColor(Color.BLACK); // Hitam pekat transparansi dikit
-                g2d.fill(darkArea);
-            }
         }
     }
 
